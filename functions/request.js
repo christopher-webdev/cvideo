@@ -1,13 +1,7 @@
 const axios = require("axios")
 
 
-const SANDBOX_URL = "https://sandbox.monnify.com"
-const LIVE_URL = "https://api.monnify.com"
-
-const TEST_API_KEY = "MK_TEST_YAVPYZQBBD"
-const TEST_SECRET_KEY = "KGWTAUQ86TQ5S3CGM93ATMSMGFPZ6K53"
-
-
+const SANDBOX_URL =""
 
 
 // Create axios instance
@@ -21,9 +15,9 @@ const axiosClient = axios.create({
 // Define the authenticate function
 export const authenticate = async () => {
     console.log("Authenticating...");
-    const base64 = Buffer.from(`${TEST_API_KEY}:${TEST_SECRET_KEY}`).toString('base64');
+    const base64 = Buffer.from(`foobar`).toString('base64');
 
-    const response = await axios.post<ApiResponse<Authenticated>>(isLive ? LIVE_URL : SANDBOX_URL + "/api/v1/auth/login", "{}", {
+    const response = await axios.post(SANDBOX_URL + "/api/", "{}", {
         headers: {
             Authorization: `Basic ${base64}`
         }
