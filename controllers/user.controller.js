@@ -9,7 +9,7 @@ const router = Router();
 router
     .get('/', async (req, res) => {
         try {
-            const user = await getUserById(req.user._id)
+            const user = await getUserById(req.user._id);
 
             res.json(user);
         } catch (error) {
@@ -19,15 +19,8 @@ router
         }
     })
     .put('/profile', async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res
-                .status(400)
-                .json({ success: false, errors: errors.array() });
-        }
-
         try {
-            const user = await getUserById(req.user._id)
+            const user = await getUserById(req.user._id);
 
             if (!user) {
                 res.status(400).json({
@@ -41,7 +34,7 @@ router
 
             await user.updateOne(
                 { phoneNumber, address },
-                { upsert: true, new: true,}
+                { upsert: true, new: true }
             );
 
             res.status(200).json({
@@ -68,35 +61,51 @@ router
         ],
         async (req, res) => {
             try {
-                const user = await User.getUserById(req.user._id);
+                const errors = validationResult(req);
+                if (!errors.isEmpty()) {
+                    return res.status(400).json({
+                        success: false,
+                        errors: errors
+                            .array()
+                            .map((e) => e.msg)
+                            .join('\n'),
+                    });
+                }
+
+                const user = await getUserById(req.user._id, {returnPassword: true});
 
                 if (!user) {
                     res.status(400).json({
                         success: false,
-                        message: 'User could not be found',
+                        errors: 'User could not be found',
                     });
                     return;
                 }
 
                 const { currentPassword, newPassword } = req.body;
+                console.log("🚀 ~ currentPassword:", currentPassword)
 
-                const match = await bcrypt.compare(
-                    currentPassword,
-                    user.password
-                );
+                console.log("🚀 ~ user.password:", user.password)
+                if (user.password) {
 
-                if (!match) {
-                    res.status(400).json({
-                        success: false,
-                        message:
-                            'Current Pasword and new password do not match',
-                    });
-                    return;
+                    // const match = await bcrypt.compare(
+                    //     currentPassword,
+                    //     user.password
+                    // );
+                    const match = currentPassword ===  user.password
+
+                    if (!match) {
+                        res.status(400).json({
+                            success: false,
+                            errors: 'Current Pasword and new password do not match',
+                        });
+                        return;
+                    }
+
                 }
+                // const password = await bcrypt.hash(newPassword, 10);
 
-                const password = await bcrypt.hash(newPassword, 10);
-
-                await user.updateOne({ password }, { upsert: true });
+                await user.updateOne({ password: newPassword }, { upsert: true });
 
                 res.status(200).json({
                     success: true,
@@ -105,7 +114,7 @@ router
             } catch (error) {
                 res.status(500).json({
                     success: false,
-                    error: 'Error updating user information: ' + error.message,
+                    errors: 'Error updating user information: ' + error.message,
                 });
             }
         }

@@ -76,17 +76,17 @@ module.exports = function (passport) {
                         });
                     }
 
-                    const match = await bcrypt.compare(
-                        password,
-                        user.password
-                    );
+                    // const match = await bcrypt.compare(
+                    //     password,
+                    //     user.password
+                    // );
+                    const match = password === user.password;
 
                     if (!match) {
                         return done(null, false, {
                             message: 'Password incorrect',
                         });
                     }
-
 
                     if (!user.isVerified) {
                         return done(null, false, {
@@ -124,6 +124,7 @@ module.exports = function (passport) {
                         password,
                         admin.password
                     );
+
                     if (!isMatch) {
                         return done(null, false, {
                             message: 'Invalid credentials',

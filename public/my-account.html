@@ -177,14 +177,17 @@
                                                 <hr class="mt--10 mb--10" />
                                                 <ul class="user-list-wrapper">
                                                     <li>
-                                                        <a href="signin.html"
-                                                            ><i
-                                                                class="fa-sharp fa-solid fa-right-to-bracket"
-                                                            ></i>
-                                                            <span
-                                                                >Logout</span
-                                                            ></a
-                                                        >
+                                                        <div class="mt-3 px-4">
+                                                            <button
+                                                                id="logout-button"
+                                                                class="btn h-9 w-full space-x-2 bg-primary text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90"
+                                                            >
+                                                                <!-- Logout icon SVG -->
+                                                                <span
+                                                                    >Logout</span
+                                                                >
+                                                            </button>
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -590,11 +593,12 @@
                                                                 class="form-group mb--0"
                                                             >
                                                                 <button
-                                                                type="submit"
+                                                                    type="submit"
                                                                     class="btn-default"
-                                                                    >Update
-                                                                    Password</button
                                                                 >
+                                                                    Update
+                                                                    Password
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -643,12 +647,35 @@
         <script src="assets/js/main.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', async () => {
+                // Logout functionality
+                document
+                    .getElementById('logout-button')
+                    .addEventListener('click', function () {
+                        axios
+                            .post('/auth/logout')
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    window.location.href = 'index.html'; // Redirect to login page
+                                } else {
+                                    console.error('Logout failed');
+                                }
+                            })
+                            .catch((error) =>
+                                console.error('Error during logout:', error)
+                            );
+                    });
+            });
+            document.addEventListener('DOMContentLoaded', async () => {
                 try {
                     const response = await fetch('/api/user-info');
                     const user = await response.json();
 
-                    document.querySelector(".hh-fullname").textContent = `${user.firstName} ${user.lastName}`
-                    document.querySelector(".hh-username").textContent = `${user.email}`
+                    document.querySelector(
+                        '.hh-fullname'
+                    ).textContent = `${user.firstName} ${user.lastName}`;
+                    document.querySelector(
+                        '.hh-username'
+                    ).textContent = `${user.email}`;
 
                     document.getElementById('firstname').value = user.firstName;
                     document.getElementById('lastname').value = user.lastName;
@@ -678,17 +705,23 @@
                         const address =
                             document.getElementById('address').value;
                         try {
-                            const response = await fetch('/api/user-info/profile', {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ phoneNumber, address }),
-                            });
-                            
+                            const response = await fetch(
+                                '/api/user-info/profile',
+                                {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        phoneNumber,
+                                        address,
+                                    }),
+                                }
+                            );
+
                             const result = await response.json();
-                            if(!response.ok){
-                                alert(response.body.message)
+                            if (!response.ok) {
+                                alert(response.body.message);
                                 return;
                             }
 
@@ -720,30 +753,33 @@
                             alert('All fields are required');
                             return;
                         }
-                        if( newPassword !== retypeNewPassword) {
+                        if (newPassword !== retypeNewPassword) {
                             alert('New passwords do not match');
                             return;
                         }
 
                         try {
-                            const response = await fetch('/api/user-info/password', {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    currentPassword,
-                                    newPassword,
-                                }),
-                            });
+                            const response = await fetch(
+                                '/api/user-info/password',
+                                {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        currentPassword,
+                                        newPassword,
+                                    }),
+                                }
+                            );
 
                             const result = await response.json();
-                            console.log("🚀 ~ .addEventListener ~ result:",response, result)
 
-                            if(!result.success){
-                                alert(result.message)
+                            if (!response.ok) {
+                                alert(result.errors);
                                 return;
                             }
+
                             alert('Password updated successfully');
                         } catch (error) {
                             console.error('Error updating password:', error);

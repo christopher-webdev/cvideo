@@ -1,11 +1,11 @@
 const { User } = require('../models/User');
 
 module.exports = {
-    async getUserById(id) {
+    async getUserById(id, options = {returnPassword: false}) {
         try {
-            const user = await User.findById(id).select(
-                '-password -resetPasswordToken -resetPasswordExpires'
-            );
+            let ignores = "-resetPasswordToken -resetPasswordExpires"
+            if(!options.returnPassword) ignores += " -password"
+            const user = await User.findById(id).select(ignores);
 
             if (!user) {
                 throw new Error('User not found');

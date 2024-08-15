@@ -87,13 +87,13 @@ router.post(
             const verificationToken = crypto.randomBytes(32).toString('hex');
             const verificationLink = `http://localhost:${PORT}/auth/verify-email?token=${verificationToken}`;
 
-            let hashedPassword =  bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+            // let hashedPassword =  bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
             user = new User({
                 firstName,
                 lastName,
                 email,
-                password: hashedPassword,
+                password,
                 isVerified: false,
                 verificationToken,
                 subscriptionPlan: subscriptionPlan || 'Free', // Set default subscription plan
