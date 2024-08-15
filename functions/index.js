@@ -20,31 +20,31 @@ module.exports = {
         const subscriptionPackages = [
             {
                 id: 1,
-                popular: false,
+                isPopular: false,
                 name: 'ProX',
                 amount: 40,
                 per: 'month',
                 benefits: [
-                    { available: true, name: 'Lorem ipsum' },
-                    { available: true, name: 'Lorem ipsum' },
-                    { available: false, name: 'Lorem ipsum' },
+                    { isAvailable: true, name: 'Lorem ipsum' },
+                    { isAvailable: true, name: 'Lorem ipsum' },
+                    { isAvailable: false, name: 'Lorem ipsum' },
                 ],
             },
             {
                 id: 2,
-                popular: true,
+                isPopular: true,
                 name: 'ProX',
                 amount: 90,
                 per: 'month',
-                benefits: [{ available: true, name: 'Lorem ipsum' }],
+                benefits: [{ isAvailable: true, name: 'Lorem ipsum' }],
             },
             {
                 id: 3,
-                popular: false,
+                isPopular: false,
                 name: 'ProX',
                 amount: 70,
                 per: 'month',
-                benefits: [{ available: true, name: 'Lorem ipsum' }],
+                benefits: [{ isAvailable: true, name: 'Lorem ipsum' }],
             },
         ];
         return subscriptionPackages;
