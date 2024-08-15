@@ -83,9 +83,7 @@ router
                 }
 
                 const { currentPassword, newPassword } = req.body;
-                console.log("🚀 ~ currentPassword:", currentPassword)
 
-                console.log("🚀 ~ user.password:", user.password)
                 if (user.password) {
 
                     // const match = await bcrypt.compare(
