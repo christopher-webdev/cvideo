@@ -91,7 +91,12 @@ function initStripePayment() {
             // Fully customizable with appearance API.
             // appearance: {/*...*/},
         });
-        const cardElement = elements.create('payment');
+        const cardElement = elements.create('payment', {
+            wallets: {
+                applePay: "auto",
+                googlePay: "auto"
+            }
+        });
         cardElement.mount('#payment-element');
 
         form.addEventListener('submit', async function (event) {

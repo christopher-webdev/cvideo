@@ -1,6 +1,7 @@
 const { STRIPE_SECRET_KEY } = require('../config/env');
 
 const Currency = require('../enums/Currency');
+const Package = require('../models/Package');
 const stripe = require('stripe')(STRIPE_SECRET_KEY);
 
 // Used accross integration. Should only be changed here
@@ -45,5 +46,5 @@ function getStripeSecretKey() {
 module.exports = {
     createPaymentIntent,
     confirmStripePayment,
-    getStripeSecretKey
+    getStripeSecretKey,
 };

@@ -11,17 +11,6 @@ const router = Router();
 router.get('/', (req, res) => res.json('Everythimg works fine ✅ '));
 
 
-router.get('/packages', async (req, res) => {
-    try {
-        const subscriptionPackages = await getPackages()
-        res.status(200).json({success: true, data: subscriptionPackages})
-    } catch (error) {
-        console.log("🚀 ~ router.get ~ error:", error)
-        res.status(200).json({success: false, errors: subscriptionPackages})
-    }
-    
-});
-
 router
     .route('/pay-with')
     .post(async (req, res) => {

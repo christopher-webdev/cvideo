@@ -24,6 +24,7 @@ const Admin = require('./models/Admin');
 const bcrypt = require('bcryptjs');
 const userInfoController = require("./controllers/user.controller")
 const userBillingController = require("./controllers/user-billing.controller")
+const userPackageController = require("./controllers/package.controller")
 
 // Passport Config
 require('./config/passport')(passport);
@@ -196,6 +197,7 @@ app.use('/admin', require('./routes/admin'));
 //handles user info updates
 app.use('/api/user-info', ensureAuthenticated, userInfoController);
 app.use("/api/billings", ensureAuthenticated, userBillingController)
+app.use("/api/packages", userPackageController)
 
 // Serve index.html for the root URL
 app.get('/', (req, res) => {
