@@ -23,7 +23,7 @@ module.exports = function (passport) {
                 clientID:
                     '250038052754-atan58f9rgc9q6oacvrq11mfdlneecph.apps.googleusercontent.com',
                 clientSecret: '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',
-                callbackURL: 'http://localhost:5000/auth/google/callback',
+                callbackURL: 'http://gunnyfrisch.shop/auth/google/callback',
             },
             async (accessToken, refreshToken, profile, done) => {
                 // Extract full name from profile
