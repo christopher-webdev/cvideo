@@ -124,15 +124,15 @@
                                                             id="profile-picture"
                                                             src="assets/images/team/team-01sm.jpg"
                                                             alt="Admin"
+                                                            width="100%"
                                                         />
                                                     </div>
                                                     <div class="content">
                                                         <span
-                                                            class="title"
-                                                            id=""
+                                                            class="title hh-fullname"
                                                             >Adam Milner</span
                                                         >
-                                                        <p id="user-name">
+                                                        <p class="hh-username">
                                                             adam@gmail.com
                                                         </p>
                                                     </div>
@@ -177,14 +177,17 @@
                                                 <hr class="mt--10 mb--10" />
                                                 <ul class="user-list-wrapper">
                                                     <li>
-                                                        <a href="signin.html"
-                                                            ><i
-                                                                class="fa-sharp fa-solid fa-right-to-bracket"
-                                                            ></i>
-                                                            <span
-                                                                >Logout</span
-                                                            ></a
-                                                        >
+                                                        <div class="mt-3 px-4">
+                                                            <button
+                                                                id="logout-button"
+                                                                class="btn h-9 w-full space-x-2 bg-primary text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90"
+                                                            >
+                                                                <!-- Logout icon SVG -->
+                                                                <span
+                                                                    >Logout</span
+                                                                >
+                                                            </button>
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -310,8 +313,8 @@
                                         />
                                     </div>
                                     <div class="author-desc">
-                                        <h6>Adam Milner</h6>
-                                        <p>trentadam@net</p>
+                                        <h6 class="hh-fullname">Adam Milner</h6>
+                                        <p class="hh-username">trentadam@net</p>
                                     </div>
                                     <div class="author-badge">Free</div>
                                 </a>
@@ -409,6 +412,7 @@
                                                 >
                                                     <!-- Start Profile Row  -->
                                                     <form
+                                                        id="profile-form"
                                                         action="#"
                                                         class="rbt-profile-row rbt-default-form row row--15"
                                                     >
@@ -427,6 +431,7 @@
                                                                     id="firstname"
                                                                     type="text"
                                                                     placeholder="Trent"
+                                                                    disabled
                                                                 />
                                                             </div>
                                                         </div>
@@ -445,6 +450,7 @@
                                                                     id="lastname"
                                                                     type="text"
                                                                     placeholder="Adam"
+                                                                    disabled
                                                                 />
                                                             </div>
                                                         </div>
@@ -463,6 +469,7 @@
                                                                     id="username"
                                                                     type="text"
                                                                     placeholder="Adam Milner"
+                                                                    disabled
                                                                 />
                                                             </div>
                                                         </div>
@@ -491,12 +498,12 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="username"
+                                                                    for="address"
                                                                     >Shipping
                                                                     address</label
                                                                 >
                                                                 <input
-                                                                    id="username"
+                                                                    id="address"
                                                                     type="text"
                                                                     placeholder="1234 Parkland, Newzealand"
                                                                 />
@@ -508,12 +515,12 @@
                                                             <div
                                                                 class="form-group mb--0"
                                                             >
-                                                                <a
+                                                                <button
+                                                                    type="submit"
                                                                     class="btn-default"
-                                                                    href="#"
-                                                                    >Update
-                                                                    Info</a
                                                                 >
+                                                                    Update Info
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -527,6 +534,7 @@
                                                 >
                                                     <!-- Start Profile Row  -->
                                                     <form
+                                                        id="password-form"
                                                         action="#"
                                                         class="rbt-profile-row rbt-default-form row row--15"
                                                     >
@@ -584,12 +592,13 @@
                                                             <div
                                                                 class="form-group mb--0"
                                                             >
-                                                                <a
+                                                                <button
+                                                                    type="submit"
                                                                     class="btn-default"
-                                                                    href="#"
-                                                                    >Update
-                                                                    Password</a
                                                                 >
+                                                                    Update
+                                                                    Password
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -638,9 +647,35 @@
         <script src="assets/js/main.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', async () => {
+                // Logout functionality
+                document
+                    .getElementById('logout-button')
+                    .addEventListener('click', function () {
+                        axios
+                            .post('/auth/logout')
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    window.location.href = 'index.html'; // Redirect to login page
+                                } else {
+                                    console.error('Logout failed');
+                                }
+                            })
+                            .catch((error) =>
+                                console.error('Error during logout:', error)
+                            );
+                    });
+            });
+            document.addEventListener('DOMContentLoaded', async () => {
                 try {
                     const response = await fetch('/api/user-info');
                     const user = await response.json();
+
+                    document.querySelector(
+                        '.hh-fullname'
+                    ).textContent = `${user.firstName} ${user.lastName}`;
+                    document.querySelector(
+                        '.hh-username'
+                    ).textContent = `${user.email}`;
 
                     document.getElementById('firstname').value = user.firstName;
                     document.getElementById('lastname').value = user.lastName;
@@ -659,71 +694,99 @@
                 }
             });
 
-            document
-                .getElementById('profile-form')
-                .addEventListener('submit', async (event) => {
-                    event.preventDefault();
+            document.addEventListener('DOMContentLoaded', async () => {
+                document
+                    .getElementById('profile-form')
+                    .addEventListener('submit', async (event) => {
+                        event.preventDefault();
 
-                    const phoneNumber =
-                        document.getElementById('phonenumber').value;
-                    const address = document.getElementById('address').value;
+                        const phoneNumber =
+                            document.getElementById('phonenumber').value;
+                        const address =
+                            document.getElementById('address').value;
+                        try {
+                            const response = await fetch(
+                                '/api/user-info/profile',
+                                {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        phoneNumber,
+                                        address,
+                                    }),
+                                }
+                            );
 
-                    try {
-                        const response = await fetch('/api/user-info', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ phoneNumber, address }),
-                        });
+                            const result = await response.json();
+                            if (!response.ok) {
+                                alert(response.body.message);
+                                return;
+                            }
 
-                        const result = await response.json();
-                        alert('Information updated successfully');
-                    } catch (error) {
-                        console.error(
-                            'Error updating user information:',
-                            error
-                        );
-                        alert('Error updating information');
-                    }
-                });
+                            alert('Information updated successfully');
+                        } catch (error) {
+                            console.error(
+                                'Error updating user information:',
+                                error
+                            );
+                            alert('Error updating information');
+                        }
+                    });
+            });
 
-            document
-                .getElementById('password-form')
-                .addEventListener('submit', async (event) => {
-                    event.preventDefault();
+            document.addEventListener('DOMContentLoaded', async () => {
+                document
+                    .getElementById('password-form')
+                    .addEventListener('submit', async (event) => {
+                        event.preventDefault();
 
-                    const currentPassword =
-                        document.getElementById('currentpassword').value;
-                    const newPassword =
-                        document.getElementById('newpassword').value;
-                    const retypeNewPassword =
-                        document.getElementById('retypenewpassword').value;
+                        const currentPassword =
+                            document.getElementById('currentpassword').value;
+                        const newPassword =
+                            document.getElementById('newpassword').value;
+                        const retypeNewPassword =
+                            document.getElementById('retypenewpassword').value;
 
-                    if (newPassword !== retypeNewPassword) {
-                        alert('New passwords do not match');
-                        return;
-                    }
+                        if (!currentPassword.trim() || !newPassword.trim()) {
+                            alert('All fields are required');
+                            return;
+                        }
+                        if (newPassword !== retypeNewPassword) {
+                            alert('New passwords do not match');
+                            return;
+                        }
 
-                    try {
-                        const response = await fetch('/api/user-password', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                currentPassword,
-                                newPassword,
-                            }),
-                        });
+                        try {
+                            const response = await fetch(
+                                '/api/user-info/password',
+                                {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        currentPassword,
+                                        newPassword,
+                                    }),
+                                }
+                            );
 
-                        const result = await response.json();
-                        alert('Password updated successfully');
-                    } catch (error) {
-                        console.error('Error updating password:', error);
-                        alert('Error updating password');
-                    }
-                });
+                            const result = await response.json();
+
+                            if (!response.ok) {
+                                alert(result.errors);
+                                return;
+                            }
+
+                            alert('Password updated successfully');
+                        } catch (error) {
+                            console.error('Error updating password:', error);
+                            alert('Error updating password');
+                        }
+                    });
+            });
         </script>
     </body>
 </html>

@@ -1676,51 +1676,44 @@
                 });
         </script>
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const sidebarLinks =
-                    document.querySelectorAll('.cursor-pointer');
-                const sections = document.querySelectorAll(
-                    '#manageAdminSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection'
-                );
+            const sidebarLinks = document.querySelectorAll('.cursor-pointer');
+            const sections = document.querySelectorAll(
+                '#manageAdminSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection'
+            );
 
-                // Function to hide all sections
-                const hideAllSections = () => {
-                    sections.forEach((section) =>
-                        section.classList.add('hidden')
-                    );
-                };
+            // Function to hide all sections
+            const hideAllSections = () => {
+                sections.forEach((section) => section.classList.add('hidden'));
+            };
 
-                // Function to show the relevant section
-                const showSection = (sectionId) => {
-                    hideAllSections();
-                    document
-                        .getElementById(sectionId)
-                        .classList.remove('hidden');
-                };
+            // Function to show the relevant section
+            const showSection = (sectionId) => {
+                hideAllSections();
+                document.getElementById(sectionId).classList.remove('hidden');
+            };
 
-                // Event listener for sidebar links
-                sidebarLinks.forEach((link) => {
-                    link.addEventListener('click', (e) => {
-                        const targetId = e.target.id;
+            // Event listener for sidebar links
+            sidebarLinks.forEach((link) => {
+                link.addEventListener('click', (e) => {
+                    const targetId = e.target.id;
 
-                        if (targetId === 'manageAdminBtn') {
-                            showSection('manageAdminSection');
-                        } else if (targetId === 'manageUsersBtn') {
-                            showSection('manageUsersSection');
-                        } else if (targetId === 'manageProjectsBtn') {
-                            showSection('manageProjectsSection');
-                        } else if (targetId === 'toggleVisability') {
-                            showSection('toggleVisabilitySection');
-                        } else if (targetId === 'manageSubmitsAndPricing') {
-                            showSection('manageSubmitsAndPricingSection');
-                        }
+                    if (targetId === 'manageAdminBtn') {
+                        showSection('manageAdminSection');
+                    } else if (targetId === 'manageUsersBtn') {
+                        showSection('manageUsersSection');
+                    } else if (targetId === 'manageProjectsBtn') {
+                        showSection('manageProjectsSection');
+                    } else if (targetId === 'toggleVisability') {
+                        showSection('toggleVisabilitySection');
+                    } else if (targetId === 'manageSubmitsAndPricing') {
+                        showSection('manageSubmitsAndPricingSection');
+                    }
 
-                        // Toggle visibility of nested ul elements
-                        const nestedUl = e.target.nextElementSibling;
-                        if (nestedUl && nestedUl.tagName === 'UL') {
-                            nestedUl.classList.toggle('hidden');
-                        }
-                    });
+                    // Toggle visibility of nested ul elements
+                    const nestedUl = e.target.nextElementSibling;
+                    if (nestedUl && nestedUl.tagName === 'UL') {
+                        nestedUl.classList.toggle('hidden');
+                    }
                 });
             });
         </script>

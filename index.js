@@ -21,6 +21,9 @@ const ffprobeInstaller = require('@ffprobe-installer/ffprobe');
 const fs = require('fs');
 const os = require('os');
 const Admin = require('./models/Admin');
+const bcrypt = require('bcryptjs');
+const userInfoController = require('./controllers/user.controller');
+const userBillingController = require('./controllers/user-billing.controller');
 
 // Passport Config
 require('./config/passport')(passport);
@@ -189,9 +192,24 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/auth', require('./routes/auth'));
 app.use('/admin', require('./routes/admin'));
 
+//handles user info updates
+app.use('/api/user-info', ensureAuthenticated, userInfoController);
+app.use('/api/billings', ensureAuthenticated, userBillingController);
+
 // Serve index.html for the root URL
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Displays billing methods
+app.get('/payment-methods.html', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'payment-methods.html'));
+});
+// Displays billing methods
+app.get('/pricing.html', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'pricing.html'));
 });
 
 // Protect specific routes
@@ -275,16 +293,18 @@ app.get('/login', (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
-app.get('/admin-dashboard.html', ensureAdminAuthenticated, (req, res) => {
-    res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
-});
-app.get('/admin-dashboard', ensureAdminAuthenticated, (req, res) => {
-    res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
-});
+// // app.get('/admin-dashboard.html', ensureAdminAuthenticated, (req, res) => {
+// //     res.set('Cache-Control', 'no-store');
+// //     res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
+// });
+// app.get('/admin-dashboard', ensureAdminAuthenticated, (req, res) => {
+//     res.set('Cache-Control', 'no-store');
+//     res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
+// });
 //email verification middleware
-app.get('/email-verified.html', verifyTokenMiddleware, (req, res) => {
+// Middleware to check if the user is new (i.e., created within the last 10 minutes)
+
+app.get('/email-verified', (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'email-verified.html'));
 });
@@ -451,21 +471,6 @@ async function generateThumbnail(videoFile) {
             });
     });
 }
-//handles password reseting
-app.get('/api/user-info', ensureAuthenticated, async (req, res) => {
-    try {
-        const userId = req.user._id;
-        const user = await User.findById(userId).select(
-            '-password -resetPasswordToken -resetPasswordExpires'
-        );
-
-        res.json(user);
-    } catch (error) {
-        res.status(500).json({
-            error: 'Error fetching user information: ' + error.message,
-        });
-    }
-});
 
 // API to update Output History for user on video edit status
 app.get('/api/video-status', ensureAuthenticated, async (req, res) => {

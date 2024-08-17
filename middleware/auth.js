@@ -39,15 +39,6 @@ const verifyTokenMiddleware = async (req, res, next) => {
 };
 module.exports = verifyTokenMiddleware;
 
-// module.exports = function isAdmin(req, res, next) {
-//     if (req.user && req.user.role === 'admin') {
-//         return next();
-//     }
-//     res.status(403).json({ msg: 'Access denied' });
-
-// };
-
-// middleware/auth.js
 module.exports.ensureAdminAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();

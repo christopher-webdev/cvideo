@@ -37,7 +37,8 @@ router.post('/', async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const resetURL = `http://localhost:${PORT}/reset-password/${token}`;
+        const resetURL = `https://gunnyfrisch.shop/reset-password/${token}`;
+
         await transporter.sendMail({
             to: user.email,
             from: 'cvideoai@gmail.com', // Replace with your email
@@ -66,11 +67,9 @@ router.post('/reset-password/:token', async (req, res) => {
         });
 
         if (!user) {
-            return res
-                .status(400)
-                .json({
-                    msg: 'Password reset token is invalid or has expired.',
-                });
+            return res.status(400).json({
+                msg: 'Password reset token is invalid or has expired.',
+            });
         }
 
         user.password = password; // No encryption, as specified
@@ -98,11 +97,9 @@ router.get('/reset-password/:token', async (req, res) => {
             resetPasswordExpires: { $gt: Date.now() },
         });
         if (!user) {
-            return res
-                .status(400)
-                .json({
-                    msg: 'Password reset token is invalid or has expired.',
-                });
+            return res.status(400).json({
+                msg: 'Password reset token is invalid or has expired.',
+            });
         }
         // Serve the reset-password.html file
         res.sendFile(path.join(__dirname, '../public/reset-password.html')); // Adjust the path as needed
@@ -124,11 +121,9 @@ router.post('/reset-password/:token', async (req, res) => {
             resetPasswordExpires: { $gt: Date.now() },
         });
         if (!user) {
-            return res
-                .status(400)
-                .json({
-                    msg: 'Password reset token is invalid or has expired.',
-                });
+            return res.status(400).json({
+                msg: 'Password reset token is invalid or has expired.',
+            });
         }
         // Update user's password
         user.password = password;

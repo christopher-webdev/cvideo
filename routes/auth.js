@@ -14,33 +14,25 @@ router.get('/verify-email', async (req, res) => {
     const { token } = req.query;
 
     try {
+        // Find the user with the given verification token
         let user = await User.findOne({ verificationToken: token });
 
         if (!user) {
+            console.log('Token not found or expired in DB:', token);
             return res.status(400).json({ msg: 'Invalid or expired token' });
         }
 
+        // Mark the user as verified
         user.isVerified = true;
         user.verificationToken = undefined;
+
         await user.save();
 
-        // Generate one-time token
-        const oneTimeToken = crypto.randomBytes(32).toString('hex');
-        user.oneTimeToken = oneTimeToken;
-        user.oneTimeTokenExpires = Date.now() + 15 * 60 * 1000; // Token expires in 15 minutes
-        await user.save();
-
-        // Redirect to success page with token
-        res.redirect(`/email-verified.html?token=${oneTimeToken}`);
+        res.redirect('/email-verified');
     } catch (err) {
-        console.error(err.message);
+        console.error('Server error:', err.message);
         res.status(500).send('Server error');
     }
-});
-
-router.get('/email-verified.html', verifyTokenMiddleware, (req, res) => {
-    res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'email-verified.html'));
 });
 
 // @desc Auth with Google

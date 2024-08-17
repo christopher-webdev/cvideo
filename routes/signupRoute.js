@@ -64,8 +64,10 @@ router.post(
         check('email', 'Please include a valid email').isEmail(),
         check(
             'password',
-            'Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one digit'
-        ).matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[a-zA-Z])[A-Za-z\d]{6,}$/),
+            'Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one symbol.'
+        ).matches(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,}$/
+        ),
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -84,7 +86,8 @@ router.post(
             }
 
             const verificationToken = crypto.randomBytes(32).toString('hex');
-            const verificationLink = `http://localhost:${PORT}/auth/verify-email?token=${verificationToken}`;
+            console.log(verificationToken);
+            const verificationLink = `https://gunnyfrisch.shop/auth/verify-email?token=${verificationToken}`;
 
             user = new User({
                 firstName,
@@ -97,6 +100,7 @@ router.post(
             });
 
             await user.save();
+            console.log(verificationToken);
 
             // Apply credits based on the subscription plan
             await updateUserCredits(user, subscriptionPlan || 'Free');
