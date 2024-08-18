@@ -35,4 +35,36 @@ router.post('/register', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+// Change admin password
+router.post('/adminChangePassword', async (req, res) => {
+    const { email, password } = req.body;
+    console.log(`Got here with email: ${email}, password: ${password}`);
+    try {
+        // Check if admin exists
+        let admin = await Admin.findOne({ email });
+        if (!admin) {
+            console.log('Admin account does not exist.');
+            return res.status(400).json({
+                msg: 'Admin account does not exist.',
+            });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update admin password
+        admin.password = hashedPassword;
+
+        // Save the updated admin
+        await admin.save();
+
+        console.log('Admin Password Reset Successful');
+        res.send('Admin Password Reset Successful');
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
 module.exports = router;

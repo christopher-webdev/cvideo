@@ -43,6 +43,12 @@
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                            id="changeAdminPasswordSectionBtn"
+                        >
+                            Change Admin Password
+                        </li>
+                        <li
+                            class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             id="adminList"
                         >
                             Admin List
@@ -131,61 +137,129 @@
             <!-- Main Content -->
             <div class="flex-1 p-6">
                 <!-- Manage Admin Section -->
-                <div id="manageAdminSection" class="hidden">
-                    <h2 class="text-3xl font-semibold text-gray-700 mb-6">
-                        Manage Admin
-                    </h2>
-                    Register superuser or just register admin work
-                    <form id="admin-register-form" class="space-y-6">
-                        <div>
-                            <label
-                                for="email"
-                                class="block text-sm font-medium text-black-300"
-                                >Email:</label
-                            >
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                required
-                                class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                for="password"
-                                class="block text-sm font-medium text-black-300"
-                                >Password:</label
-                            >
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                required
-                                class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            />
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                id="isSuperuser"
-                                name="isSuperuser"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-600 rounded"
-                            />
-                            <label
-                                for="isSuperuser"
-                                class="text-sm font-medium text-black-300"
-                                >Is Superuser</label
-                            >
-                        </div>
-                        <button
-                            type="submit"
-                            class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                <div
+                    id="manageAdminSection"
+                    class="hidden flex justify-center items-center min-h-screen bg-gray-100"
+                >
+                    <div
+                        class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
+                    >
+                        <h2
+                            class="text-3xl font-semibold text-gray-700 mb-6 text-center"
                         >
-                            Register
-                        </button>
-                        <div id="message" class="text-center mt-4"></div>
-                    </form>
+                            Manage Admin
+                        </h2>
+                        <p class="text-center text-gray-600 mb-4">
+                            Register superuser or just register admin work
+                        </p>
+                        <form id="admin-register-form" class="space-y-6">
+                            <div>
+                                <label
+                                    for="email"
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Email:</label
+                                >
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    for="password"
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Password:</label
+                                >
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    required
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                />
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    id="isSuperuser"
+                                    name="isSuperuser"
+                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                />
+                                <label
+                                    for="isSuperuser"
+                                    class="text-sm font-medium text-gray-700"
+                                    >Is Superuser</label
+                                >
+                            </div>
+                            <button
+                                type="submit"
+                                class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                            >
+                                Register
+                            </button>
+                            <div
+                                id="message"
+                                class="text-center mt-4 text-gray-600"
+                            ></div>
+                        </form>
+                    </div>
+                </div>
+                <div
+                    id="changeAdminPasswordSection"
+                    class="hidden flex justify-center items-center min-h-screen bg-gray-100"
+                >
+                    <div
+                        class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
+                    >
+                        <h2
+                            class="text-3xl font-semibold text-gray-700 mb-6 text-center"
+                        >
+                            Change Admin Password
+                        </h2>
+                        <form id="admin-password-form" class="space-y-6">
+                            <div>
+                                <label
+                                    for="email"
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Email:</label
+                                >
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    for="password"
+                                    class="block text-sm font-medium text-gray-700"
+                                    >New Password:</label
+                                >
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    required
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                            >
+                                Change Password
+                            </button>
+                            <div
+                                id="changePasswordMessage"
+                                class="text-center mt-4 text-gray-600"
+                            ></div>
+                        </form>
+                    </div>
                 </div>
                 <!-- /////////////////////////////////////// Start of Manage Users ////////////////////////// -->
                 <!-- Manage Users Section -->
@@ -1678,7 +1752,7 @@
         <script>
             const sidebarLinks = document.querySelectorAll('.cursor-pointer');
             const sections = document.querySelectorAll(
-                '#manageAdminSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection'
+                '#manageAdminSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
             );
 
             // Function to hide all sections
@@ -1707,6 +1781,8 @@
                         showSection('toggleVisabilitySection');
                     } else if (targetId === 'manageSubmitsAndPricing') {
                         showSection('manageSubmitsAndPricingSection');
+                    } else if (targetId === 'changeAdminPasswordSectionBtn') {
+                        showSection('changeAdminPasswordSection');
                     }
 
                     // Toggle visibility of nested ul elements
@@ -1716,6 +1792,41 @@
                     }
                 });
             });
+        </script>
+        <script>
+            document
+                .getElementById('admin-password-form')
+                .addEventListener('submit', async function (event) {
+                    event.preventDefault();
+
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+
+                    try {
+                        const response = await axios.post(
+                            '/admin/adminChangePassword',
+                            { email, password }
+                        );
+
+                        if (response.status === 200) {
+                            document.getElementById(
+                                'changePasswordMessage'
+                            ).textContent = 'Password changed successfully!';
+                            document
+                                .getElementById('changePasswordMessage')
+                                .classList.add('text-green-500');
+                        }
+                    } catch (error) {
+                        document.getElementById(
+                            'changePasswordMessage'
+                        ).textContent =
+                            error.response.data.msg ||
+                            'Error changing password';
+                        document
+                            .getElementById('changePasswordMessage')
+                            .classList.add('text-red-500');
+                    }
+                });
         </script>
     </body>
 </html>

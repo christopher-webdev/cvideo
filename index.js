@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 const { User } = require('./models/User');
 const { SubscriptionPlan } = require('./models/User');
 const Project = require('./models/Project');
-const adminRoutes = require('./routes/adminRoutes');
+
 const signupRoute = require('./routes/signupRoute');
 const bodyParser = require('body-parser');
 const multer = require('multer');
