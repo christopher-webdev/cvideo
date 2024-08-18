@@ -29,8 +29,10 @@ const SubscriptionPlanSchema = new mongoose.Schema({
         enum: [
             'Free',
             'BasicMonthly',
+            'creatorMonthly',
             'PremiumMonthly',
             'BasicYearly',
+            'creatorYearly',
             'PremiumYearly',
         ],
         required: true,
@@ -79,8 +81,10 @@ const UserSchema = new mongoose.Schema({
         enum: [
             'Free',
             'BasicMonthly',
+            'creatorMonthly',
             'PremiumMonthly',
             'BasicYearly',
+            'creatorYearly',
             'PremiumYearly',
         ],
         default: 'Free',

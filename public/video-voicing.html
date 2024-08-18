@@ -34,6 +34,63 @@
                 document.documentElement.classList.add('dark');
         </script>
     </head>
+    <!-- Start of LiveChat (www.livechat.com) code -->
+    <script>
+        window.__lc = window.__lc || {};
+        window.__lc.license = 18422055;
+        window.__lc.integration_name = 'manual_channels';
+        window.__lc.product_name = 'livechat';
+        (function (n, t, c) {
+            function i(n) {
+                return e._h ? e._h.apply(null, n) : e._q.push(n);
+            }
+            var e = {
+                _q: [],
+                _h: null,
+                _v: '2.0',
+                on: function () {
+                    i(['on', c.call(arguments)]);
+                },
+                once: function () {
+                    i(['once', c.call(arguments)]);
+                },
+                off: function () {
+                    i(['off', c.call(arguments)]);
+                },
+                get: function () {
+                    if (!e._h)
+                        throw new Error(
+                            "[LiveChatWidget] You can't use getters before load."
+                        );
+                    return i(['get', c.call(arguments)]);
+                },
+                call: function () {
+                    i(['call', c.call(arguments)]);
+                },
+                init: function () {
+                    var n = t.createElement('script');
+                    (n.async = !0),
+                        (n.type = 'text/javascript'),
+                        (n.src = 'https://cdn.livechatinc.com/tracking.js'),
+                        t.head.appendChild(n);
+                },
+            };
+            !n.__lc.asyncInit && e.init(),
+                (n.LiveChatWidget = n.LiveChatWidget || e);
+        })(window, document, [].slice);
+    </script>
+    <noscript
+        ><a href="https://www.livechat.com/chat-with/18422055/" rel="nofollow"
+            >Chat with us</a
+        >, powered by
+        <a
+            href="https://www.livechat.com/?welcome"
+            rel="noopener nofollow"
+            target="_blank"
+            >LiveChat</a
+        ></noscript
+    >
+    <!-- End of LiveChat code -->
 
     <body
         x-data
@@ -1059,25 +1116,41 @@
                             videoPond.removeFiles();
                             audioPond.removeFiles();
                         } catch (error) {
-                            console.error(error);
-                            if (
-                                error.response &&
-                                error.response.status === 403
-                            ) {
-                                messageDiv.textContent =
-                                    error.response.data.error;
-                            } else {
-                                messageDiv.textContent =
-                                    'An error occurred while submitting the video.';
+                                console.error(error);
+                                if (
+                                    error.response &&
+                                    error.response.status === 403
+                                ) {
+                                    // Display modal with message and link
+                                    showExhaustedCreditsModal(
+                                        error.response.data.error
+                                    );
+                                } else {
+                                    messageDiv.textContent =
+                                        'An error occurred while submitting the video.';
+                                    messageDiv.style.color = 'red';
+                                }
                             }
-                            messageDiv.style.color = 'red';
-                        }
-                        setTimeout(() => {
-                            messageDiv.textContent = '';
-                            remainingCreditsDiv.textContent = '';
-                        }, 5000);
-                    });
-            });
+
+                            setTimeout(() => {
+                                messageDiv.textContent = '';
+                                remainingCreditsDiv.textContent = '';
+                            }, 5000);
+                        });
+                });
+                function showExhaustedCreditsModal(message) {
+                    // Create modal element
+                    const modal = document.createElement('div');
+                    modal.id = 'creditsModal';
+                    modal.style.position = 'fixed';
+                    modal.style.left = '50%';
+                    modal.style.top = '50%';
+                    modal.style.transform = 'translate(-50%, -50%)';
+                    modal.style.backgroundColor = '#bcc5ca';
+                    modal.style.padding = '30px';
+                    modal.style.boxShadow = '0px 0px 20px rgba(0, 0, 0, 0.3)';
+                    modal.style.zIndex = '1000';
+
 
             function deleteProject(projectId) {
                 axios
@@ -1129,7 +1202,7 @@
                             if (video.status === 'Completed') {
                                 downloadButton = `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`;
                                 watchButton = `
-                                        <button 
+                                        <button
                                             id="openModal"
                                             data-video-src="${video.downloadLink}"
                                             data-video-title="${video.title}"
