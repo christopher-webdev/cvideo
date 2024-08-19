@@ -66,5 +66,25 @@ router.post('/adminChangePassword', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+// adminRoutes.js
+router.get('/admins', async (req, res) => {
+    try {
+        const admins = await Admin.find({}, '_id email isSuperuser'); // Include isSuperUser field
+        res.json(admins);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
+
+// DELETE /api/admins/:id - Delete an admin
+router.delete('/admins/:id', async (req, res) => {
+    try {
+        const adminId = req.params.id;
+        await Admin.findByIdAndDelete(adminId);
+        res.json({ message: 'Admin deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
 
 module.exports = router;

@@ -49,7 +49,7 @@
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                            id="adminList"
+                            id="adminListBtn"
                         >
                             Admin List
                         </li>
@@ -150,7 +150,7 @@
                             Manage Admin
                         </h2>
                         <p class="text-center text-gray-600 mb-4">
-                            Register superuser or just register admin work
+                            Register SuperUser and Register Admin
                         </p>
                         <form id="admin-register-form" class="space-y-6">
                             <div>
@@ -228,7 +228,7 @@
                                 >
                                 <input
                                     type="email"
-                                    id="email"
+                                    id="chemail"
                                     name="email"
                                     required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -242,7 +242,7 @@
                                 >
                                 <input
                                     type="password"
-                                    id="password"
+                                    id="chpassword"
                                     name="password"
                                     required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -261,6 +261,48 @@
                         </form>
                     </div>
                 </div>
+                <section
+                    id="adminListSection"
+                    class="container mx-auto my-8 p-6 bg-white shadow-md rounded-lg"
+                >
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700">
+                        Admin List
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table
+                            id="adminTable"
+                            class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm"
+                        >
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th
+                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
+                                    >
+                                        Admin ID
+                                    </th>
+                                    <th
+                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
+                                    >
+                                        Email
+                                    </th>
+                                    <th
+                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
+                                    >
+                                        Is Super User
+                                    </th>
+                                    <th
+                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
+                                    >
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Admins will be listed here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
                 <!-- /////////////////////////////////////// Start of Manage Users ////////////////////////// -->
                 <!-- Manage Users Section -->
                 <div id="manageUsersSection" class="hidden">
@@ -1752,7 +1794,7 @@
         <script>
             const sidebarLinks = document.querySelectorAll('.cursor-pointer');
             const sections = document.querySelectorAll(
-                '#manageAdminSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
+                '#manageAdminSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection, #adminListSection'
             );
 
             // Function to hide all sections
@@ -1783,6 +1825,8 @@
                         showSection('manageSubmitsAndPricingSection');
                     } else if (targetId === 'changeAdminPasswordSectionBtn') {
                         showSection('changeAdminPasswordSection');
+                    } else if (targetId === 'adminListBtn') {
+                        showSection('adminListSection');
                     }
 
                     // Toggle visibility of nested ul elements
@@ -1827,6 +1871,105 @@
                             .classList.add('text-red-500');
                     }
                 });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const adminTableBody =
+                    document.querySelector('#adminTable tbody');
+
+                // Fetch the admin data from the API
+                fetch('/admin/admins')
+                    .then((response) => response.json())
+                    .then((admins) => {
+                        // Clear the table body
+                        adminTableBody.innerHTML = '';
+
+                        // Populate the table with the fetched admins
+                        admins.forEach((admin) => {
+                            const row = document.createElement('tr');
+                            row.classList.add('border-t'); // Add border to each row
+
+                            const idCell = document.createElement('td');
+                            idCell.textContent = admin._id;
+                            idCell.classList.add(
+                                'py-4',
+                                'px-6',
+                                'text-sm',
+                                'text-gray-700'
+                            ); // Add Tailwind classes to the cell
+                            row.appendChild(idCell);
+
+                            const emailCell = document.createElement('td');
+                            emailCell.textContent = admin.email;
+                            emailCell.classList.add(
+                                'py-4',
+                                'px-6',
+                                'text-sm',
+                                'text-gray-700'
+                            ); // Add Tailwind classes to the cell
+                            row.appendChild(emailCell);
+
+                            const isSuperUserCell =
+                                document.createElement('td');
+                            isSuperUserCell.textContent = admin.isSuperuser
+                                ? 'Yes'
+                                : 'No';
+                            isSuperUserCell.classList.add(
+                                'py-4',
+                                'px-6',
+                                'text-sm',
+                                'text-gray-700'
+                            ); // Add Tailwind classes to the cell
+                            row.appendChild(isSuperUserCell);
+
+                            const actionsCell = document.createElement('td');
+                            actionsCell.classList.add(
+                                'py-4',
+                                'px-6',
+                                'text-sm',
+                                'text-gray-700'
+                            ); // Add Tailwind classes to the cell
+                            const deleteButton =
+                                document.createElement('button');
+                            deleteButton.textContent = 'Delete';
+                            deleteButton.classList.add(
+                                'bg-red-500',
+                                'hover:bg-red-600',
+                                'text-white',
+                                'font-bold',
+                                'py-1',
+                                'px-3',
+                                'rounded'
+                            ); // Add Tailwind classes to the button
+                            deleteButton.addEventListener('click', () =>
+                                handleDelete(admin._id)
+                            );
+                            actionsCell.appendChild(deleteButton);
+                            row.appendChild(actionsCell);
+
+                            adminTableBody.appendChild(row);
+                        });
+                    })
+                    .catch((error) =>
+                        console.error('Error fetching admins:', error)
+                    );
+            });
+
+            // Handle delete action
+            function handleDelete(adminId) {
+                if (confirm('Are you sure you want to delete this admin?')) {
+                    fetch(`/admin/admins/${adminId}`, {
+                        method: 'DELETE',
+                    })
+                        .then((response) => response.json())
+                        .then((result) => {
+                            alert(result.message);
+                            location.reload(); // Reload the page to reflect changes
+                        })
+                        .catch((error) =>
+                            console.error('Error deleting admin:', error)
+                        );
+                }
+            }
         </script>
     </body>
 </html>
