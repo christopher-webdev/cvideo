@@ -100,7 +100,7 @@ async function handlePayment(packageId) {
         content: `
         <div class="paywith-btn">
         <button id="payWithStripeBtn">Pay with Stripe</button>
-        <button id="payWithPaypalBtn">Pay with Klarna</button>
+        <button id="payWithPaypalBtn">Pay with Paypal</button>
         </div>
 `,
     });
