@@ -1,30 +1,18 @@
 const mongoose = require('mongoose');
-const { Package, Duration } = require('../enums/Package');
+const { allowedPackages, allowedIntervals } = require('../enums/Package');
 
-const allowedPackages = [
-    Package.Free,
-    Package.BasicMonthly,
-    Package.CreatorMonthly,
-    Package.PremiumMonthly,
-    Package.BasicYearly,
-    Package.CreatorYearly,
-    Package.PremiumYearly,
-];
-
-const allowedDurations = [
-    Duration.Monthly,
-    Duration.Yearly,
-    Duration.Unlimited
-]
 
 
 const package = new mongoose.Schema(
     {
-        isPopular: { type: Boolean },
-        name: { type: String, enum: allowedPackages },
+        creditStore:  {type: mongoose.Types.ObjectId, ref: "SubscriptionPlan"},
+        isPopular: { type: Boolean, default: false },
+        name: { type: String, enum: allowedPackages.map(pkg=>pkg.name) },
         amount: {type: Number, default: 0},
-        per: { type: String, enum: allowedDurations },
-        benefits: [{ isAvaliable: Boolean, name: String }],
+        stripePriceId: {type: String, default: ""},
+        paypalProductId: {type: String, default: ""},
+        interval: { type: String, enum: allowedIntervals },
+        benefits: [{ isAvailable: Boolean, name: String }],
     },
     { timestamps: true } // Prevents automatic creation of _id field for subdocuments
 );

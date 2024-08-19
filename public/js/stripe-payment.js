@@ -1,23 +1,32 @@
 const STRIPE_PUBLIC_KEY =
     'pk_test_51DKSt8AW156duCe7SQPEiEgCvN7VOTUIvpkyfqNdMo72W8v4pFDZmuLxMs69clBbDXMHPL5SKAdodlXO0Mxx71HN00Yzx63HKt';
+const PAYPAL_CLIENT_ID =
+    'AfF6JpcY-Fr8z-f27osmui4h1c0g2CSdUOo_mMGzVXExwApV-mNg-zH6VCKLK3U84KimA3j2pR7TyLLA';
 
 let stripe;
 
-
+const PROVIDERS = {
+    stripe: 'https://js.stripe.com/v3/',
+    klarna: 'https://x.klarnacdn.net/kp/lib/v1/api.js',
+    paypal: `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&components=buttons&vault=true&intent=subscription`,
+};
 
 window.addEventListener('DOMContentLoaded', async () => {
-    await loadStripeScript();
+    await loadScript(PROVIDERS.stripe);
+    // await loadScript(PROVIDERS.klarna, true)
+    await loadScript(PROVIDERS.paypal);
 
     stripe = Stripe(STRIPE_PUBLIC_KEY, {
         apiVersion: '2020-08-27',
     });
     const url = new URL(window.location).searchParams;
-    window.history.replaceState(
-        'plans-billing.html',
-        undefined,
-        '/plans-billing.html'
-    );
+
     if (url.has('payment_intent_client_secret')) {
+        window.history.replaceState(
+            'plans-billing.html',
+            undefined,
+            '/plans-billing.html'
+        );
         const clientSecret = url.get('payment_intent_client_secret');
 
         const { error, paymentIntent } = await stripe.retrievePaymentIntent(
@@ -26,88 +35,129 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (error) {
             initModal({
                 title: `Payment ${paymentIntent.status}`,
-                content: 'Your payment is not successful',
+                content:
+                    '<br />Your payment is not successful. <a href="/my-account.html">Try again</a>',
             });
             return;
         }
 
-        initModal({
-            title: `Payment ${paymentIntent.status}`,
-            content: 'Your payment is successful',
+        console.log(
+            '🚀 ~ window.addEventListener ~ paymentIntent:',
+            paymentIntent
+        );
+        fetch(`/api/billings/pay-with?provide=stripe.confirm-subscription`, {
+            method: 'POST',
+            body: JSON.stringify({ paymentIntentId: paymentIntent.id }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((res) => res.json())
+            .then(({ data }) => {
+                console.log('🚀 ~ onApprove ~ data:', data);
+                initModal({
+                    title: `Payment ${paymentIntent.status}`,
+                    content:
+                        '<br />Your payment is successful. <a href="/manage-subscription.html">Manage Subscription</a>',
+                });
+                setTimeout(() => {
+                    window.location.href = '/manage-subscription.html';
+                }, 1500);
+            });
+    }
+});
+
+function cancelSubscription(subscriptionId) {
+    fetch('/api/billings/pay-with?provider=stripe.cancel-subscription', {
+        body: JSON.stringify({ subscriptionId }),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then((result) => {
+            initModal({
+                title: 'Cancel Subscription',
+                content: result.success
+                    ? 'You subscription has been canceled'
+                    : 'Your ubscription has not been canceled',
+            });
+        })
+        .catch((error) => {
+            initModal({
+                title: 'Cancel Subscription',
+                content:
+                    'Your subscription has not been canceled. Please try again',
+            });
         });
-    }
-});
-
-
-window.addEventListener('DOMContentLoaded', () => {
-    document
-        .querySelectorAll('.choose-plan')
-        .forEach((el) => el.addEventListener('click', handlePayment));
-});
-
-async function handlePayment() {
-    initModal({
-        title: 'Pay with Stripe',
-        content: `
-        <form id="payment-form">
-            <div id="link-authentication-element"></div>
-            <div id="payment-element"><!-- A Stripe Element will be inserted here. --></div>
-            <button type="submit">Continue</button>
-            <div id="payment-result"></div>
-        </form>`,
-    });
-
-    try {
-        const paymentIntent = await initStripePayment();
-
-        if (paymentIntent.status === 'succeeded') {
-            setMessage('Payment succeeded!');
-            return;
-        }
-        setMessage("Something isn't right. Please try again");
-    } catch (error) {
-        console.log('🚀 ~ loadStripeScript ~ error:', error);
-        setMessage(`Payment failed: ${error.message}`);
-    }
 }
 
-function initStripePayment() {
+async function handlePayment(packageId) {
+    // <button id="payWithKlarnaBtn">Pay with Klarna</button>
+    initModal({
+        title: 'Select Payment Method',
+        content: `
+        <div class="paywith-btn">
+        <button id="payWithStripeBtn">Pay with Stripe</button>
+        <button id="payWithPaypalBtn">Pay with Klarna</button>
+        </div>
+`,
+    });
+    document
+        .getElementById('payWithStripeBtn')
+        .addEventListener(
+            'click',
+            async () => await initStripePaymentModal(packageId)
+        );
+    //   document.getElementById('payWithKlarnaBtn').addEventListener('click', async () => await initKlarnaPaymentModal(packageId));
+    document
+        .getElementById('payWithPaypalBtn')
+        .addEventListener(
+            'click',
+            async () => await initStripePaypalModal(packageId)
+        );
+}
+
+function initStripePayment(packageId) {
     return new Promise(async (resolve, reject) => {
         const form = document.getElementById('payment-form');
 
         const response = await fetch(
-            '/api/billings/pay-with?provider=stripe&action=create-payment-intent',
+            '/api/billings/pay-with?provide=stripe.create-payment-subscription',
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: 1000 }),
+                body: JSON.stringify({ packageId }),
             }
-        );
-        const { clientSecret, customer, redirectUrl } = await response.json();
+        ).then((res) => res.json());
+        const { clientSecret, redirectUrl, customer } = await response.data;
 
         const elements = stripe.elements({
             clientSecret,
             loader: 'auto',
-            // Fully customizable with appearance API.
             // appearance: {/*...*/},
         });
         const cardElement = elements.create('payment', {
-            wallets: {
-                applePay: "auto",
-                googlePay: "auto"
-            }
+            paymentMethodOrder: ['apple_pay', 'google_pay', 'klarna', 'card'],
+            // wallets: {
+            //     applePay: "auto",
+            //     googlePay: "auto"
+            // }
         });
         cardElement.mount('#payment-element');
 
         form.addEventListener('submit', async function (event) {
             event.preventDefault();
             setMessage('');
+
             try {
                 const { error, paymentIntent } = await stripe.confirmPayment({
                     elements,
                     billing_details: {
                         name: customer.fullName,
                     },
+                    // redirect: 'if_required'
                     confirmParams: {
                         return_url: redirectUrl,
                     },
@@ -123,12 +173,14 @@ function initStripePayment() {
     });
 }
 
-function loadStripeScript() {
+function loadScript(url, async = false) {
     return new Promise((resolve, reject) => {
         try {
-            const url = 'https://js.stripe.com/v3/';
+            // <script src="https://x.klarnacdn.net/kp/lib/v1/api.js" async></script>
+            // const url = url; //'https://js.stripe.com/v3/';
             const script = document.createElement('script');
             script.src = url;
+            if (async) script.async = true;
             script.className = 'stript-cdn';
 
             // Event listener for script load
@@ -185,6 +237,178 @@ function initModal({ title = 'Modal Title', content = 'Modal Content' }) {
     modal.style.display = 'block';
     document.body.appendChild(modal);
 }
+
+async function initStripePaymentModal(packageId) {
+    initModal({
+        title: 'Pay with Stripe',
+        content: `
+        <form id="payment-form">
+            <div id="link-authentication-element"></div>
+            <div id="payment-element"><!-- A Stripe Element will be inserted here. --></div>
+            <button type="submit">Continue</button>
+            <div id="payment-result"></div>
+        </form>`,
+    });
+
+    try {
+        const paymentIntent = await initStripePayment(packageId);
+
+        if (paymentIntent.status === 'succeeded') {
+            setMessage('Payment succeeded!');
+            return;
+        }
+        setMessage("Something isn't right. Please try again");
+    } catch (error) {
+        console.log('🚀 ~ loadScript ~ error:', error);
+        setMessage(`Payment failed: ${error.message}`);
+    }
+}
+
+async function initKlarnaPaymentModal(packageId) {
+    initModal({
+        title: 'Pay with Stripe',
+        content: `
+       <div id="klarna-payments-container"></div>
+       `,
+    });
+
+    window.klarnaAsyncCallback = async function () {
+        const session = await fetch(
+            '/api/billings/pay-with?provide=klarna.create-payment-session'
+        ).then((res) => res.json());
+        console.log('🚀 ~ initKlarnaPaymentModal ~ session:', session);
+
+        // This is where you start calling Klarna's JS SDK functions
+        //
+        Klarna.Payments.init({
+            client_token:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIifQ.dtxWM6MIcgoeMgH87tGvsNDY6cH',
+        });
+        Klarna.Payments.load(
+            {
+                container: '#klarna-payments-container',
+            },
+            {},
+            function (res) {
+                console.debug(res);
+            }
+        );
+    };
+    klarnaAsyncCallback();
+}
+async function initStripePaypalModal(packageId) {
+    initModal({
+        title: 'Pay with Paypal',
+        content: `
+       <div id="paypal-button-container"></div>
+       `,
+    });
+
+    const response = await fetch(
+        `/api/billings/pay-with?provide=paypal.create-plan`,
+        {
+            method: 'POST',
+            body: JSON.stringify({ packageId }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+
+    const { planId, productId } = (await response.json()).data;
+    console.log('🚀 ~ initStripePaypalModal ~ planId:', planId);
+
+    paypal
+        .Buttons({
+            async createSubscription(data, actions) {
+                const createSubscription = () => new Promise((resolve, reject) => {
+                    const createSub = actions.subscription.create({
+                        plan_id: planId,
+                    });
+                    console.log("🚀 ~ createSubscription ~ createSub: Promise", createSub)
+                    resolve(createSub);
+                });
+
+                const subscriptionId = await createSubscription()
+                console.log("🚀 ~ createSubscription ~ subscriptionId: after promise", subscriptionId)
+                
+                const response = await fetch(
+                    `/api/billings/pay-with?provide=paypal.create-subscription`,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            packageId,
+                            planId,
+                            productId,
+                            subscriptionId,
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+
+                const creaeSubscriptionResponse = (await response.json()).data;
+                console.log(
+                    '🚀 ~ createSubscription ~ subscription:',
+                    creaeSubscriptionResponse
+                );
+                return subscriptionId;
+            },
+
+            onApprove(data) {
+                console.log('🚀 ~ onApprove ~ data:', data);
+
+                // if(data.status === 'APPROVAL_PENDING'){
+                //     const approveUrl = data.links.find(link=>link.rel=='approve')
+                //     console.log("🚀 ~ onApprove ~ approveUrl:", approveUrl)
+                //     initModal({
+                //         title: `Subscription is ${data.status?.split("_").reverse().join(" ").toLowerCase()}`,
+                //         content: `<p>Please <a href="${approveUrl.href}">approve subscription</p>`,
+                //     });
+                // }else{
+                fetch(
+                    `/api/billings/pay-with?provide=paypal.confirm-subscription`,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            packageId,
+                            subscriptionId: data.subscriptionID,
+                            orderId: data.orderId,
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                )
+                    .then((res) => res.json())
+                    .then(({ data }) => {
+                        console.log('🚀 ~ onApprove ~ data:', data);
+                        initModal({
+                            title: 'Success',
+                            content: `<p>Your subscription is successful</p>`,
+                        });
+                    });
+                // }
+            },
+
+            onCancel(data) {
+                initModal({
+                    title: 'Canceled',
+                    content: `<p>Your subscription was canceled. Please give another shoot</p>`,
+                });
+            },
+
+            onError(err) {
+                initModal({
+                    title: 'Error',
+                    content: `<p>Something terrible happened. Please give another shoot</p>`,
+                });
+            },
+        })
+        .render('#paypal-button-container');
+}
+
 /**
  * {
   "id": "pi_3PnvfpAW156duCe73fMUrjtX",

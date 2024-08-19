@@ -4,9 +4,10 @@ module.exports = [
     {
         id: 1,
         isPopular: false,
-        name: EPackage.Free,
-        amount: 40,
-        per: Duration.Unlimited,
+        name: EPackage.Free.name,
+        amount: EPackage.Free.amount,
+        per: EPackage.Free.duration,
+        stripePriceId: 10, 
         benefits: [
             { isAvailable: true, name: 'Lorem ipsum' },
             { isAvailable: true, name: 'Lorem ipsum' },
@@ -16,9 +17,10 @@ module.exports = [
     {
         id: 2,
         isPopular: true,
-        name: EPackage.BasicMonthly,
-        amount: 60,
-        per: Duration.Monthly,
+        name: EPackage.BasicMonthly.name,
+        amount: EPackage.BasicMonthly.amount,
+        per: EPackage.BasicMonthly.duration,
+        stripePriceId: 10, 
         benefits: [
             { isAvailable: true, name: 'Dolor sit amet' },
             { isAvailable: true, name: 'Consectetur adipiscing' },
@@ -29,9 +31,10 @@ module.exports = [
     {
         id: 3,
         isPopular: false,
-        name: EPackage.BasicYearly,
-        amount: 50,
-        per: Duration.Yearly,
+        name: EPackage.BasicYearly.name,
+        amount: EPackage.BasicYearly.amount,
+        per: EPackage.BasicYearly.duration,
+        stripePriceId: 10, 
         benefits: [
             { isAvailable: true, name: 'Incididunt ut' },
             { isAvailable: false, name: 'Labore et dolore' },

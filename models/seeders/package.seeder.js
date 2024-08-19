@@ -1,21 +1,30 @@
+const { allowedPackages } = require('../../enums/Package');
+const { createStripeProductAndPrices } = require('../../functions/helpers');
 const Package = require('../Package');
-const packages = require('../seeders/package.data');
-
 
 async function seed() {
     try {
-       
+        console.log('Start seeder for packages');
+        let x = allowedPackages.length;
+        allowedPackages.forEach(async ({ name, amount, interval }) => {
+            const priceId = await createStripeProductAndPrices({
+                name,
+                amount,
+                interval,
+            });
 
-        packages.forEach(async ({id, benefits, ...data})=>{
-            const package = await Package.create({data})
-            package.updateOne({$push: {benefits}})
-            await package.save()
+            await Package.create({
+                amount,
+                name,
+                per: interval,
+                stripePriceId: priceId,
+            });
+            x--;
+        });
 
-            console.log("Created package: ", data.name);
-            
-        })
-
-        console.log('Seeder completed sucessfuly');
+        if (x == 0) {
+            console.log('Seeder completed sucessfuly');
+        }
     } catch (error) {
         console.log('🚀 ~ seed ~ error:', error);
     }

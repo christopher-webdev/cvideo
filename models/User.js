@@ -1,5 +1,7 @@
 // models/User.js
 const mongoose = require('mongoose');
+const {allowedPackages, Package: EPackage} = require('../enums/Package');
+const Package = require('./Package');
 
 // Credit Schema
 const CreditSchema = new mongoose.Schema({
@@ -26,13 +28,14 @@ const CreditSchema = new mongoose.Schema({
 const SubscriptionPlanSchema = new mongoose.Schema({
     plan: {
         type: String,
-        enum: [
-            'Free',
-            'BasicMonthly',
-            'PremiumMonthly',
-            'BasicYearly',
-            'PremiumYearly',
-        ],
+        enum: allowedPackages.map(pkg=>pkg.name),
+        // enum: [
+        //     'Free',
+        //     'BasicMonthly',
+        //     'PremiumMonthly',
+        //     'BasicYearly',
+        //     'PremiumYearly',
+        // ],
         required: true,
     },
     credits: [CreditSchema],
@@ -76,15 +79,14 @@ const UserSchema = new mongoose.Schema({
     },
     subscriptionPlan: {
         type: String,
-        enum: [
-            'Free',
-            'BasicMonthly',
-            'PremiumMonthly',
-            'BasicYearly',
-            'PremiumYearly',
-        ],
-        default: 'Free',
+        enum: allowedPackages.map(pkg=>pkg.name),
+        default: EPackage.Free.name,
     },
+
+    activePackage: {type: mongoose.Types.ObjectId, ref: "Package"},
+    activePackageExpiresAt: {type: Date, default: new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000).toISOString()},
+    paymantProvider: {type: mongoose.Types.ObjectId, ref: "PaymentProvider"},
+
     verificationToken: {
         type: String,
     },
@@ -111,6 +113,7 @@ const SubscriptionPlan = mongoose.model(
 module.exports = {
     User,
     SubscriptionPlan,
+    CreditSchema
 };
 
 // const mongoose = require('mongoose');

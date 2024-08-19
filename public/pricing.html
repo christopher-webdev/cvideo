@@ -7,6 +7,8 @@
 <meta name="theme-style-mode" content="">
 <!-- 0 == light, 1 == dark -->
 
+  <!-- Javascript Assets -->
+  <script src="js/app.js" defer></script>
 <title>Cashvipe Video AI</title>
 <!-- Favicon -->
 <link rel="shortcut icon" type="image/x-icon" href="assets/images/logo/favicon.png">
@@ -20,6 +22,7 @@
 <link rel="stylesheet" href="assets/css/plugins/bootstrap-select.min.css">
 <link rel="stylesheet" href="assets/css/plugins/prism.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="css/styles.css" />
 	</head>
 <body>
 <main class="page-wrapper"> 
@@ -151,21 +154,35 @@
 
                                     <nav class="cashvipe-tab">
                                         <div class="tab-btn-grp nav nav-tabs mb-3 text-center justify-content-center" id="nav-tab" role="tablist">
-                                            <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">
-                                                Monthly
+                                            <button class="nav-link nav-tab-get-monthly" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">
+                                                Our Exclusive Plans
                                             </button>
-                                            <button class="nav-link with-badge active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">
+                                            <!-- <button class="nav-link with-badge active nav-tab-get-yearly" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">
                                                 Yearly
                                                 <span class="rainbow-badge-card badge-border"
                             >20% Off</span>
-                                            </button>
+                                            </button> -->
                                         </div>
                                     </nav>
                                 </div>
                             </div>
-                            <div class="tab-content p-0 bg-transparent border-0 border bg-light" id="nav-tabContent">
-                                <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    <div class="row row--15">
+                            <div id="nav-tabContent">
+                              <div class="tab-pane" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                  <div class="row row--15" x-data="{
+                                    items: {activePlan: null, pkgs: []},
+                                    fetchData() {
+                                      fetch('http://localhost:5000/api/packages?item=month')
+                                      .then(response => response.json())
+                                      .then(data => {
+                                          console.log('🚀 ~ fetchData ~ data:', data)
+                                        let response = data.data
+                                        this.items.activePlan = response.activePlan;
+                                        this.items.pkgs = response.pkgs;
+                                      })
+                                      .catch(error => console.error('Error fetching data:', error));
+                                    }
+                                  }" x-init="fetchData" class="tab-content p-0 bg-transparent border-0 border bg-light" >
+                                        <template x-for="item in items.pkgs" :key="item._id">
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-12 mt--30">
                                             <div class="rainbow-pricing style-cashvipe">
                                                 <div class="pricing-table-inner">
@@ -174,21 +191,24 @@
                                                             <div class="icon">
                                                                 <i class="fa-regular fa-circle-radiation"></i>
                                                             </div>
-                                                            <h4 class="title color-var-one">Basic</h4>
+                                                            <h4 class="title color-var-one" x-text="item.name">Basic</h4>
                                                             <p class="subtitle">For large teams & corportaions</p>
                                                             <div class="pricing">
-                                                                <span class="price-text">Free</span>
+                                                                <span class="price-text" x-text="item.amount">Free</span>
                                                             </div>
                                                         </div>
                                                         <div class="pricing-body">
                                                             <div class="features-section">
                                                                 <h6>Features</h6>
                                                                 <ul class="list-style--1">
+                                                                    <template x-for="benefit in item.benefits" :key="benefit._id">
+                                                                      
                                                                     <li>
-                                                                        <i class="fa-regular fa-circle-check"></i> 7,700
-                                                                        3-5 day turnarouord
+                                                                        <i x-show="benefit.isAvailable == true" class="fa-regular fa-circle-check"></i> 
+                                                                        <i x-show="benefit.isAvailable != true" class="fa-sharp fa-regular fa-minus-circle"></i>
+                                                                        <span x-text="benefit.name">7,700 3-5 day turnarouord</span>
                                                                     </li>
-                                                                    <li>
+                                                                    <!-- <li>
                                                                         <i class="fa-regular fa-circle-check"></i> 6+
                                                                         Naive development
                                                                     </li>
@@ -203,19 +223,23 @@
                                                                     <li>
                                                                         <i class="fa-sharp fa-regular fa-minus-circle"></i> Advance
                                                                         Updates via dashboard & slack
-                                                                    </li>
+                                                                    </li> -->
+                                                                </template>
+
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="pricing-footer">
-                                                        <a class="btn-default btn-border" href="#">Get Started</a>
+                                                        <a class="btn-default btn-border" @click="()=>handlePayment(item._id)" href="#">Get Started</a>
                                                         <p class="bottom-text">Limited Offer</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-4 col-lg-6 col-md-6 col-12 mt--30">
+                                    </template>
+
+                                        <!-- <div class="col-xl-4 col-lg-6 col-md-6 col-12 mt--30">
                                             <div class="rainbow-pricing style-cashvipe active">
                                                 <div class="pricing-table-inner">
                                                     <div class="pricing-top">
@@ -342,11 +366,24 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
-                                <div class="tab-pane fade active show" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                    <div class="row row--15">
+                                <!-- <div class="tab-pane fade active show" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                    <div class="row row--15" x-data="{
+                                        items: {activePlan: null, pkgs: []},
+                                        fetchData() {
+                                          fetch('http://localhost:5000/api/packages?item=year')
+                                          .then(response => response.json())
+                                          .then(data => {
+                                            let response = data.data
+                                            this.items.activePlan = response.activePlan;
+                                            this.items.pkgs = response.pkgs;
+                                          })
+                                          .catch(error => console.error('Error fetching data:', error));
+                                        }
+                                      }" x-init="fetchData" >
+                                        <template x-for="item in items.pkgs" :key="item._id">
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-12 mt--30">
                                             <div class="rainbow-pricing style-cashvipe">
                                                 <div class="pricing-table-inner">
@@ -396,6 +433,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        </template>
+
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-12 mt--30">
                                             <div class="rainbow-pricing style-cashvipe active">
                                                 <div class="pricing-table-inner">
@@ -525,7 +564,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -2053,7 +2092,10 @@
         </div>
         <!-- End Copy Right Area  -->
     </main>
-
+    <div id="x-teleport-target"></div>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => Alpine.start());
+    </script>
     <!-- All Scripts  -->
     <div class="rbt-progress-parent">
         <svg class="rbt-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
@@ -2062,7 +2104,9 @@
     </div>
 
     <!-- JS
-============================================ -->
+     
+    ============================================ -->
+    <script src="./js/stripe-payment.js"></script>
     <script src="assets/js/vendor/modernizr.min.js"></script>
     <script src="assets/js/vendor/jquery.min.js"></script>
     <script src="assets/js/vendor/bootstrap.min.js"></script>
@@ -2081,6 +2125,9 @@
     <script src="assets/js/vendor/jquery-one-page-nav.js"></script>
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    <script>
+
+    </script>
 </body>
 
 

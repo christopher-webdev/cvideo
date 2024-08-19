@@ -124,9 +124,9 @@
                     <div class="avatar size-14"> <img class="rounded-full" src="images/avatar/avatar-12.jpg"
                         alt="avatar" /> </div>
                     <div> <a href="#"
-                        class="text-base font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">
+                        class="fullname text-base font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">
                         Travis Fuller </a>
-                      <p class="text-xs text-slate-400 dark:text-navy-300">Assistance</p>
+                      <p class="text-xs text-slate-400 dark:text-navy-300 email">Assistance</p>
                     </div>
                   </div>
                   <div class="flex flex-col pt-2 pb-5"> <a href="my-account.html"
@@ -412,25 +412,27 @@
         </h3>
       </div>
       <div x-data="{
-          items: [],
+          items: {activePlan: null, pkgs: []},
           fetchData() {
             fetch('http://localhost:5000/api/packages')
             .then(response => response.json())
             .then(data => {
-              this.items = data.data;
+              let response = data.data
+              this.items.activePlan = response.activePlan;
+              this.items.pkgs = response.pkgs;
             })
             .catch(error => console.error('Error fetching data:', error));
           }
         }" x-init="fetchData"
         class="mx-auto w-full grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-3 md:gap-5 2xl:gap-6">
-        <template x-for="item in items" :key="item.id">
+        <template x-for="item in items.pkgs" :key="item._id">
           <div class="card item">
             <div class="rounded-t-lg p-4 text-center sm:p-5"
               :class="item.isPopular ? 'bg-primary dark:bg-accent ' : 'bg-slate-150 dark:bg-navy-800'">
               <p class="text-xl font-medium" :class="item.isPopular ? 'text-white': 'text-slate-800 dark:text-navy-100' " x-text="item.name"></p>
               <p class="mt-3 text-5xl font-semibold"
                 :class="item.isPopular ? 'text-white' : 'text-slate-800 dark:text-navy-50'" x-text="item.amount"></p>
-              <p class="mt-3" :class="item.isPopular ? 'text-white' : 'text-black'" x-text="'/' + (item.per || 'month')">
+              <p class="mt-3" :class="item.isPopular ? 'text-white' : 'text-black'" x-text="'/' + (item.interval || 'month')">
               </p>
             </div>
             <div class="p-4 sm:p-5">
@@ -459,9 +461,11 @@
               </div>
               <div class="mt-8">
                 <button
-                @click="handlePayment"
+                @click="()=>handlePayment(item._id)"
                  class="btn w-full font-medium h-10 "
-                  :class="item.isPopular ? 'bg-primary text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90' : 'bg-slate-150 text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90' ">
+                  :class="[item.isPopular 
+                  ? 'bg-primary text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90' 
+                  : 'bg-slate-150 text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90', items.activePlan == item.name && 'hidden']">
                   Choose Plan
                 </button>
               </div>
@@ -478,6 +482,14 @@
   </script>
 
   <script src="./js/stripe-payment.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () =>{
+      fetch("/api/user-info").then(res=>res.json()).then(user=>{
+        document.querySelector(".email").innerHTML = user.email
+        document.querySelector(".fullname").innerHTML = `${user.firstName} ${user.lastName}`
+      })
+    });
+  </script>
 </body>
 
 

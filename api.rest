@@ -1,0 +1,10 @@
+POST http://localhost:5000/api/packages
+User-Agent: vscode-restclient
+Content-Type: application/json
+
+{
+  "isPopular": true, 
+  "name": "Free", 
+  "amount": 3500,
+  "interval": "month"
+}

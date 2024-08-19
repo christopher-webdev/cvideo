@@ -1,13 +1,20 @@
 const mongoose = require('mongoose');
+const { createWebhooks } = require('../functions/helpers');
+const getEnv = require('./env');
 
-const connectDB = async () => { 
+const connectDB = async () => {
     try {
         // Local MongoDB URI
         await mongoose.connect('mongodb://localhost:27017/cluster1', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000
+            serverSelectionTimeoutMS: 5000,
         });
+
+        if (getEnv('ENV') !== 'development') {
+            await createWebhooks(getEnv("WEBHOOK.PAYPAL"));
+            // await createWebhooks(getEnv("WEBHOOKS.STRIPE"));
+        }
 
         console.log('MongoDB connected');
     } catch (err) {

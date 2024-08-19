@@ -7,8 +7,11 @@ const { SubscriptionPlan } = require('../models/User');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { check, validationResult } = require('express-validator');
-const { PORT } = require('../config');
+const { PORT, stripe } = require('../config');
 const bcrypt = require('bcryptjs');
+const Package = require('../models/Package');
+const { Package: EPackage } = require('../enums/Package');
+const PaymentProvider = require('../models/PaymentProvider');
 
 // Define the function to update credits
 const updateUserCredits = async (user, subscriptionPlan) => {
@@ -74,13 +77,12 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { firstName, lastName, email, password, subscriptionPlan } =
-            req.body;
+        const { firstName, lastName, email, password } = req.body;
 
         try {
-            let user = await User.findOne({ email });
+            // let user = await User.findOne({ email });
 
-            if (user) {
+            if (await User.exists({ email })) {
                 return res.status(400).json({ msg: 'User already exists' });
             }
 
@@ -88,21 +90,42 @@ router.post(
             const verificationLink = `http://localhost:${PORT}/auth/verify-email?token=${verificationToken}`;
 
             // let hashedPassword =  bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+            const plan = await Package.findOne({ name: EPackage.Free.name });
+            if (!plan) {
+                res.status(200).json({
+                    msg: 'Cant create user. Please ensure packages have been uploaded.',
+                });
+                return;
+            }
 
-            user = new User({
+
+            await SubscriptionPlan.create({ plan: plan.name });
+    
+
+            const user = await User.create({
                 firstName,
                 lastName,
                 email,
                 password,
                 isVerified: false,
                 verificationToken,
-                subscriptionPlan: subscriptionPlan || 'Free', // Set default subscription plan
+
+                subscriptionPlan: plan.name || 'Free', // Set default subscription plan
+
+                // Newly added
+                activePackage: plan.id,
+
+                // // Should be refactored
+                // subscriptionPlanDetail: {
+                //     stripeCustomerId: customer.id,
+                //     packageId: plan.id,
+                //     paymentMethodId: '',
+                //     createdAt: Date.now(),
+                // },
             });
 
-            await user.save();
-
             // Apply credits based on the subscription plan
-            await updateUserCredits(user, subscriptionPlan || 'Free');
+            await updateUserCredits(user, plan.name || 'Free');
 
             await transporter.sendMail({
                 to: user.email,

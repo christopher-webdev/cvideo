@@ -1,3 +1,4 @@
+
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -22,9 +23,10 @@ const fs = require('fs');
 const os = require('os');
 const Admin = require('./models/Admin');
 const bcrypt = require('bcryptjs');
-const userInfoController = require("./controllers/user.controller")
-const userBillingController = require("./controllers/user-billing.controller")
-const userPackageController = require("./controllers/package.controller")
+const userInfoController = require('./controllers/user.controller');
+const userBillingController = require('./controllers/user-billing.controller');
+const userPackageController = require('./controllers/package.controller');
+const Package = require('./models/Package');
 
 // Passport Config
 require('./config/passport')(passport);
@@ -48,8 +50,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Body parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Multer configuration starts//////////////////////////////////////////////////////////////////////
 const uploadDir = path.join(__dirname, 'uploads');
@@ -193,11 +195,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/auth', require('./routes/auth'));
 app.use('/admin', require('./routes/admin'));
 
-
 //handles user info updates
 app.use('/api/user-info', ensureAuthenticated, userInfoController);
-app.use("/api/billings", ensureAuthenticated, userBillingController)
-app.use("/api/packages", userPackageController)
+app.use('/api/billings',  userBillingController);
+app.use('/api/packages', userPackageController);
 
 // Serve index.html for the root URL
 app.get('/', (req, res) => {
@@ -223,6 +224,10 @@ app.get('/plans-billing.html', ensureAuthenticated, (req, res) => {
 app.get('/dashboard.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+app.get('/manage-subscription.html', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'manage-subscription.html'));
 });
 app.get('/dashboard', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
@@ -296,7 +301,7 @@ app.get('/login', (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
-app.get('/admin-dashboard.html', ensureAdminAuthenticated, (req, res) => {
+app.get('/admin-dashboard.html', (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
 });
@@ -472,7 +477,6 @@ async function generateThumbnail(videoFile) {
             });
     });
 }
-
 
 // API to update Output History for user on video edit status
 app.get('/api/video-status', ensureAuthenticated, async (req, res) => {
@@ -658,6 +662,7 @@ app.get('/api/admins', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 // Delete user
 app.delete('/users/:id', async (req, res) => {
     try {
@@ -726,16 +731,25 @@ app.post('/set-credits', async (req, res) => {
     try {
         // Find the subscription plan
         let plan = await SubscriptionPlan.findOne({ plan: subscriptionPlan });
+
+
         if (!plan) {
             // Create a new plan if it doesn't exist
             plan = new SubscriptionPlan({ plan: subscriptionPlan });
-        }
 
+        }
         // Set the credits for the subscription plan
         plan.credits = credits;
 
         // Save the updated subscription plan
         await plan.save();
+
+        
+       await Package.findOneAndUpdate(
+            {name: plan.plan},
+            { creditStore: plan.id },
+            { upsert: true }
+        );
 
         res.status(200).json({ message: 'Credits successfully set' });
     } catch (error) {
