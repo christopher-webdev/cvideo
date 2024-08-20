@@ -38,7 +38,7 @@ app.use(
     session({
         secret: 'secret',
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
     })
 );
 
@@ -640,19 +640,6 @@ app.get('/api/users/:id', async (req, res) => {
         res.json({ user });
     } catch (error) {
         console.error('Error fetching user:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-//gets all admin
-app.get('/api/admins', async (req, res) => {
-    try {
-        const admins = await Admin.find();
-        if (!admins) {
-            return res.status(404).json({ message: 'Admin not found' });
-        }
-        res.json({ admins });
-    } catch (error) {
-        console.error('Error fetching Admin:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

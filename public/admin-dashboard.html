@@ -8,6 +8,7 @@
             href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css"
             rel="stylesheet"
         />
+
         <style>
             .dot {
                 transition: transform 0.2s ease-in-out;
@@ -147,10 +148,10 @@
                         <h2
                             class="text-3xl font-semibold text-gray-700 mb-6 text-center"
                         >
-                            Manage Admin
+                            Create Admin
                         </h2>
                         <p class="text-center text-gray-600 mb-4">
-                            Register SuperUser and Register Admin
+                            Create Admin SuperUser or Admin
                         </p>
                         <form id="admin-register-form" class="space-y-6">
                             <div>
@@ -357,11 +358,17 @@
                                     <option value="BasicMonthly">
                                         Basic Monthly
                                     </option>
+                                    <option value="CreatorMonthly">
+                                        Creator Monthly
+                                    </option>
                                     <option value="PremiumMonthly">
                                         Premium Monthly
                                     </option>
                                     <option value="BasicYearly">
                                         Basic Yearly
+                                    </option>
+                                    <option value="CreatorYearly">
+                                        Creator Yearly
                                     </option>
                                     <option value="PremiumYearly">
                                         Premium Yearly
@@ -631,16 +638,11 @@
                 <!-- Manage User Submits and Pricing Section -->
                 <div id="manageSubmitsAndPricingSection" class="hidden">
                     <h4 class="text-3xl font-semibold text-gray-700 mb-6">
-                        Manage User Subscription Plan and Submit Credits
+                        Set Subscription Plan Credits
                     </h4>
                     <div
                         class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8"
                     >
-                        <h3
-                            class="text-2xl font-semibold text-gray-800 mb-6 text-center"
-                        >
-                            Set Credits for Subscription Plans
-                        </h3>
                         <div
                             id="creditSettingsContainer"
                             class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md"
@@ -667,11 +669,17 @@
                                             <option value="BasicMonthly">
                                                 Basic Monthly
                                             </option>
+                                            <option value="CreatorMonthly">
+                                                Creator Monthly
+                                            </option>
                                             <option value="PremiumMonthly">
                                                 Premium Monthly
                                             </option>
                                             <option value="BasicYearly">
                                                 Basic Yearly
+                                            </option>
+                                            <option value="CreatorYearly">
+                                                Creator Yearly
                                             </option>
                                             <option value="PremiumYearly">
                                                 Premium Yearly
@@ -1827,6 +1835,8 @@
                         showSection('changeAdminPasswordSection');
                     } else if (targetId === 'adminListBtn') {
                         showSection('adminListSection');
+                    } else if (targetId === 'registerAdmin') {
+                        showSection('manageAdminSection');
                     }
 
                     // Toggle visibility of nested ul elements

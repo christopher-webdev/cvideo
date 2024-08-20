@@ -69,7 +69,7 @@ router.post('/adminChangePassword', async (req, res) => {
 // adminRoutes.js
 router.get('/admins', async (req, res) => {
     try {
-        const admins = await Admin.find({}, '_id email isSuperuser'); // Include isSuperUser field
+        const admins = await Admin.find({}, '_id email isSuperuser');
         res.json(admins);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
