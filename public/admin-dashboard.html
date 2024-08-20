@@ -784,8 +784,8 @@
 
 
                 const formData = buildFormData(event.target);
+                const formElements = event.target.elements;
                 try {
-                    const formElements = event.target.elements;
                     for (let i = 0; i < formElements.length; i++) {
                         formElements[i].disabled = true;
                     }

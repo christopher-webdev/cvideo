@@ -11,7 +11,7 @@ const connectDB = async () => {
             serverSelectionTimeoutMS: 5000,
         });
 
-        if (getEnv('ENV') !== 'development') {
+        if (getEnv('ENV') != 'development') {
             await createWebhooks(getEnv("WEBHOOK.PAYPAL"));
             // await createWebhooks(getEnv("WEBHOOKS.STRIPE"));
         }
