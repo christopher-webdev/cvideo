@@ -202,74 +202,94 @@ app.get('/', (req, res) => {
 });
 
 // Displays billing methods
+app.get('/payment-methods', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'payment-methods.html'));
+});
+app.get('/affiliate-daashboard.html', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'affiliate-daashboard.html'));
+});
+app.get('/affiliate-daashboard', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'affiliate-daashboard.html'));
+});
 app.get('/payment-methods.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'payment-methods.html'));
 });
 // Displays billing methods
-app.get('/pricing.html', ensureAuthenticated, (req, res) => {
+app.get('/manage-subscription', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'pricing.html'));
+    res.sendFile(path.join(__dirname, 'public', 'manage-subscription.html'));
 });
-
+app.get('/manage-subscription.html', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'manage-subscription.html'));
+});
 // Protect specific routes
-app.get('/plans-billing.html', ensureAuthenticated, (req, res) => {
+app.get('/plans-billing', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'plans-billing.html'));
 });
-app.get('/dashboard.html', ensureAuthenticated, (req, res) => {
+app.get('/plans-billing.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'plans-billing.html'));
 });
 app.get('/dashboard', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
-app.get('/video-editor.html', ensureAuthenticated, (req, res) => {
+app.get('/dashboard.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'video-editor.html'));
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 app.get('/video-editor', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'video-editor.html'));
 });
-app.get('/face-swap.html', ensureAuthenticated, (req, res) => {
+app.get('/video-editor.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'face-swap.html'));
+    res.sendFile(path.join(__dirname, 'public', 'video-editor.html'));
 });
 app.get('/face-swap', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'face-swap.html'));
 });
-app.get('/video-restyle.html', ensureAuthenticated, (req, res) => {
+app.get('/face-swap.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'video-restyle.html'));
+    res.sendFile(path.join(__dirname, 'public', 'face-swap.html'));
 });
+
 app.get('/video-restyle', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'video-restyle.html'));
 });
-app.get('/3d-video.html', ensureAuthenticated, (req, res) => {
+app.get('/video-restyle.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', '3d-video.html'));
+    res.sendFile(path.join(__dirname, 'public', 'video-restyle.html'));
 });
 app.get('/3d-video', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', '3d-video.html'));
 });
-app.get('/lip-sync.html', ensureAuthenticated, (req, res) => {
+app.get('/3d-video.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'lip-sync.html'));
+    res.sendFile(path.join(__dirname, 'public', '3d-video.html'));
 });
 app.get('/lip-sync', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'lip-sync.html'));
 });
-app.get('/video-voicing.html', ensureAuthenticated, (req, res) => {
+app.get('/lip-sync.html', ensureAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'lip-sync.html'));
+});
+app.get('/video-voicing', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'video-voicing.html'));
 });
-app.get('/video-voicing', ensureAuthenticated, (req, res) => {
+app.get('/video-voicing.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'video-voicing.html'));
 });
