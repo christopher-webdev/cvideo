@@ -41,8 +41,6 @@ router
                         expand: ['latest_invoice.payment_intent'],
                     });
 
-                    console.log("🚀 ~ .post ~ subscription:", subscription)
-
                     
                     await PaymentProvider.create({
                         name: 'stripe',

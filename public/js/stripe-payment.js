@@ -3,7 +3,7 @@ const STRIPE_PUBLIC_KEY =
 const PAYPAL_CLIENT_ID =
     'AfF6JpcY-Fr8z-f27osmui4h1c0g2CSdUOo_mMGzVXExwApV-mNg-zH6VCKLK3U84KimA3j2pR7TyLLA';
 
-let stripe;
+let stripe, elementsLoaded = false;
 
 const PROVIDERS = {
     stripe: 'https://js.stripe.com/v3/',
@@ -108,7 +108,7 @@ async function handlePayment(packageId) {
         .getElementById('payWithStripeBtn')
         .addEventListener(
             'click',
-            async () => await initStripePaymentModal(packageId)
+            async ()=> await initStripePaymentModal(packageId) 
         );
     //   document.getElementById('payWithKlarnaBtn').addEventListener('click', async () => await initKlarnaPaymentModal(packageId));
     document
@@ -146,6 +146,18 @@ function initStripePayment(packageId) {
             // }
         });
         cardElement.mount('#payment-element');
+
+    const el = elements.getElement('payment')
+    if(el){
+        console.log("mounted");
+        console.log(el);
+        elementsLoaded = true
+        
+    }else{
+        console.log('loading');
+    }
+
+
 
         form.addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -239,16 +251,23 @@ function initModal({ title = 'Modal Title', content = 'Modal Content' }) {
 }
 
 async function initStripePaymentModal(packageId) {
+    let interval;
     initModal({
         title: 'Pay with Stripe',
         content: `
         <form id="payment-form">
             <div id="link-authentication-element"></div>
-            <div id="payment-element"><!-- A Stripe Element will be inserted here. --></div>
-            <button type="submit">Continue</button>
+            <div id="payment-element">Please wait. Payment  modal is loading...</div>
+            <button type="submit" id="ssss" class="hidden">Continue</button>
             <div id="payment-result"></div>
         </form>`,
     });
+    interval = setInterval(() => {
+        if(elementsLoaded){
+            document.querySelector("#ssss").classList.remove("hidden")
+            clearInterval(interval)
+        }
+    }, 1000);
 
     try {
         const paymentIntent = await initStripePayment(packageId);
@@ -300,7 +319,7 @@ async function initStripePaypalModal(packageId) {
     initModal({
         title: 'Pay with Paypal',
         content: `
-       <div id="paypal-button-container"></div>
+       <div id="paypal-button-container">Please wait. Payment modal is loading....</div>
        `,
     });
 
@@ -318,6 +337,7 @@ async function initStripePaypalModal(packageId) {
     const { planId, productId } = (await response.json()).data;
     console.log('🚀 ~ initStripePaypalModal ~ planId:', planId);
 
+    document.querySelector("#paypal-button-container").innerText = ""
     paypal
         .Buttons({
             async createSubscription(data, actions) {

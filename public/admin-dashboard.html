@@ -636,14 +636,12 @@
             document.getElementById('AddPackageBtn').addEventListener("click", () => addNewPackageField(undefined, false))
 
             function buildFormData(form) {
-                console.log("🚀 ~ buildFormData ~ form:", form)
                 // Convert form data to a JSON object, handling multiple fields with the same name
                 const formData = new FormData(form);
                 const formObject = {};
                 const benefits = [];
 
                 for (const [key, value] of formData) {
-                    console.log("🚀 ~ buildFormData ~ [key, value]:", [key, value])
                     if (key === 'benefits') {
                         // If key is benefit_name, push a new object into benefits array
                         benefits.push({ name: value, isAvailable: false });
@@ -673,6 +671,7 @@
 
             function addNewPackageField(pkg, isNew = true) {
                 const container = document.createElement("form")
+                const benefitInfoField = document.createElement("p")
                 const benefitcontainer = document.createElement("div")
                 const packagePrice = document.createElement('input')
 
@@ -683,6 +682,7 @@
                 const submitButton = document.createElement('button')
 
                 // const packageInterval = document.createElement('select')
+                benefitInfoField.innerText = "Please check the box if the corresponding benefit is available for this package"
                 const packageName = document.createElement('select')
                 packageName.name = "name"
                 packageName.disabled = isNew
@@ -730,6 +730,7 @@
                 packageInterval.placeholder = "month, year"
 
                 container.className = "p-4 border border-blue-500 my-4 bg-gray-300 rounded-md"
+                benefitInfoField.className = "p-4 border my-4 bg-yellow-100 text-yellow-600"
                 benefitcontainer.className = "p-2"
                 packageName.className = "p-2 mr-2"
 
@@ -756,6 +757,7 @@
                 })
 
                 addBenefitBtn.addEventListener('click', () => addBenefitField(benefitcontainer, undefined))
+                addBenefitField(benefitcontainer, undefined)
                 removePackageBtn.addEventListener('click', () => {
                     const canContinue = packageName.value.length < 2 || packagePrice.value.length < 2 || packageInterval.value.length < 2
                     if (!canContinue) {
@@ -768,8 +770,8 @@
                 })
 
 
-                container.append(packageName, packagePrice, packageInterval, addBenefitBtn, removePackageBtn, packageHiddenId)
-                container.append(benefitcontainer)
+                container.append( packageName, packagePrice, packageInterval, addBenefitBtn, removePackageBtn, packageHiddenId)
+                container.append(benefitInfoField,benefitcontainer)
                 container.append(submitButton)
 
                 container.addEventListener("submit", handleSubmitNewPackage)
