@@ -8,6 +8,22 @@
             href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css"
             rel="stylesheet"
         />
+        <!-- CSS Assets -->
+        <link rel="stylesheet" href="css/app.css" />
+
+        <!-- Javascript Assets -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.0/css/jquery.dataTables.min.css"
+        />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
+        <!-- <script src="js/app.js" defer></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
 
         <style>
             .dot {
@@ -20,39 +36,148 @@
                 transform: translateX(100%);
             }
         </style>
+        <style>
+            /* Custom class for the <a> elements */
+            .custom-li {
+                color: #f97316; /* Tailwind's text-orange-500 */
+                background-color: transparent; /* Default background color */
+                padding: 0.5rem 1rem; /* px-4 py-2 */
+                border-radius: 0.5rem; /* rounded-lg */
+                transition: color 0.3s ease, background-color 0.3s ease; /* transition-colors duration-300 */
+                text-decoration: none; /* Remove underline from links */
+            }
+
+            .custom-li:hover {
+                color: #f97316; /* Tailwind's hover:text-orange-700 (same color in this example) */
+                background-color: #fef3c7; /* Tailwind's hover:bg-orange-100 */
+            }
+        </style>
+        <style>
+            .Sidebar--bars {
+                height: 100vh;
+                width: 20% !important;
+                font-size: 14px;
+            }
+            .sidebar {
+                padding: 10px;
+            }
+            .sidebar-admin ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+            }
+            .sidebar-admin ul li.active {
+                background: orange;
+                color: #000;
+            }
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+            * {
+                font-family: 'Poppins', sans-serif;
+            }
+            #rainbow-compare-table,
+            #manageplanSection,
+            #addplanSection,
+            #manageProjectsSection,
+            #ManagemainSection,
+            #manageAdminSection,
+            #manageUsersSection,
+            #manageSubmitsAndPricingSection,
+            #editplanSection,
+            #addplanSection,
+            #ManageCompareSection,
+            #EditComparesectionsection {
+                height: 100vh;
+                overflow: hidden;
+                overflow-x: auto;
+                overflow-y: auto;
+                width: 100%;
+                padding-bottom: 4rem;
+            }
+            #planTable_filter,
+            #planTable_length {
+                display: none;
+            }
+            td > div > button.btn {
+                padding: 10px;
+            }
+            h2,
+            h1,
+            h6,
+            h4 {
+                color: #000;
+            }
+            thead {
+                background: #c0c0c02e;
+                height: 100px;
+            }
+            .rainbow-compare-table.style-1 table .heading-row td > h6 {
+                color: #fff !important;
+            }
+            .rainbow-compare-table.style-1 table th.style-prymary {
+                background: transparent !important;
+            }
+            input,
+            select {
+                height: 40px !important;
+                border: 1px solid #df7f0d !important;
+                border-radius: 0 !important;
+                border-radius: 5px !important;
+
+                background: transparent !important;
+            }
+            .flex-1.p-6 {
+                width: 75% !important;
+            }
+            button {
+                padding: 10px !important;
+            }
+            body {
+                font-size: 1.4rem;
+            }
+            .p-8 {
+                padding: 2.5rem;
+            }
+            #managecompasionsection {
+                background: #000;
+                color: #df7f0d;
+            }
+        </style>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body class="bg-gray-100">
         <div class="flex">
             <!-- Sidebar -->
-            <div class="w-64 h-screen bg-gray-800 text-white">
+            <div class="bg-gray-800 h-screen text-white">
                 <div class="p-4 text-2xl font-semibold">Admin Dashboard</div>
-                <ul class="mt-8">
+                <ul class="mt-8 font-semibold custom-li">
                     <li
                         class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                         id="manageAdminBtn"
                     >
                         Manage Admin
                     </li>
-                    <ul class="ml-4 mt-2 hidden" id="allAdminFunctions">
+                    <ul
+                        class="ml-4 mt-2 custom-li hidden"
+                        id="allAdminFunctions"
+                    >
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             id="registerAdmin"
                         >
-                            Register Admin
+                            🚀 Register Admin
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             id="changeAdminPasswordSectionBtn"
                         >
-                            Change Admin Password
+                            🚀 Change Admin Password
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             id="adminListBtn"
                         >
-                            Admin List
+                            🚀 Admin List
                         </li>
                     </ul>
                     <li
@@ -82,54 +207,57 @@
                     >
                         Manage Projects
                     </li>
-                    <ul class="ml-4 mt-2 hidden" id="manageProjectslinkBtn">
+                    <ul
+                        class="ml-4 mt-2 custom-li hidden"
+                        id="manageProjectslinkBtn"
+                    >
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category=""
                         >
-                            All Projects
+                            🚀 All Projects
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Video Editor AI"
                         >
-                            Video Editor
+                            🚀 Video Editor
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Video Restyling AI"
                         >
-                            Video Restyle
+                            🚀 Video Restyle
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Video Voicing"
                         >
-                            Video Voicing
+                            🚀 Video Voicing
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Lip Sync AI"
                         >
-                            Lip Sync
+                            🚀 Lip Sync
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Face Swap AI"
                         >
-                            Face Swap
+                            🚀 Face Swap
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="3D Video Modeling AI"
                         >
-                            3D Video Modeling
+                            🚀 3D Video Modeling
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Add Avatar"
                         >
-                            My Avatar
+                            🚀 My Avatar
                         </li>
                     </ul>
                     <li
@@ -137,6 +265,30 @@
                         id="manageAvatarBtn"
                     >
                         Manage Avatar
+                    </li>
+                    <li
+                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                        id="manageplanBtn"
+                    >
+                        Manage Plans
+                    </li>
+                    <li
+                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                        id="addplanBtn"
+                    >
+                        Add Plans
+                    </li>
+                    <li
+                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                        id="ManageComparisonBtn"
+                    >
+                        Manage Comparison
+                    </li>
+                    <li
+                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                        id="AddComparisonBtn"
+                    >
+                        Add Comparison
                     </li>
                 </ul>
             </div>
@@ -235,7 +387,7 @@
                                 >
                                 <input
                                     type="email"
-                                    id="chemail"
+                                    id="email"
                                     name="email"
                                     required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -249,7 +401,7 @@
                                 >
                                 <input
                                     type="password"
-                                    id="chpassword"
+                                    id="password"
                                     name="password"
                                     required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -439,7 +591,7 @@
                                 </div>
                             </label>
                         </div>
-                        <!-- End of Video Editor Toggle -->
+                        End of Video Editor Toggle
 
                         <!-- Start of Video Restyle Toggle -->
                         <div
@@ -1141,6 +1293,34 @@
                         <button type="submit">Update Avatar</button>
                     </form>
                 </div>
+                <!-- Manage plan Section -->
+                <div id="manageplanSection" class="hidden">
+                    <div class="container mx-auto">
+                        <h1 class="text-2xl font-bold mb-4">Manage Plans</h1>
+                        <div class="overflow-x-auto">
+                            <table
+                                class="table table-bordered table-responsive table-striped"
+                                id="planTable"
+                            >
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Plan Title</th>
+                                        <th>Plan Heading</th>
+                                        <th>Price</th>
+                                        <th>Subscription</th>
+                                        <th>Status</th>
+                                        <th>Features</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="plans-table-body">
+                                    <!-- Plan rows will be injected here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1599,6 +1779,152 @@
                     });
                 });
         </script>
+        <!-- edit plan section -->
+        <script>
+            document
+                .getElementById('update-btn')
+                .addEventListener('click', async function () {
+                    const form = document.getElementById('update-plan-form');
+
+                    if (!form.checkValidity()) {
+                        handleNotificator(
+                            'error',
+                            'Please fill in all required fields.'
+                        );
+                        return;
+                    }
+
+                    const formData = new FormData(form);
+                    const planData = {};
+
+                    // formData.forEach((value, key) => {
+                    //     if (key === 'features') {
+                    //         planData.features = planData.features || [];
+                    //         planData.features.push(value);
+                    //     } else {
+                    //         planData[key] = value;
+                    //     }
+                    // });
+
+                    // Manually handle the FormData entries
+                    formData.forEach((value, key) => {
+                        if (key === 'features[]') {
+                            // Handle features as an array
+                            if (!planData.features) {
+                                planData.features = [];
+                            }
+                            planData.features.push(value);
+                        } else {
+                            planData[key] = value;
+                        }
+                    });
+                    const planId =
+                        document.getElementById('update-plan-id').value;
+
+                    if (!planId) {
+                        handleNotificator(
+                            'error',
+                            'No plan ID provided. Cannot update plan.'
+                        );
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(
+                            `/auth/update-plans/${planId}`,
+                            {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(planData),
+                            }
+                        );
+
+                        if (!response.ok) {
+                            const result = await response.json();
+                            // console.error('Server responded with an error:', result);
+                            handleNotificator(
+                                'error',
+                                result.message || 'Failed to update plan'
+                            );
+                            return;
+                        }
+
+                        const result = await response.json();
+                        // console.log('Response received:', result);
+                        handleNotificator('success', result.message);
+                        form.reset();
+                        document.getElementById('update-plan-id').value = '';
+                        // fetchPlans();
+                    } catch (error) {
+                        console.error('Error:', error);
+                        handleNotificator(
+                            'danger',
+                            'An error occurred while submitting the form.'
+                        );
+                    }
+                });
+        </script>
+        <!-- Add Plan section script -->
+        <script>
+            document
+                .getElementById('submit-btn')
+                .addEventListener('click', async function () {
+                    const form = document.getElementById('add-plan-form');
+
+                    // Validate form
+                    if (!form.checkValidity()) {
+                        handleNotificator(
+                            'info',
+                            'Please fill in all required fields.'
+                        );
+                        return;
+                    }
+
+                    // Create FormData object from the form
+                    const formData = new FormData(form);
+                    const planData = {};
+
+                    // Manually handle the FormData entries
+                    formData.forEach((value, key) => {
+                        if (key === 'features[]') {
+                            // Handle features as an array
+                            if (!planData.features) {
+                                planData.features = [];
+                            }
+                            planData.features.push(value);
+                        } else {
+                            planData[key] = value;
+                        }
+                    });
+
+                    try {
+                        const response = await fetch('/auth/add-plan', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(planData),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to add plan');
+                        }
+
+                        const result = await response.json();
+                        handleNotificator('success', result.message);
+                        form.reset(); // Optionally, reset the form fields
+                    } catch (error) {
+                        console.error('Error:', error);
+                        handleNotificator(
+                            'error',
+                            'An error occurred while submitting the form.'
+                        );
+                    }
+                });
+        </script>
+
         <script>
             document
                 .getElementById('setCreditSettingsForm')
@@ -1886,6 +2212,8 @@
                         showSection('manageAdminSection');
                     } else if (targetId === 'manageAvatarBtn') {
                         showSection('manageAvatarSection');
+                    } else if (targetId === 'manageplanBtn') {
+                        showSection('manageplanSection');
                     }
 
                     // Toggle visibility of nested ul elements
@@ -2091,5 +2419,687 @@
 
             populateAvatars();
         </script>
+        <script>
+            // MANAGE THE COMPARISION SECTION TABLE
+
+            async function fetchSubscriptionPlans() {
+                try {
+                    const response = await fetch('/data/subscription.json');
+                    if (!response.ok) {
+                        throw new Error('Failed to load subscription data');
+                    }
+                    const data = await response.json();
+                    // console.log('Subscription Plans:', data); // Log the actual data
+
+                    // Flatten the nested array and extract the first element
+                    const subscriptions = data.flat().map((item) => item.plan);
+                    if (subscriptions.length === 0) {
+                        throw new Error('No valid subscription data found');
+                    }
+
+                    console.log('sub found', subscriptions.length);
+                    // Extract unique plan names across all subscriptions
+                    function extractPlanNames(subscriptions) {
+                        if (subscriptions.length === 0) return [];
+                        return Array.from(
+                            new Set(
+                                subscriptions.flatMap((subscription) =>
+                                    Object.keys(subscription)
+                                )
+                            )
+                        );
+                    }
+
+                    const planNames = extractPlanNames(subscriptions);
+                    let tableHeader = `<thead><tr><th></th>`;
+                    subscriptions.forEach((subscription, index) => {
+                        planNames.forEach((planName) => {
+                            const plan = subscription[planName];
+                            if (plan && plan.name) {
+                                // Ensure the plan and name exist
+                                // console.log('our x', plan.name);
+                                const name = plan.name;
+                                const htv = 'style-prymary';
+                                if (name === 'free' || name === 'Free') {
+                                    const htv = 'sm-radius-top-left';
+                                }
+                                tableHeader += `<th class="${htv}">${name}\n <div class="d-flex justify-content-center"><div class="col-3"><button class="btn btn-sm btn-warning" onclick="editSubscriptionBtn('${name}')" name="${name}"><i class="fa fa-edit"></i></button></div><div class="col-3"><button class="btn btn-sm btn-danger" onclick="deleteComparisonPlan('${name}')" name="${name}" ><i class="fa fa-trash"></i></button> </div></div> </th>`; // Append each plan name as a table header
+                            }
+                        });
+                    });
+                    tableHeader += `</tr></thead>`;
+                    tableHeader += `<tbody>`;
+                    // console.log(tableHeader);
+                    function extractFeatureNames(subscriptions) {
+                        let featureNames = [];
+                        subscriptions.forEach((subscription) => {
+                            for (const plan of Object.values(subscription)) {
+                                if (Array.isArray(plan.data)) {
+                                    featureNames.push(
+                                        ...plan.data.map((item) => item.name)
+                                    );
+                                }
+                            }
+                        });
+                        return Array.from(new Set(featureNames)); // Remove duplicates
+                    }
+                    const featureNames = extractFeatureNames(subscriptions);
+                    for (x = 0; x < featureNames.length; x++) {
+                        // console.log('Feature Names:', featureNames[x]); // Log feature names
+                        const id = featureNames[x].replace(/ /g, '_');
+                        tableHeader += `<tr class="heading-row " id="${id}"><td><h6>${featureNames[x]}</h6></td>`;
+                        for (s = 0; s < subscriptions.length; s++) {
+                            tableHeader += `<td><h6>${featureNames[x]}</h6></td>`;
+                        }
+                    }
+                    tableHeader += `</tr>`;
+                    const tableHtml = `
+            <table class="table-responsive">
+                ${tableHeader}
+            </table>
+        `;
+
+                    const container = document.getElementById(
+                        'rainbow-compare-table'
+                    );
+                    container.innerHTML = tableHtml;
+                    // Log plan names and their data
+                    subscriptions.forEach((subscription, index) => {
+                        // console.log(`Subscription ${index + 1}:`);
+                        planNames.forEach((planName) => {
+                            const plan = subscription[planName];
+                            if (plan) {
+                                // console.log(`  Plan Name: ${planName}`);
+                                // console.log(`  Plan Data:`);
+                                if (Array.isArray(plan.data)) {
+                                    plan.data.forEach((dataItem) => {
+                                        const trid = dataItem.name.replace(
+                                            / /g,
+                                            '_'
+                                        );
+                                        const trElement =
+                                            document.getElementById(trid);
+                                        // console.log('the plan',plan.data);
+                                        if (trElement) {
+                                            const tridid =
+                                                trid +
+                                                dataItem.subOption.replace(
+                                                    / /g,
+                                                    '__'
+                                                );
+                                            const trElement2 =
+                                                document.getElementById(tridid);
+                                            if (!trElement2) {
+                                                // Select the existing row by its ID
+                                                var existingRow = trElement;
+
+                                                // Create a new row element
+                                                var newRow =
+                                                    document.createElement(
+                                                        'tr'
+                                                    );
+
+                                                // Set the ID of the new row
+                                                newRow.id = tridid;
+                                                let extratable = '';
+
+                                                const planNamesforrow =
+                                                    extractPlanNames(
+                                                        subscriptions
+                                                    );
+                                                // Loop through subscriptions and add a new cell for each item
+                                                for (
+                                                    let d = 0;
+                                                    d < subscriptions.length;
+                                                    d++
+                                                ) {
+                                                    extratable += `<td id="${
+                                                        planNamesforrow[d]
+                                                    }" name="${dataItem.subOption
+                                                        .replace(/ /g, '_')
+                                                        .replace(
+                                                            /\//g,
+                                                            '_'
+                                                        )}" title="${dataItem.name
+                                                        .replace(/ /g, '_')
+                                                        .replace(
+                                                            /\//g,
+                                                            '_'
+                                                        )}" ></td>`;
+                                                }
+                                                newRow.innerHTML =
+                                                    '<td>' +
+                                                    dataItem.subOption +
+                                                    '</td>' +
+                                                    extratable;
+                                                // Insert the new row after the existing row
+                                                existingRow.parentNode.insertBefore(
+                                                    newRow,
+                                                    existingRow.nextSibling
+                                                );
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    console.log(
+                                        `    No data found for this plan.`
+                                    );
+                                }
+                            } else {
+                                console.log(
+                                    `  Plan ${planName} not found in this subscription.`
+                                );
+                            }
+                        });
+                    });
+                    // Log plan names and their data
+                    subscriptions.forEach((subscription, index) => {
+                        planNames.forEach((planName) => {
+                            const plan = subscription[planName];
+                            if (plan) {
+                                if (Array.isArray(plan.data)) {
+                                    plan.data.forEach((dataItem) => {
+                                        const trid = dataItem.name.replace(
+                                            / /g,
+                                            '_'
+                                        );
+                                        const trElement =
+                                            document.getElementById(trid);
+                                        const tridid = dataItem.subOption
+                                            .replace(/ /g, '_')
+                                            .replace(/\//g, '_');
+                                        const trElement2 =
+                                            document.getElementById(tridid);
+
+                                        // Find the target element using the ID and name attributes
+                                        var element = document.querySelector(
+                                            '#' +
+                                                planName +
+                                                '[name="' +
+                                                tridid +
+                                                '"]' +
+                                                '[title="' +
+                                                trid +
+                                                '"]'
+                                        );
+                                        console.log(
+                                            'id:' +
+                                                planName +
+                                                'title:' +
+                                                trid +
+                                                'name:' +
+                                                tridid
+                                        );
+                                        if (element) {
+                                            let lastvalue = dataItem.value; // Use let instead of const here to allow re-assignment
+                                            const newSpan =
+                                                document.createElement('span'); // Create a new span element
+
+                                            if (dataItem.value === 'check') {
+                                                lastvalue = `<span class="icon">
+                                            <i class="fa-sharp fa-solid fa-check"></i>
+                                         </span>`;
+                                            } else if (
+                                                dataItem.value === 'uncheck'
+                                            ) {
+                                                lastvalue = `<span class="icon bg-dark">
+                                            <i class="fa-sharp fa-solid fa-xmark"></i>
+                                         </span>`;
+                                            }
+
+                                            // Set the innerHTML of the new span to the value of lastvalue
+                                            newSpan.innerHTML = lastvalue;
+
+                                            // Append the new span to the element
+                                            element.appendChild(newSpan);
+                                        }
+                                    });
+                                } else {
+                                    console.log(
+                                        `    No data found for this plan.`
+                                    );
+                                }
+                            } else {
+                                console.log(
+                                    `  Plan ${planName} not found in this subscription.`
+                                );
+                            }
+                        });
+                    });
+                    subscriptions.forEach((subscription, index) => {
+                        console.log(index);
+                        planNames.forEach((planName) => {
+                            const plan = subscription[planName];
+                            // console.log(plan.data);
+                            if (plan) {
+                                if (Array.isArray(plan.data)) {
+                                    plan.data.forEach((dataItem) => {
+                                        plan.data.forEach((dataItem) => {
+                                            const trid = dataItem.name.replace(
+                                                / /g,
+                                                '_'
+                                            );
+                                            const trElement =
+                                                document.getElementById(trid);
+                                            // console.log('id1: ',trid);
+                                            if (trElement) {
+                                                const tridid =
+                                                    trid +
+                                                    dataItem.subOption.replace(
+                                                        / /g,
+                                                        '__'
+                                                    );
+                                                const trElement2 =
+                                                    document.getElementById(
+                                                        tridid
+                                                    );
+                                                // console.log('id1: ',tridid);
+                                                // Create a new <tr> element
+                                                if (trElement2) {
+                                                    // Select the existing row by its ID
+                                                    var existingRow =
+                                                        document.getElementById(
+                                                            tridid
+                                                        );
+                                                    if (existingRow) {
+                                                        console.log('1');
+                                                    }
+                                                    // // Append new content to the existing row
+                                                    // existingRow.innerHTML += '<td>'+dataItem.subOption+'</td>';
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+                            } else {
+                                console.log(
+                                    `  Plan not found in this subscription.`
+                                );
+                            }
+                        });
+                    });
+                    console.clear();
+                } catch (error) {
+                    console.error('Error loading subscription data:', error);
+                    const container = document.getElementById(
+                        'rainbow-compare-table'
+                    );
+                    container.innerHTML =
+                        '<p class="text-danger">Failed to load subscription plans. Please try again later.</p>';
+                }
+            }
+
+            fetchSubscriptionPlans();
+            async function editSubscriptionBtn(Planname) {
+                // Set up the UI as needed
+                document
+                    .getElementById('AddComparisonBtn')
+                    .classList.add('active');
+                document
+                    .getElementById('manageUsersSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('manageSubmitsAndPricingSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('manageProjectsSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('ManageCompareSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('EditComparesectionsection')
+                    .classList.remove('hidden');
+                document
+                    .getElementById('manageplanSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('addplanSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('ManagemainSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('editplanSection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('managecompasionsection')
+                    .classList.add('hidden');
+                document
+                    .getElementById('manageAdminSection')
+                    .classList.add('hidden');
+
+                const planName = Planname; // Get the plan name passed to the function
+
+                try {
+                    const response = await fetch('/data/subscription.json');
+                    if (!response.ok) {
+                        throw new Error('Failed to load subscription data');
+                    }
+                    const data = await response.json();
+
+                    // Locate the plan using the `Array.from(new Set(...))` pattern
+                    const planData = data
+                        .flatMap((subscriptionArray) => subscriptionArray)
+                        .flatMap((subscriptionObj) => {
+                            return Object.entries(subscriptionObj.plan || {});
+                        })
+                        .find(([key, value]) => value.name === planName);
+
+                    if (!planData) {
+                        throw new Error(
+                            `Plan with name "${planName}" not found`
+                        );
+                    }
+
+                    const [key, plan] = planData;
+
+                    // Get the container where the form fields will be added
+                    const plansContainer =
+                        document.getElementById('plansContaineredit');
+                    plansContainer.innerHTML = ''; // Clear any existing content
+
+                    // Populate the form with the plan data
+                    let planGroupHtml = `
+            <div class="plan-group-edit mb-4">
+                <h4>${plan.name}</h4>
+                <div class="form-group">
+                    <label for="planName">Plan Name</label>
+                    <input type="text" class="form-control" id="planNameInput" value="${plan.name}" required>
+                </div>
+                <div class="dataContaineredit">
+        `;
+
+                    plan.data.forEach((dataItem, index) => {
+                        const dataIndex = index + 1;
+                        planGroupHtml += `
+            <div><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                <div class="data-group-edit mb-3">
+                    <h5>Data ${dataIndex}</h5>
+                    <div class="form-group">
+                        <label for="dataName${dataIndex}">Data Name</label>
+                        <select class="form-control dataName" id="dataName${dataIndex}" required>
+                            <option value="Price & Credits" ${
+                                dataItem.name === 'Price & Credits'
+                                    ? 'selected'
+                                    : ''
+                            }>Price & Credits</option>
+                            <option value="Avatars" ${
+                                dataItem.name === 'Avatars' ? 'selected' : ''
+                            }>Avatars</option>
+                            <option value="All Features" ${
+                                dataItem.name === 'All Features'
+                                    ? 'selected'
+                                    : ''
+                            }>All Features</option>
+                            <option value="Team Collaboration" ${
+                                dataItem.name === 'Team Collaboration'
+                                    ? 'selected'
+                                    : ''
+                            }>Team Collaboration</option>
+                            <option value="Video Creation" ${
+                                dataItem.name === 'Video Creation'
+                                    ? 'selected'
+                                    : ''
+                            }>Video Creation</option>
+                            <option value="" ${
+                                ![
+                                    'Price & Credits',
+                                    'Avatars',
+                                    'All Features',
+                                    'Team Collaboration',
+                                    'Video Creation',
+                                ].includes(dataItem.name)
+                                    ? 'selected'
+                                    : ''
+                            }>Add More...</option>
+                        </select>
+                        <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: ${
+                            ![
+                                'Price & Credits',
+                                'Avatars',
+                                'All Features',
+                                'Team Collaboration',
+                                'Video Creation',
+                            ].includes(dataItem.name)
+                                ? 'block'
+                                : 'none'
+                        };" value="${dataItem.name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="subOption${dataIndex}">Sub-option</label>
+                        <input type="text" class="form-control subOption" id="subOption${dataIndex}" value="${
+                            dataItem.subOption
+                        }" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subOptionValue${dataIndex}">Sub-option Value</label>
+                        <input type="text" class="form-control subOptionValue" id="subOptionValue${dataIndex}" value="${
+                            dataItem.value
+                        }" required>
+                    </div>
+                </div></div>
+            `;
+                    });
+
+                    planGroupHtml += `</div><button type="button" class="btn btn-secondary addDataBtn_edit">Add More Data</button></div>`;
+                    plansContainer.innerHTML = planGroupHtml;
+
+                    // Handle the "Add More Data" button (optional if you want to add this functionality)
+                    document
+                        .querySelector('.addDataBtn_edit')
+                        .addEventListener('click', function () {
+                            const dataIndex =
+                                document.querySelectorAll('.data-group')
+                                    .length + 1;
+                            const newDataGroupHtml = `
+            <div><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                <div class="data-group-edit mb-3">
+                    <h5>Data ${dataIndex}</h5>
+                    <div class="form-group">
+                        <label for="dataName${dataIndex}">Data Name</label>
+                        <select class="form-control dataName" id="dataName${dataIndex}" required>
+                            <option value="Price & Credits">Price & Credits</option>
+                            <option value="Avatars">Avatars</option>
+                            <option value="All Features">All Features</option>
+                            <option value="Team Collaboration">Team Collaboration</option>
+                            <option value="Video Creation">Video Creation</option>
+                            <option value="">Add More...</option>
+                        </select>
+                        <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label for="subOption${dataIndex}">Sub-option</label>
+                        <input type="text" class="form-control subOption" id="subOption${dataIndex}" placeholder="Enter sub-option" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subOptionValue${dataIndex}">Sub-option Value</label>
+                        <input type="text" class="form-control subOptionValue" id="subOptionValue${dataIndex}" placeholder="Enter sub-option value" required>
+                    </div>
+                </div></div>
+            `;
+                            document
+                                .querySelector('.dataContainer')
+                                .insertAdjacentHTML(
+                                    'beforeend',
+                                    newDataGroupHtml
+                                );
+                        });
+                } catch (error) {
+                    console.error('Error loading subscription data:', error);
+                    handleNotificator(
+                        'info',
+                        'Failed to load the selected plan for editing.'
+                    );
+                }
+            }
+            async function deleteComparisonPlan(planName) {
+                try {
+                    const response = await fetch(
+                        `/auth/delete-comparison-plan/${encodeURIComponent(
+                            planName
+                        )}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(
+                            'Failed to update the subscription data'
+                        );
+                    }
+
+                    handleNotificator(
+                        'success',
+                        `Plan "${planName}" has been successfully deleted.`
+                    );
+                    location.reload(); // Reload the page to reflect the changes
+                } catch (error) {
+                    console.error('Error deleting the comparison plan:', error);
+                    handleNotificator(
+                        'error',
+                        `Failed to delete the plan: ${error.message}`
+                    );
+                }
+            }
+
+            //update comparision plan
+            document
+                .getElementById('subscriptionEditForm')
+                .addEventListener('submit', async (event) => {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    const generateUniqueId = () =>
+                        '_' + Math.random().toString(36).substr(2, 9);
+
+                    // This will hold the entire structure of the plan data
+                    const jsonData = {};
+                    const planNameEdit =
+                        document.getElementById('planNameInput').value;
+                    // Loop through each plan group to collect its data
+                    document
+                        .querySelectorAll('.plan-group-edit')
+                        .forEach((planGroup) => {
+                            const planName = planGroup
+                                .querySelector('input[type="text"]')
+                                .value.trim();
+                            const planId = generateUniqueId(); // Generate a unique ID for this plan
+
+                            // Initialize dataEntries as an empty array for each plan
+                            const dataEntries = [];
+
+                            // Loop through each data group to collect data entries
+                            planGroup
+                                .querySelectorAll('.data-group-edit')
+                                .forEach((dataGroup) => {
+                                    const dataId = generateUniqueId();
+                                    let dataName = dataGroup
+                                        .querySelector('.dataName')
+                                        .value.trim();
+                                    if (dataName === '') {
+                                        dataName = dataGroup
+                                            .querySelector('.newDataName')
+                                            .value.trim();
+                                    }
+                                    const subOption = dataGroup
+                                        .querySelector('.subOption')
+                                        .value.trim();
+                                    const subOptionValue = dataGroup
+                                        .querySelector('.subOptionValue')
+                                        .value.trim();
+
+                                    // Push each data entry to the dataEntries array
+                                    dataEntries.push({
+                                        id: dataId,
+                                        name: dataName,
+                                        subOption: subOption,
+                                        value: subOptionValue,
+                                    });
+                                });
+
+                            // Add the plan data to the jsonData object using the planId
+                            jsonData[planId] = {
+                                name: planName,
+                                data: dataEntries,
+                            };
+                        });
+
+                    // Wrap the jsonData in the format that matches your JSON file structure
+                    const subscriptionData = [{ plan: jsonData }];
+
+                    // console.log('Subscription Data to be sent:', JSON.stringify(subscriptionData, null, 2));
+                    try {
+                        const response = await fetch(`/auth/update-com`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(subscriptionData),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(
+                                `HTTP error! Status: ${response.status}`
+                            );
+                        }
+
+                        const result = await response.json();
+                        // console.log(subscriptionData);
+                        // console.log(result.subscription);
+                        handleNotificator('success', result.message);
+                    } catch (error) {
+                        // console.log(error);
+                        handleNotificator('error', 'Error:', error);
+                    }
+                });
+            const handleNotificator = (status, text) => {
+                let alertHTML = '';
+
+                switch (status) {
+                    case 'success':
+                        alertHTML = `<div class="alert alert-success">${text}</div>`;
+                        break;
+                    case 'info':
+                        alertHTML = `<div class="alert alert-info">${text}</div>`;
+                        break;
+                    default:
+                        alertHTML = `<div class="alert alert-danger">${text}</div>`;
+                        break;
+                }
+
+                const notificator = document.querySelector('.responser');
+                notificator.innerHTML = alertHTML; // Insert the generated HTML into the notificator
+                notificator.style.display = 'block'; // Show the notificator
+
+                // Hide after 3 seconds
+                setTimeout(() => (notificator.style.display = 'none'), 3000);
+
+                // Hide on click
+                notificator.onclick = () =>
+                    (notificator.style.display = 'none');
+            };
+        </script>
+        <style>
+            .responser {
+                position: fixed;
+                right: 0;
+                top: 10%;
+                width: 30%;
+                z-index: 100;
+                display: none;
+            }
+            @media (max-width: 600px) {
+                .responser {
+                    width: 90%;
+                }
+            }
+        </style>
+        <div class="responser">
+            <div class="loader-responder small"></div>
+        </div>
     </body>
 </html>

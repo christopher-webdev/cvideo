@@ -47,7 +47,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'cvideoai@gmail.com',
-        pass: 'zkgp iiye okuv onbr', // Use application-specific password if 2FA is enabled
+        pass: 'lpyt gmfn emmi ucoz', // Use application-specific password if 2FA is enabled
     },
     logger: true, // Enable logging
     debug: true, // Enable debug output
