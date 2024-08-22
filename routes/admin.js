@@ -5,12 +5,37 @@ const Admin = require('../models/Admin');
 const { User } = require('../models/User');
 const { SubscriptionPlan } = require('../models/User');
 const router = express.Router();
+const nodemailer = require('nodemailer');
+const path = require('path');
 
 // Serve the admin registration page
 router.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/admin-register.html'));
 });
+// Email setup
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'cvideoai@gmail.com',
+        pass: 'zkgp iiye okuv onbr', // Use application-specific password if 2FA is enabled
+    },
+    logger: true, // Enable logging
+    debug: true, // Enable debug output
+    tls: {
+        rejectUnauthorized: false,
+    },
+});
+// Helper function to send email
+const sendEmail = (to, subject, text) => {
+    const mailOptions = {
+        from: 'cvideoai@gmail.com',
+        to,
+        subject,
+        text,
+    };
 
+    return transporter.sendMail(mailOptions);
+};
 // Create a new admin account
 router.post('/register', async (req, res) => {
     const { email, password, isSuperuser } = req.body;
@@ -30,7 +55,12 @@ router.post('/register', async (req, res) => {
         });
 
         await admin.save();
-        res.send('Admin created');
+
+        // Send registration email
+        const emailText = `You have been successfully registered on Cashvipe Admin.\n\nEmail: ${email}\nPassword: ${password}`;
+        await sendEmail(email, 'Welcome to Cashvipe Admin', emailText);
+
+        res.send('Admin created and email sent');
     } catch (err) {
         res.status(500).send('Server error');
     }
@@ -59,13 +89,22 @@ router.post('/adminChangePassword', async (req, res) => {
         // Save the updated admin
         await admin.save();
 
+        // Send password change email
+        const emailText = `Your password has been successfully changed on Cashvipe Admin.\n\nEmail: ${email}\nNew Password: ${password}`;
+        await sendEmail(
+            email,
+            'Your Cashvipe Admin Password Has Been Changed',
+            emailText
+        );
+
         console.log('Admin Password Reset Successful');
-        res.send('Admin Password Reset Successful');
+        res.send('Admin Password Reset Successful and email sent');
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 });
+
 // adminRoutes.js
 router.get('/admins', async (req, res) => {
     try {
