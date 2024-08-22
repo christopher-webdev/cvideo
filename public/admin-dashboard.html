@@ -1345,7 +1345,7 @@
                         );
                     }
 
-                    // Sort projects by most recent (assuming createdAt field is available)
+                    // Sort projects by most recent
                     projects.sort(
                         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                     );
@@ -1355,41 +1355,33 @@
                     projectsTableBody.innerHTML = '';
 
                     projects.forEach((project, index) => {
-                        // Project row
                         const projectRow = document.createElement('tr');
 
-                        // Numbering
                         const numberCell = document.createElement('td');
                         numberCell.className = 'py-2 px-4';
                         numberCell.innerText = index + 1;
                         projectRow.appendChild(numberCell);
 
-                        // Project & User ID
                         const idCell = document.createElement('td');
                         idCell.className = 'py-2 px-4';
                         idCell.innerText = `${project._id} / ${project.userId._id}`;
                         projectRow.appendChild(idCell);
 
-                        // Title
                         const titleCell = document.createElement('td');
                         titleCell.className = 'py-2 px-4';
                         titleCell.innerText = project.title;
                         projectRow.appendChild(titleCell);
 
-                        // Status
                         const statusCell = document.createElement('td');
                         statusCell.className = 'py-2 px-4';
-
                         let statusContent = `<strong>Status: ${project.status}</strong>`;
 
-                        // Add ETA if available
                         if (project.estimatedCompletionTime) {
                             statusContent += `<p><strong>ETA:</strong> ${new Date(
                                 project.estimatedCompletionTime
                             ).toLocaleString()}</p>`;
                         }
 
-                        // Add comment if available
                         if (
                             project.statusHistory &&
                             project.statusHistory.length > 0
@@ -1406,7 +1398,6 @@
                         statusCell.innerHTML = statusContent;
                         projectRow.appendChild(statusCell);
 
-                        // Created At
                         const createdAtCell = document.createElement('td');
                         createdAtCell.className = 'py-2 px-4';
                         createdAtCell.innerText = new Date(
@@ -1414,45 +1405,38 @@
                         ).toLocaleString();
                         projectRow.appendChild(createdAtCell);
 
-                        // Options
                         const optionsCell = document.createElement('td');
                         optionsCell.className = 'py-2 px-4';
-                        optionsCell.innerHTML = `
-                ${
-                    project.videoLink
-                        ? `<p><strong>Video Link:</strong> <a href="${
-                              project.videoLink.startsWith('http')
-                                  ? project.videoLink
-                                  : `http://${project.videoLink}`
-                          }" class="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">${
-                              project.videoLink
-                          }</a></p>`
-                        : ''
-                }
-                ${
-                    project.videoDescription
-                        ? `<p><strong>Description:</strong> ${project.videoDescription}</p>`
-                        : ''
-                }
-                ${
-                    project.orientation
-                        ? `<p><strong>Orientation:</strong> ${project.orientation}</p>`
-                        : ''
-                }
-                ${
-                    project.location
-                        ? `<p><strong>Location:</strong> ${project.location}</p>`
-                        : ''
-                }
-                ${
-                    project.avatar
-                        ? `<p><strong>Avatar:</strong> ${project.avatar}</p>`
-                        : ''
-                }
-            `;
+
+                        // Display multiple video links
+                        if (project.videoLink && project.videoLink.length > 0) {
+                            project.videoLink.forEach((link) => {
+                                optionsCell.innerHTML += `<p><strong>Video Link:</strong> <a href="${
+                                    link.startsWith('http')
+                                        ? link
+                                        : `http://${link}`
+                                }" class="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">${link}</a></p>`;
+                            });
+                        }
+
+                        if (project.videoDescription) {
+                            optionsCell.innerHTML += `<p><strong>Description:</strong> ${project.videoDescription}</p>`;
+                        }
+
+                        if (project.orientation) {
+                            optionsCell.innerHTML += `<p><strong>Orientation:</strong> ${project.orientation}</p>`;
+                        }
+
+                        if (project.location) {
+                            optionsCell.innerHTML += `<p><strong>Location:</strong> ${project.location}</p>`;
+                        }
+
+                        if (project.avatar) {
+                            optionsCell.innerHTML += `<p><strong>Avatar:</strong> ${project.avatar}</p>`;
+                        }
+
                         projectRow.appendChild(optionsCell);
 
-                        // Actions
                         const actionsCell = document.createElement('td');
                         actionsCell.className = 'py-2 px-4';
                         actionsCell.innerHTML += `
@@ -1470,24 +1454,20 @@
                     onclick="openMediaModal('${project._id}')"
                     class="bg-indigo-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
                     View Project Files
-                 </button>
-                
+                </button>
                 <button
                     onclick="deleteProject('${project._id}')"
                     class="bg-red-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-red-700 hover:shadow-lg transition-all duration-300">
                     Delete Project
                 </button><br><br>
-                
             `;
                         projectRow.appendChild(actionsCell);
 
-                        // Append the project row
                         projectsTableBody.appendChild(projectRow);
 
-                        // Add a horizontal line after the row
                         const hrRow = document.createElement('tr');
                         const hrCell = document.createElement('td');
-                        hrCell.setAttribute('colspan', '7'); // Adjust colspan to match the number of columns
+                        hrCell.setAttribute('colspan', '7');
                         hrCell.innerHTML =
                             '<hr class="border-t-2 border-gray-300 my-4">';
                         hrRow.appendChild(hrCell);
