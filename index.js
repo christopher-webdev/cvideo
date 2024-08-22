@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const { User } = require('./models/User');
 const { SubscriptionPlan } = require('./models/User');
 const Project = require('./models/Project');
+const Avatar = require('./models/Avatar');
 
 const signupRoute = require('./routes/signupRoute');
 const bodyParser = require('body-parser');
@@ -47,8 +48,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Body parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Multer configuration starts//////////////////////////////////////////////////////////////////////
 const uploadDir = path.join(__dirname, 'uploads');
@@ -379,7 +382,6 @@ app.post('/auth/reset-password/:token', async (req, res) => {
         });
     }
 });
-//handles video ai submits
 app.post(
     '/submit-video',
     ensureAuthenticated,
@@ -392,11 +394,10 @@ app.post(
         try {
             const userId = req.user._id;
             const {
-                videoLink,
+                videoLinks, // Changed to handle multiple links
                 videoDescription,
-                location,
-                orientation,
                 selectedAvatar,
+                location_avatar, // Handle location for avatar
             } = req.body;
             const title = req.headers['page-title'] || 'Untitled Project';
 
@@ -441,13 +442,12 @@ app.post(
                 userId,
                 title,
                 videoFiles,
-                videoLink,
+                videoLink: JSON.parse(req.body.videoLinks), // Parse JSON string to array
                 pictureFiles,
                 audioFiles,
                 videoDescription,
-                location,
-                orientation,
                 avatar: selectedAvatar,
+                location: location_avatar, // Save location if avatar is selected
                 status: 'Pending',
             });
 
@@ -464,6 +464,92 @@ app.post(
         }
     }
 );
+
+// //handles video ai submits
+// app.post(
+//     '/submit-video',
+//     ensureAuthenticated,
+//     upload.fields([
+//         { name: 'videoFiles', maxCount: 5 },
+//         { name: 'pictureFiles', maxCount: 5 },
+//         { name: 'audioFiles', maxCount: 5 },
+//     ]),
+//     async (req, res) => {
+//         try {
+//             const userId = req.user._id;
+//             const {
+//                 videoLink,
+//                 videoDescription,
+//                 location,
+//                 orientation,
+//                 selectedAvatar,
+//             } = req.body;
+//             const title = req.headers['page-title'] || 'Untitled Project';
+
+//             // Determine the feature based on the project title
+//             const featureMap = {
+//                 'Video Editor AI': 'videoEditor',
+//                 'Video Restyling AI': 'videoRestyle',
+//                 'Video Voicing': 'videoVoicing',
+//                 'Lip Sync AI': 'lipSync',
+//                 'Face Swap AI': 'faceSwap',
+//                 '3D Video Modeling AI': '3dVideoModeling',
+//                 'Add Avatar': 'myAvatar',
+//             };
+//             const feature = featureMap[title];
+
+//             // Check if the user has enough credits for the feature
+//             const user = await User.findById(userId);
+//             const userCredit = user.credits.find(
+//                 (credit) => credit.feature === feature
+//             );
+//             if (!userCredit || userCredit.credits <= 0) {
+//                 return res.status(403).json({
+//                     error: `You have exceeded the submit limit for ${title}. Please upgrade your subscription to submit more.`,
+//                 });
+//             }
+
+//             // Deduct a credit
+//             userCredit.credits -= 1;
+//             await user.save();
+
+//             const videoFiles = req.files['videoFiles']
+//                 ? req.files['videoFiles'].map((file) => file.path)
+//                 : [];
+//             const pictureFiles = req.files['pictureFiles']
+//                 ? req.files['pictureFiles'].map((file) => file.path)
+//                 : [];
+//             const audioFiles = req.files['audioFiles']
+//                 ? req.files['audioFiles'].map((file) => file.path)
+//                 : [];
+
+//             const newProject = new Project({
+//                 userId,
+//                 title,
+//                 videoFiles,
+//                 videoLink,
+//                 pictureFiles,
+//                 audioFiles,
+//                 videoDescription,
+//                 location,
+//                 orientation,
+//                 avatar: selectedAvatar,
+//                 status: 'Pending',
+//             });
+
+//             await newProject.save();
+//             res.status(201).json({
+//                 message: 'Project created successfully',
+//                 projectId: newProject._id,
+//                 remainingCredits: userCredit.credits, // Include remaining credits in the response
+//             });
+//         } catch (error) {
+//             res.status(500).json({
+//                 error: 'Error creating project: ' + error.message,
+//             });
+//         }
+//     }
+// );
 
 // Set FFmpeg and FFprobe paths for Thumbnail settings
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
@@ -758,6 +844,71 @@ app.put('/update-subscription/:userId', updateCreditsMiddleware, (req, res) => {
     });
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+app.put(
+    '/update-avatar/:id',
+    upload.fields([
+        { name: 'avatarImage', maxCount: 1 },
+        { name: 'locationImages[office]', maxCount: 1 },
+        { name: 'locationImages[street]', maxCount: 1 },
+        { name: 'locationImages[forest]', maxCount: 1 },
+        { name: 'locationImages[home]', maxCount: 1 },
+    ]),
+    async (req, res) => {
+        try {
+            const avatarId = req.params.id;
+            const updatedData = {};
+
+            if (req.files['avatarImage']) {
+                updatedData.image = req.files['avatarImage'][0].path;
+            }
+
+            updatedData.locations = [];
+
+            ['office', 'street', 'forest', 'home'].forEach((location) => {
+                if (req.files[`locationImages[${location}]`]) {
+                    updatedData.locations.push({
+                        name: location,
+                        image: req.files[`locationImages[${location}]`][0].path,
+                    });
+                }
+            });
+
+            const updatedAvatar = await Avatar.findByIdAndUpdate(
+                avatarId,
+                updatedData,
+                { new: true }
+            );
+
+            if (!updatedAvatar) {
+                return res.status(404).json({ error: 'Avatar not found' });
+            }
+
+            res.status(200).json(updatedAvatar);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+);
+app.get('/avatars/:id', async (req, res) => {
+    try {
+        const avatar = await Avatar.findById(req.params.id);
+        if (!avatar) {
+            return res.status(404).json({ error: 'Avatar not found' });
+        }
+        res.status(200).json(avatar);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch avatar' });
+    }
+});
+// Route to fetch all avatars
+app.get('/api/avatars', async (req, res) => {
+    try {
+        const avatars = await Avatar.find();
+        res.status(200).json(avatars);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch avatars' });
+    }
+});
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 

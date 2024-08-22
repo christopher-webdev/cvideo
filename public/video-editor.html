@@ -724,120 +724,17 @@
                                 <span></span> <span></span> <span></span>
                             </button>
                         </div>
-
-                        <!-- Right: Header buttons -->
-                        <div class="-mr-1.5 flex items-center space-x-2">
-                            <!-- Mobile Search Toggle -->
-                            <button
-                                @click="$store.global.isSearchbarActive = !$store.global.isSearchbarActive"
-                                class="btn size-8 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:hidden"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="size-5.5 text-slate-500 dark:text-navy-100"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                    />
-                                </svg>
-                            </button>
-
-                            <!-- Main Searchbar -->
-                            <template x-if="$store.breakpoints.smAndUp">
-                                <div
-                                    class="flex"
-                                    x-data="usePopper({placement:'bottom-end',offset:12})"
-                                    @click.outside="isShowPopper && (isShowPopper = false)"
-                                >
-                                    <div class="relative mr-4 flex h-8">
-                                        <input
-                                            placeholder="Search here..."
-                                            class="form-input peer h-full rounded-full bg-slate-150 px-4 pl-9 text-xs+ text-slate-800 ring-primary/50 hover:bg-slate-200 focus:ring dark:bg-navy-900/90 dark:text-navy-100 dark:placeholder-navy-300 dark:ring-accent/50 dark:hover:bg-navy-900 dark:focus:bg-navy-900"
-                                            :class="isShowPopper ? 'w-80' : 'w-60'"
-                                            @focus="isShowPopper= true"
-                                            type="text"
-                                            x-ref="popperRef"
-                                        />
-                                        <div
-                                            class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                class="size-4.5 transition-colors duration-200"
-                                                fill="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    d="M3.316 13.781l.73-.171-.73.171zm0-5.457l.73.171-.73-.171zm15.473 0l.73-.171-.73.171zm0 5.457l.73.171-.73-.171zm-5.008 5.008l-.171-.73.171.73zm-5.457 0l-.171.73.171-.73zm0-15.473l-.171-.73.171.73zm5.457 0l.171-.73-.171.73zM20.47 21.53a.75.75 0 101.06-1.06l-1.06 1.06zM4.046 13.61a11.198 11.198 0 010-5.115l-1.46-.342a12.698 12.698 0 000 5.8l1.46-.343zm14.013-5.115a11.196 11.196 0 010 5.115l1.46.342a12.698 12.698 0 000-5.8l-1.46.343zm-4.45 9.564a11.196 11.196 0 01-5.114 0l-.342 1.46c1.907.448 3.892.448 5.8 0l-.343-1.46zM8.496 4.046a11.198 11.198 0 015.115 0l.342-1.46a12.698 12.698 0 00-5.8 0l.343 1.46zm0 14.013a5.97 5.97 0 01-4.45-4.45l-1.46.343a7.47 7.47 0 005.568 5.568l.342-1.46zm5.457 1.46a7.47 7.47 0 005.568-5.567l-1.46-.342a5.97 5.97 0 01-4.45 4.45l.342 1.46zM13.61 4.046a5.97 5.97 0 014.45 4.45l1.46-.343a7.47 7.47 0 00-5.568-5.567l-.342 1.46zm-5.457-1.46a7.47 7.47 0 00-5.567 5.567l1.46.342a5.97 5.97 0 014.45-4.45l-.343-1.46zm8.652 15.28l3.665 3.664 1.06-1.06-3.665-3.665-1.06 1.06z"
-                                                />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div
-                                        :class="isShowPopper && 'show'"
-                                        class="popper-root"
-                                        x-ref="popperRoot"
-                                    ></div>
-                                </div>
-                            </template>
-                        </div>
                     </div>
                 </div>
             </nav>
 
-            <!-- Mobile Searchbar -->
-            <div
-                x-show="$store.breakpoints.isXs && $store.global.isSearchbarActive"
-                x-transition:enter="easy-out transition-all"
-                x-transition:enter-start="opacity-0 scale-105"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="easy-in transition-all"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-95"
-                class="fixed inset-0 z-[100] flex flex-col bg-white dark:bg-navy-700 sm:hidden"
-            >
-                <div
-                    class="flex items-center space-x-2 bg-slate-100 px-3 pt-2 dark:bg-navy-800"
-                >
-                    <button
-                        class="btn -ml-1.5 h-7 w-7 shrink-0 rounded-full p-0 text-slate-600 hover:bg-slate-300/20 active:bg-slate-300/25 dark:text-navy-100 dark:hover:bg-navy-300/20 dark:active:bg-navy-300/25"
-                        @click="$store.global.isSearchbarActive = false"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="size-5"
-                            fill="none"
-                            stroke-width="1.5"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M15 19l-7-7 7-7"
-                            />
-                        </svg>
-                    </button>
-                    <input
-                        x-effect="$store.global.isSearchbarActive && $nextTick(() => $el.focus() );"
-                        class="form-input h-8 w-full bg-transparent placeholder-slate-400 dark:placeholder-navy-300"
-                        type="text"
-                        placeholder="Search here..."
-                    />
-                </div>
-            </div>
-
             <!-- Main Content Wrapper -->
             <main class="main-content w-full px-[var(--margin-x)] pb-6">
                 <div class="py-5 text-center lg:py-6">
+                    <br />
                     <h3
-                        class="mt-1 text-xl font-semibold text-slate-600 dark:text-navy-100"
+                        style="font-size: 40px"
+                        class="mt-1 font-semibold text-slate-500 dark:text-navy-100"
                     >
                         Video Editor AI
                     </h3>
@@ -854,10 +751,12 @@
                                 <div
                                     class="my-3 flex h-8 items-center justify-between"
                                 ></div>
+
+                                <!-- Upload Video Clip Section -->
                                 <h4
                                     class="text-lg text-center font-semibold text-slate-70 dark:text-navy-100"
                                 >
-                                    Upload Video clip to edit
+                                    Upload Video Clip to Edit
                                 </h4>
                                 <small class="text-warning text-center"
                                     >You can enter multiple videos</small
@@ -869,25 +768,40 @@
                                                 id="videoFiles"
                                                 type="file"
                                                 name="videoFiles"
+                                                accept="video/*"
                                                 x-init="$el._x_filepond = FilePond.create($el)"
                                                 multiple
                                             />
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- Add Video Links Section -->
+                                <div class="mt-5">
                                     <label class="block">
                                         <p class="text-warning">
-                                            Add video link
+                                            Add Video Links
                                         </p>
-                                        <input
-                                            class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            placeholder="Add video link from internet"
-                                            name="videoLink"
-                                            type="text"
-                                            id="videoLink"
-                                        />
+                                        <div id="videoLinksContainer">
+                                            <input
+                                                class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                                placeholder="Add video link from internet"
+                                                name="videoLink[]"
+                                                type="text"
+                                            />
+                                            <!-- Additional video link fields will be added here -->
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onclick="addVideoLinkField()"
+                                            class="mt-2 text-primary hover:underline"
+                                        >
+                                            Add More Link
+                                        </button>
                                     </label>
                                 </div>
-                                <br />
+
+                                <!-- Add Picture Section -->
                                 <h4
                                     class="text-lg text-center font-semibold text-slate-70 dark:text-navy-100"
                                 >
@@ -899,6 +813,7 @@
                                             <input
                                                 type="file"
                                                 name="pictureFiles"
+                                                accept="image/*"
                                                 x-init="$el._x_filepond = FilePond.create($el)"
                                                 id="pictureFiles"
                                                 multiple
@@ -906,59 +821,58 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br />
-                                <div align="center">
-                                    <h4
-                                        class="text-lg font-semibold text-slate-700 dark:text-navy-100"
-                                    >
-                                        Add Audio File
-                                    </h4>
-                                    <div class="flex justify-center p-5">
-                                        <img
-                                            src="images/avatar/123.png"
-                                            alt="image"
-                                            width="50"
-                                        />
-                                    </div>
-                                    <p class="pt-3">
-                                        Select audio file to add to video
-                                    </p>
-                                    <label
-                                        class="mt-5 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90"
-                                    >
-                                        <div
-                                            class="flex items-center space-x-2"
-                                        >
-                                            <div class="filepond fp-bordered">
-                                                <input
-                                                    id="audioFiles"
-                                                    type="file"
-                                                    name="audioFiles"
-                                                    x-init="$el._x_filepond = FilePond.create($el)"
-                                                    multiple
-                                                />
-                                            </div>
+
+                                <!-- Add Audio File Section -->
+                                <h4
+                                    class="text-lg text-center font-semibold text-slate-700 dark:text-navy-100"
+                                >
+                                    Add Audio File
+                                </h4>
+                                <div class="flex justify-center p-5">
+                                    <img
+                                        src="images/avatar/123.png"
+                                        alt="image"
+                                        width="50"
+                                    />
+                                </div>
+                                <p class="pt-3 text-center">
+                                    Select audio file to add to video
+                                </p>
+                                <label
+                                    class="mt-5 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90"
+                                >
+                                    <div class="flex items-center space-x-2">
+                                        <div class="filepond fp-bordered">
+                                            <input
+                                                id="audioFiles"
+                                                type="file"
+                                                name="audioFiles"
+                                                accept="audio/*"
+                                                x-init="$el._x_filepond = FilePond.create($el)"
+                                                multiple
+                                            />
                                         </div>
-                                    </label>
-                                </div>
+                                    </div>
+                                </label>
                                 <br />
-                                <div align="center">
-                                    <h4
-                                        class="text-lg font-semibold text-slate-700 dark:text-navy-100"
-                                    >
-                                        Select Video Avatar
-                                    </h4>
-                                    <small class="pt-3 text-warning"
-                                        >Select a video from list of
-                                        Avatar</small
-                                    >
-                                </div>
-                                <br />
+                                <!-- Select Video Avatar Section -->
+                                <h4
+                                    class="text-lg text-center font-semibold text-slate-700 dark:text-navy-100"
+                                >
+                                    Select Video Avatar
+                                </h4>
+                                <small class="pt-3 text-center text-warning"
+                                    >Select a video from the list of
+                                    Avatars</small
+                                >
+
                                 <div
                                     class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6"
                                 >
-                                    <!-- Avatar Cards -->
-                                    <div class="card">
+                                    <!-- Avatar 1  Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/images (26).jpeg"
@@ -970,11 +884,25 @@
                                             class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
                                         >
                                             <div class="mt-1">
-                                                <a
+                                                <p
                                                     href="#"
                                                     class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                                    >Avatar 1</a
                                                 >
+                                                    Avatar 1
+                                                </p>
+                                                <br /><button
+                                                    onclick="showLocationImages('avatar1')"
+                                                    class="text-sm font-medium text-slate-700 hover:text-primary focus:text-primary"
+                                                >
+                                                    View Locations
+                                                </button>
+                                            </div>
+                                            <!-- Add a container to display the location images -->
+                                            <div
+                                                id="locationImagesContainer"
+                                                class="hidden flex flex-wrap space-x-4"
+                                            >
+                                                <!-- Dynamically populated with location images -->
                                             </div>
                                             <div
                                                 class="my-2 flex items-center space-x-3 text-xs"
@@ -995,14 +923,60 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- End of Avatar 1 -->
-
-                                    <!-- End of Avatar Card Block -->
-
-                                    <div class="card">
+                                    <!-- Avatar 2  Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/200w.gif"
@@ -1039,12 +1013,60 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- End of Avatar 2 -->
-                                    <!-- Avatar 3 -->
-                                    <div class="card">
+                                    <!-- Avatar 3  Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/images (27).jpeg"
@@ -1081,12 +1103,60 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Avatar 4 -->
-                                    <div class="card">
+                                    <!-- Avatar 4  Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/images (20).jpeg"
@@ -1123,12 +1193,60 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Avatar 5 -->
-                                    <div class="card">
+                                    <!-- Avatar 5 Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/29.gif"
@@ -1165,12 +1283,60 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Avatar 6 -->
-                                    <div class="card">
+                                    <!-- Avatar 6  Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/images (17).jpeg"
@@ -1207,12 +1373,60 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Avatar 7 -->
-                                    <div class="card">
+                                    <!-- Avatar 7  Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/images (24).jpeg"
@@ -1249,12 +1463,60 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Avatar 8 -->
-                                    <div class="card">
+                                    <!-- Avatar 8  Cards -->
+                                    <div
+                                        class="card border-2 border-slate-300 shadow-lg rounded-lg"
+                                    >
                                         <div class="p-2.5">
                                             <img
                                                 src="images/avatar/21.jpg"
@@ -1291,100 +1553,122 @@
                                                     />
                                                     <p>Select Avatar</p>
                                                 </label>
+                                                <div class="mt-2">
+                                                    <p>Choose Location</p>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="office"
+                                                        />
+                                                        <p>Office</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="street"
+                                                        />
+                                                        <p>Street</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="forest"
+                                                        />
+                                                        <p>Forest</p>
+                                                    </label>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
+                                                            name="location_avatar"
+                                                            type="radio"
+                                                            value="home"
+                                                        />
+                                                        <p>Home</p>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Repeat Avatar Cards for Avatar 2, Avatar 3, Avatar 4 -->
                                 </div>
-                                <!-- End of Avatar Cards -->
-                                <br /><br />
-                                <div>
-                                    <p class="pt-3">Enter video description</p>
-                                    <label class="block">
-                                        <textarea
-                                            rows="4"
-                                            placeholder=" Enter Text"
-                                            class="form-textarea w-full resize-none rounded-lg bg-slate-150 p-2.5 placeholder:text-slate-400 dark:bg-navy-900 dark:placeholder:text-navy-300"
-                                            name="videoDescription"
-                                            id="videoDescription"
-                                        ></textarea>
-                                    </label>
-                                    <br />
-                                    <label class="block">
-                                        <span>Choose location</span>
-                                        <select
-                                            class="form-select mt-1.5 w-full rounded-full border border-slate-300 bg-white px-4 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            name="location"
-                                            id="location"
-                                        >
-                                            <option>Office</option>
-                                            <option>Street</option>
-                                            <option>Forest</option>
-                                            <option>Home</option>
-                                        </select>
-                                    </label>
-                                    <br /><br />
-                                    <p>Select orientation</p>
-                                    <br />
-                                    <div>
-                                        <label
-                                            class="inline-flex items-center space-x-2"
-                                        >
-                                            <input
-                                                class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent"
-                                                name="orientation"
-                                                type="radio"
-                                                value="portrait"
-                                            />
-                                            <p>Portrait</p>
-                                        </label>
-                                        <label
-                                            class="inline-flex items-center space-x-2"
-                                        >
-                                            <input
-                                                class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:checked:border-accent dark:hover:border-accent dark:focus:border-accent"
-                                                name="orientation"
-                                                type="radio"
-                                                value="landscape"
-                                            />
-                                            <p>Landscape</p>
-                                        </label>
-                                    </div>
-                                    <br /><br />
-                                </div>
-                                <div class="code-wrapper hidden pt-4">
-                                    <pre
-                                        class="is-scrollbar-hidden max-h-96 overflow-auto rounded-lg"
-                                        x-init="hljs.highlightElement($el)"
+
+                                <div
+                                    class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
+                                ></div>
+                                <br />
+                                <div align="center">
+                                    <button
+                                        type="submit"
+                                        class="btn border border-warning/30 bg-warning/10 font-medium text-warning hover:bg-warning/20 focus:bg-warning/20 active:bg-warning/25"
                                     >
-                <code class="language-html" x-ignore>
-                  &lt;div class=&quot;filepond fp-bordered&quot;&gt;&#13;&#10;    &lt;input type=&quot;file&quot;  x-init="$el._x_filepond = FilePond.create($el)" multiple /&gt;&#13;&#10;  &lt;/div&gt;&#13;&#10;
-                </code>
-              </pre>
+                                        Submit Video
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <br />
-
-                    <div
-                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                    ></div>
-                    <br />
-                    <div align="center">
-                        <button
-                            type="submit"
-                            class="btn border border-warning/30 bg-warning/10 font-medium text-warning hover:bg-warning/20 focus:bg-warning/20 active:bg-warning/25"
-                        >
-                            Submit Video
-                        </button>
-                    </div>
                 </form>
+
                 <div
                     id="message"
                     class="text-center mt-3 text-slate-600 dark:text-navy-100"
                 ></div>
                 <div id="remainingCredits"></div>
                 <!-- New div for remaining credits -->
+                <br />
+                <!-- Chat Feature Box -->
+                <div class="chat-box mt-8 max-w-6xl mx-auto">
+                    <h4
+                        class="text-lg font-semibold text-slate-700 dark:text-navy-100"
+                    >
+                        Chat Feature
+                    </h4>
+                    <div
+                        class="chat-content bg-slate-100 dark:bg-navy-800 p-4 rounded-lg h-60 overflow-auto"
+                    >
+                        <!-- Chat messages will go here -->
+                    </div>
+                    <div class="chat-input mt-4">
+                        <textarea
+                            rows="4"
+                            placeholder="Enter your message here..."
+                            class="form-textarea w-full resize-none rounded-lg bg-slate-150 p-2.5 placeholder:text-slate-400 dark:bg-navy-900 dark:placeholder:text-navy-300"
+                        ></textarea>
+                        <div class="mt-2 flex justify-between">
+                            <input
+                                type="file"
+                                id="chatFileUpload"
+                                class="hidden"
+                            />
+                            <label
+                                for="chatFileUpload"
+                                class="btn border border-warning/30 bg-warning/10 font-medium text-warning hover:bg-warning/20 focus:bg-warning/20 active:bg-warning/25 cursor-pointer"
+                            >
+                                Attach File
+                            </label>
+                            <button
+                                type="button"
+                                class="btn border border-primary/30 bg-primary/10 font-medium text-primary hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25"
+                            >
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
                 <br />
@@ -1546,31 +1830,31 @@
                             });
 
                             // Append other form fields
-                            formData.append(
-                                'videoLink',
-                                document.getElementById('videoLink').value
+                            const videoLinkInputs = document.querySelectorAll(
+                                'input[name="videoLink[]"]'
                             );
+                            const videoLinks = Array.from(videoLinkInputs).map(
+                                (input) => (input ? input.value : '')
+                            );
+                            formData.append(
+                                'videoLinks',
+                                JSON.stringify(
+                                    videoLinks.filter(
+                                        (link) => link.trim() !== ''
+                                    )
+                                )
+                            ); // Convert array to JSON string and filter out empty links
+
+                            const videoDescriptionElement =
+                                document.getElementById('videoDescription');
                             formData.append(
                                 'videoDescription',
-                                document.getElementById('videoDescription')
-                                    .value
-                            );
-                            formData.append(
-                                'location',
-                                document.getElementById('location').value
+                                videoDescriptionElement
+                                    ? videoDescriptionElement.value
+                                    : ''
                             );
 
                             // Append selected radio button values if they exist
-                            const selectedOrientation = document.querySelector(
-                                'input[name="orientation"]:checked'
-                            );
-                            if (selectedOrientation) {
-                                formData.append(
-                                    'orientation',
-                                    selectedOrientation.value
-                                );
-                            }
-
                             const selectedAvatar = document.querySelector(
                                 'input[name="selectedAvatar"]:checked'
                             );
@@ -1578,6 +1862,16 @@
                                 formData.append(
                                     'selectedAvatar',
                                     selectedAvatar.value
+                                );
+                            }
+
+                            const location_avatar = document.querySelector(
+                                'input[name="location_avatar"]:checked'
+                            );
+                            if (location_avatar) {
+                                formData.append(
+                                    'location_avatar',
+                                    location_avatar.value
                                 );
                             }
 
@@ -1642,38 +1936,64 @@
                     modal.style.left = '50%';
                     modal.style.top = '50%';
                     modal.style.transform = 'translate(-50%, -50%)';
-                    modal.style.backgroundColor = '#bcc5ca';
-                    modal.style.padding = '30px';
-                    modal.style.boxShadow = '0px 0px 20px rgba(0, 0, 0, 0.3)';
+                    modal.style.backgroundColor = '#fff';
+                    modal.style.padding = '20px';
+                    modal.style.boxShadow = '0px 0px 30px rgba(0, 0, 0, 0.1)';
+                    modal.style.borderRadius = '8px';
                     modal.style.zIndex = '1000';
+                    modal.style.maxWidth = '400px';
+                    modal.style.width = '90%';
+                    modal.style.textAlign = 'center';
+                    modal.style.fontFamily = 'Arial, sans-serif';
 
                     // Modal content
                     const modalContent = `
-                        <p>${message}</p>
-                        <p>Please click <a href="/plans-billing.html" style="color: red;"><strong>Upgrade</strong></a> to submit more videos.</p><br>
-                        <button class='red' onclick="closeExhaustedCreditsModal()" style="
+                        <br><div style="font-size: 50px; color: #d9534f;">
+                            😢
+                        </div><br>
+                        <h2 style="color: #333;">Oops!</h2><br>
+                        <p style="color: #555;">${message}</p>
+                        <p style="color: #555;">Please click <a href="/plans-billing.html" style="color: #007bff; text-decoration: none; font-weight: bold;">here</a> to upgrade and submit more videos.</p>
+                       <br> <button onclick="closeExhaustedCreditsModal()" style="
                             background-color: #d9534f;
                             color: white;
-                            padding: 10px 20px;
+                            padding: 12px 12px;
                             border: none;
                             border-radius: 5px;
-                            box-shadow: 0px 5px 0px #b52b27;
+                            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
                             font-weight: bold;
                             cursor: pointer;
-                            transition: all 0.3s ease;
-                        "><strong>Close</strong></button>
+                            transition: background-color 0.3s ease;
+                            font-size: 16px;
+                        ">Close</button>
                     `;
 
                     modal.innerHTML = modalContent;
 
                     // Append modal to body
                     document.body.appendChild(modal);
+
+                    // Add overlay
+                    const overlay = document.createElement('div');
+                    overlay.id = 'modalOverlay';
+                    overlay.style.position = 'fixed';
+                    overlay.style.left = '0';
+                    overlay.style.top = '0';
+                    overlay.style.width = '100%';
+                    overlay.style.height = '100%';
+                    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+                    overlay.style.zIndex = '999';
+                    document.body.appendChild(overlay);
                 }
 
                 function closeExhaustedCreditsModal() {
                     const modal = document.getElementById('creditsModal');
+                    const overlay = document.getElementById('modalOverlay');
                     if (modal) {
                         document.body.removeChild(modal);
+                    }
+                    if (overlay) {
+                        document.body.removeChild(overlay);
                     }
                 }
             </script>
@@ -1878,6 +2198,132 @@
                 window.addEventListener('DOMContentLoaded', () =>
                     Alpine.start()
                 );
+            </script>
+            <script>
+                function addVideoLinkField() {
+                    const container = document.getElementById(
+                        'videoLinksContainer'
+                    );
+                    const inputCount =
+                        container.querySelectorAll('input').length;
+                    if (inputCount < 5) {
+                        const newInput = document.createElement('input');
+                        newInput.className =
+                            'form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent mt-2';
+                        newInput.placeholder = 'Add video link from internet';
+                        newInput.name = 'videoLink[]';
+                        newInput.type = 'text';
+                        container.appendChild(newInput);
+                    } else {
+                        alert('Maximum of 5 video links are allowed.');
+                    }
+                }
+            </script>
+            <script>
+                function addVideoLinkField() {
+                    const container = document.getElementById(
+                        'videoLinksContainer'
+                    );
+                    const inputCount =
+                        container.querySelectorAll('input').length;
+                    if (inputCount < 5) {
+                        const newInput = document.createElement('input');
+                        newInput.className =
+                            'form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent mt-2';
+                        newInput.placeholder = 'Add video link from internet';
+                        newInput.name = 'videoLink[]';
+                        newInput.type = 'text';
+                        container.appendChild(newInput);
+                    } else {
+                        alert('Maximum of 5 video links are allowed.');
+                    }
+                }
+            </script>
+            <script>
+                async function fetchAvatars() {
+                    const response = await fetch('/api/avatars');
+                    const avatars = await response.json();
+                    const container =
+                        document.getElementById('avatarContainer');
+
+                    container.innerHTML = ''; // Clear existing avatars
+
+                    avatars.forEach((avatar) => {
+                        const card = document.createElement('div');
+                        card.className =
+                            'card border-2 border-slate-300 shadow-lg rounded-lg';
+                        card.innerHTML = `
+                            <div class="p-2.5">
+                                <img src="${
+                                    avatar.image
+                                }" class="w-full rounded-lg object-cover object-center" alt="Avatar ${
+                            avatar.number
+                        }" />
+                            </div>
+                            <div class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5">
+                                <div class="mt-1">
+                                    <a href="#" class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">Avatar ${
+                                        avatar.number
+                                    }</a>
+                                </div>
+                                <div class="my-2 flex items-center space-x-3 text-xs">
+                                    <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
+                                </div>
+                                <div>
+                                    <label class="inline-flex items-center space-x-2">
+                                        <input class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100" name="selectedAvatar" type="radio" value="avatar${
+                                            avatar.number
+                                        }" />
+                                        <p>Select Avatar</p>
+                                    </label>
+                                    <div class="mt-2">
+                                        <p>Choose Location</p>
+                                        ${avatar.locations
+                                            .map(
+                                                (location) => `
+                                            <label class="inline-flex items-center space-x-2">
+                                                <input class="form-radio is-outline size-5 rounded-md border-slate-400/70" name="location_avatar" type="radio" value="${location}" />
+                                                <p>${
+                                                    location
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                    location.slice(1)
+                                                }</p>
+                                            </label>
+                                        `
+                                            )
+                                            .join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                }
+
+                fetchAvatars();
+            </script>
+            <script>
+                async function showLocationImages(avatarId) {
+                    const response = await fetch(`/api/avatars/${avatarId}`);
+                    const avatar = await response.json();
+
+                    const container = document.getElementById(
+                        'locationImagesContainer'
+                    );
+                    container.innerHTML = ''; // Clear previous images
+
+                    avatar.locations.forEach((location) => {
+                        const img = document.createElement('img');
+                        img.src = location.image;
+                        img.alt = `${location.name} location`;
+                        img.className = 'w-32 h-32 rounded-lg object-cover';
+
+                        container.appendChild(img);
+                    });
+
+                    container.classList.remove('hidden');
+                }
             </script>
             <br />
             <br />

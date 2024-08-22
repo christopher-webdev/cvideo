@@ -132,6 +132,12 @@
                             My Avatar
                         </li>
                     </ul>
+                    <li
+                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                        id="manageAvatarBtn"
+                    >
+                        Manage Avatar
+                    </li>
                 </ul>
             </div>
 
@@ -1074,6 +1080,67 @@
                     </div>
                 </div>
                 <!-- ///////////////////////////////////////// End of Manage Projects////////////////////////////////// -->
+                <div id="manageAvatarSection" class="hidden">
+                    <h2 class="text-3xl font-semibold text-gray-700 mb-6">
+                        Manage Avatars
+                    </h2>
+                    <form id="updateAvatarForm" enctype="multipart/form-data">
+                        <label for="avatarSelect">Select Avatar:</label>
+                        <select id="avatarSelect" name="avatarId">
+                            <!-- Populate options dynamically -->
+                        </select>
+
+                        <label for="avatarImage">Upload Avatar Image:</label>
+                        <input
+                            type="file"
+                            id="avatarImage"
+                            name="avatarImage"
+                            accept="image/*"
+                        />
+
+                        <label>Upload Images for Available Locations:</label>
+                        <div id="locationImages">
+                            <div>
+                                <label for="locationOffice">Office:</label>
+                                <input
+                                    type="file"
+                                    id="locationOffice"
+                                    name="locationImages[office]"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div>
+                                <label for="locationStreet">Street:</label>
+                                <input
+                                    type="file"
+                                    id="locationStreet"
+                                    name="locationImages[street]"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div>
+                                <label for="locationForest">Forest:</label>
+                                <input
+                                    type="file"
+                                    id="locationForest"
+                                    name="locationImages[forest]"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div>
+                                <label for="locationHome">Home:</label>
+                                <input
+                                    type="file"
+                                    id="locationHome"
+                                    name="locationImages[home]"
+                                    accept="image/*"
+                                />
+                            </div>
+                        </div>
+
+                        <button type="submit">Update Avatar</button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -1802,7 +1869,7 @@
         <script>
             const sidebarLinks = document.querySelectorAll('.cursor-pointer');
             const sections = document.querySelectorAll(
-                '#manageAdminSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection, #adminListSection'
+                '#manageAdminSection, #manageAvatarSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection, #adminListSection'
             );
 
             // Function to hide all sections
@@ -1837,6 +1904,8 @@
                         showSection('adminListSection');
                     } else if (targetId === 'registerAdmin') {
                         showSection('manageAdminSection');
+                    } else if (targetId === 'manageAvatarBtn') {
+                        showSection('manageAvatarSection');
                     }
 
                     // Toggle visibility of nested ul elements
@@ -1980,6 +2049,67 @@
                         );
                 }
             }
+        </script>
+        <script>
+            document
+                .getElementById('updateAvatarForm')
+                .addEventListener('submit', async function (event) {
+                    event.preventDefault();
+
+                    const formData = new FormData(this);
+                    const avatarId = formData.get('avatarId');
+                    if (!avatarId) {
+                        alert('Please select an avatar to update.');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(
+                            `/api/update-avatar/${avatarId}`,
+                            {
+                                method: 'PUT',
+                                body: formData,
+                            }
+                        );
+
+                        if (response.ok) {
+                            const updatedAvatar = await response.json();
+                            alert('Avatar updated successfully!');
+                        } else {
+                            const errorData = await response.json();
+                            alert(
+                                `Failed to update avatar: ${errorData.error}`
+                            );
+                        }
+                    } catch (error) {
+                        console.error('Error updating avatar:', error);
+                        alert('An error occurred while updating the avatar.');
+                    }
+                });
+
+            async function populateAvatars() {
+                try {
+                    const response = await fetch('/api/avatars');
+                    const avatars = await response.json();
+                    const avatarSelect =
+                        document.getElementById('avatarSelect');
+
+                    // Clear existing options
+                    avatarSelect.innerHTML = '';
+
+                    avatars.forEach((avatar) => {
+                        const option = document.createElement('option');
+                        option.value = avatar._id;
+                        option.textContent = `Avatar ${avatar.number}`; // Adjust according to your data
+                        avatarSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error fetching avatars:', error);
+                    alert('Failed to load avatars.');
+                }
+            }
+
+            populateAvatars();
         </script>
     </body>
 </html>

@@ -142,4 +142,18 @@ router.post('/logout', async (req, res, next) => {
     }
 });
 
+router.get('/status', async (req, res) => {
+    try {
+        // Assuming you use session or token to identify the user
+
+        const user = await User.findById(req.session.userId); // or use JWT token
+        if (user && user.isSignedIn) {
+            return res.json({ loggedIn: true });
+        }
+        res.json({ loggedIn: false });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;
