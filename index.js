@@ -834,6 +834,27 @@ app.post('/set-credits', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+app.get('/get-credits', async (req, res) => {
+    try {
+        // Retrieve all subscription plans
+        const subscriptionPlans = await SubscriptionPlan.find({});
+
+        // Structure the data for response
+        const creditsData = subscriptionPlans.map((plan) => ({
+            plan: plan.plan,
+            credits: plan.credits.map((credit) => ({
+                feature: credit.feature,
+                credits: credit.credits,
+            })),
+        }));
+
+        res.status(200).json({ creditsData });
+    } catch (error) {
+        console.error('Error retrieving credits:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////UPDATE SUBSCRIPTION PLAN
 app.put('/update-subscription/:userId', updateCreditsMiddleware, (req, res) => {

@@ -42,18 +42,15 @@ router.post('/update-com', (req, res) => {
         // Extract the key and new data from updatesubscription
         const updatePlanKey = Object.keys(updatesubscription[0].plan)[0];
         const newData = updatesubscription[0].plan[updatePlanKey].data;
-
+        // console.log('Before update:', subscription);
         // Iterate through the subscription array to find and update the specific plan's data
         subscription.forEach((planArray) => {
             planArray.forEach((planObj) => {
                 const planKey = Object.keys(planObj.plan)[0];
-                if (planKey === updatePlanKey) {
-                    // Only replace the data field
-                    planObj.plan[planKey].data = newData;
-                }
+                planObj.plan[planKey].data = newData;
             });
         });
-
+        // console.log('After update:', subscription);
         // Write the updated subscription data back to subscription.json
         fs.writeFile(
             subscriptionsPath,
@@ -66,11 +63,71 @@ router.post('/update-com', (req, res) => {
                         .send('Error writing updated subscription file');
                 }
                 // res.send(message:'Subscription updated successfully');
-                res.json({ message: 'Subscription updated successfully' });
+                res.json({
+                    message: 'Subscription updated successfully',
+                    newData: newData,
+                    updatePlanKey: updatePlanKey,
+                    subscription: subscription,
+                });
             }
         );
     });
 });
+
+// const subscriptionsPath = path.join(
+//     __dirname,
+//     '..',
+//     'public',
+//     'data',
+//     'subscription.json'
+// );
+// router.post('/update-com', (req, res) => {
+//     const updatesubscription = req.body; // Assuming this contains the new data
+//     // Read the subscription.json file
+//     fs.readFile(subscriptionsPath, 'utf8', (err, data) => {
+//         if (err) {
+//             return res.status(500).send('Error reading subscription file');
+//         }
+
+//         let subscription;
+//         try {
+//             subscription = JSON.parse(data); // Parse the JSON data
+//         } catch (parseErr) {
+//             return res.status(500).send('Error parsing subscription data');
+//         }
+
+//         // Extract the key and new data from updatesubscription
+//         const updatePlanKey = Object.keys(updatesubscription[0].plan)[0];
+//         const newData = updatesubscription[0].plan[updatePlanKey].data;
+
+//         // Iterate through the subscription array to find and update the specific plan's data
+//         subscription.forEach((planArray) => {
+//             planArray.forEach((planObj) => {
+//                 const planKey = Object.keys(planObj.plan)[0];
+//                 if (planKey === updatePlanKey) {
+//                     // Only replace the data field
+//                     planObj.plan[planKey].data = newData;
+//                 }
+//             });
+//         });
+
+//         // Write the updated subscription data back to subscription.json
+//         fs.writeFile(
+//             subscriptionsPath,
+//             JSON.stringify(subscription, null, 2),
+//             'utf8',
+//             (writeErr) => {
+//                 if (writeErr) {
+//                     return res
+//                         .status(500)
+//                         .send('Error writing updated subscription file');
+//                 }
+//                 // res.send(message:'Subscription updated successfully');
+//                 res.json({ message: 'Subscription updated successfully' });
+//             }
+//         );
+//     });
+// });
 //updating comparision
 // router.post('/update-com', (req, res) => {
 //     // Handle the update comparison plan logic here
