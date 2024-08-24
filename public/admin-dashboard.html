@@ -1088,16 +1088,32 @@
                 </div>
                 <!-- ///////////////////////////////////////// End of Manage Projects////////////////////////////////// -->
                 <div id="manageAvatarSection"  class="hidden sidebar-content manage-projects">
+                    <style>
+                        .submitAvatar, .avatarBtn{
+                            background-color: #1F2937;
+                            color: white;
+                            font-weight: 600;
+                        }
+                    </style>
                     <h2 class="text-3xl font-semibold text-gray-700 mb-6">
                         Manage Avatars
                     </h2>
-                    <form id="updateAvatarForm" enctype="multipart/form-data">
-                        <label for="avatarSelect">Select Avatar:</label>
-                        <select id="avatarSelect" name="avatarId">
-                            <!-- Populate options dynamically -->
-                        </select>
+                   <div class="flex items-center gap-4">
+                    <label for="avatarSelect">Upload Avatar:</label>
+                    <button type="button" class="avatarBtn create mx-3 p-2" id="createAvatarBtn">Create Avatar</button>
+                    <button type="button" class="avatarBtn create mx-3 p-2" id="updateAvatarBtn">Update Avatar</button>
+                   </div>
+                    <!-- <form id="updateAvatarForm" enctype="multipart/form-data"> -->
+                        <!-- <select id="avatarSelect" name="avatarId">
+                             <option value="1">Avatar 1</option>
+                             <option value="2">Avatar 2</option>
+                             <option value="3">Avatar 3</option>
+                             <option value="4">Avatar 4</option>
+                        </select> -->
 
-                        <label for="avatarImage">Upload Avatar Image:</label>
+<div id="UploaderContainer"></div>
+
+                        <!-- <label for="avatarImage">Upload Avatar Image:</label>
                         <input
                             type="file"
                             id="avatarImage"
@@ -1143,9 +1159,9 @@
                                     accept="image/*"
                                 />
                             </div>
-                        </div>
+                        </div> -->
 
-                        <button type="submit">Update Avatar</button>
+                        <!-- <button type="submit" class="avatarBtn p-2 my-3 text-white font-bold">Update Avatar</button> -->
                     </form>
                 </div>
 
@@ -1683,20 +1699,20 @@
                 fetchProjects();
 
                 // Event listener for Update Status form submission
-                document
-                    .getElementById('updateStatusForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await updateProjectStatus();
-                    });
+                // document
+                //     .getElementById('updateStatusForm')
+                //     .addEventListener('submit', async (e) => {
+                //         e.preventDefault();
+                //         await updateProjectStatus();
+                //     });
 
                 // Event listener for Reupload form submission
-                document
-                    .getElementById('reuploadForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await reuploadEditedFile();
-                    });
+                // document
+                //     .getElementById('reuploadForm')
+                //     .addEventListener('submit', async (e) => {
+                //         e.preventDefault();
+                //         await reuploadEditedFile();
+                //     });
             });
 
             // Add event listeners to all category buttons
@@ -2406,67 +2422,67 @@
             }
         </script>
         <script>
-            document
-                .getElementById('updateAvatarForm')
-                .addEventListener('submit', async function (event) {
-                    event.preventDefault();
+            // document
+            //     .getElementById('updateAvatarForm')
+            //     .addEventListener('submit', async function (event) {
+            //         event.preventDefault();
 
-                    const formData = new FormData(this);
-                    const avatarId = formData.get('avatarId');
-                    if (!avatarId) {
-                        alert('Please select an avatar to update.');
-                        return;
-                    }
+            //         const formData = new FormData(this);
+            //         const avatarId = formData.get('avatarId');
+            //         if (!avatarId) {
+            //             alert('Please select an avatar to update.');
+            //             return;
+            //         }
 
-                    try {
-                        const response = await fetch(
-                            `/api/update-avatar/${avatarId}`,
-                            {
-                                method: 'PUT',
-                                body: formData,
-                            }
-                        );
+            //         try {
+            //             const response = await fetch(
+            //                 `/api/update-avatar/${avatarId}`,
+            //                 {
+            //                     method: 'PUT',
+            //                     body: formData,
+            //                 }
+            //             );
 
-                        if (response.ok) {
-                            const updatedAvatar = await response.json();
-                            alert('Avatar updated successfully!');
-                        } else {
-                            const errorData = await response.json();
-                            alert(
-                                `Failed to update avatar: ${errorData.error}`
-                            );
-                        }
-                    } catch (error) {
-                        console.error('Error updating avatar:', error);
-                        alert('An error occurred while updating the avatar.');
-                    }
-                });
+            //             if (response.ok) {
+            //                 const updatedAvatar = await response.json();
+            //                 alert('Avatar updated successfully!');
+            //             } else {
+            //                 const errorData = await response.json();
+            //                 alert(
+            //                     `Failed to update avatar: ${errorData.error}`
+            //                 );
+            //             }
+            //         } catch (error) {
+            //             console.error('Error updating avatar:', error);
+            //             alert('An error occurred while updating the avatar.');
+            //         }
+            //     });
 
-            async function populateAvatars() {
-                try {
-                    const response = await fetch('/api/avatars');
-                    const avatars = await response.json();
-                    const avatarSelect =
-                        document.getElementById('avatarSelect');
+            // async function populateAvatars() {
+            //     try {
+            //         const response = await fetch('/api/avatars');
+            //         const avatars = await response.json();
+            //         const avatarSelect =
+            //             document.getElementById('avatarSelect');
 
-                    // Clear existing options
-                    avatarSelect.innerHTML = '';
+            //         // Clear existing options
+            //         avatarSelect.innerHTML = '';
 
-                    avatars.forEach((avatar) => {
-                        const option = document.createElement('option');
-                        option.value = avatar._id;
-                        option.textContent = `Avatar ${avatar.number}`; // Adjust according to your data
-                        avatarSelect.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error fetching avatars:', error);
-                    alert('Failed to load avatars.');
-                }
-            }
+            //         avatars.forEach((avatar) => {
+            //             const option = document.createElement('option');
+            //             option.value = avatar._id;
+            //             option.textContent = `Avatar ${avatar.number}`; // Adjust according to your data
+            //             avatarSelect.appendChild(option);
+            //         });
+            //     } catch (error) {
+            //         console.error('Error fetching avatars:', error);
+            //         alert('Failed to load avatars.');
+            //     }
+            // }
 
-            populateAvatars();
+            // populateAvatars();
         </script>
 
-        <!-- <script src="./js/create-avatar.js"></script> -->
+        <script src="./js/create-avatar.js"></script>
     </body>
 </html>
