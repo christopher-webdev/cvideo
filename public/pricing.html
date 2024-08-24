@@ -171,7 +171,7 @@
                                   <div class="row row--15" x-data="{
                                     items: {activePlan: null, pkgs: []},
                                     fetchData() {
-                                      fetch('http://localhost:80/api/packages?item=month')
+                                      fetch('/api/packages?item=month')
                                       .then(response => response.json())
                                       .then(data => {
                                           console.log('🚀 ~ fetchData ~ data:', data)
@@ -373,7 +373,7 @@
                                     <div class="row row--15" x-data="{
                                         items: {activePlan: null, pkgs: []},
                                         fetchData() {
-                                          fetch('http://localhost:5000/api/packages?item=year')
+                                          fetch('/api/packages?item=year')
                                           .then(response => response.json())
                                           .then(data => {
                                             let response = data.data

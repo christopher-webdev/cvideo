@@ -7,6 +7,7 @@ const { SubscriptionPlan } = require('../models/User');
 const Admin = require('../models/Admin');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const getEnv = require('./env');
 
 // Function to manually parse the full name
 function parseFullName(fullName) {
@@ -143,7 +144,7 @@ module.exports = function (passport) {
     passport.use(new TwitterStrategy({
         consumerKey: "alDLgZJUVrZFbZGPjNXD0SoGr",
         consumerSecret: "t71NKUcE5fkcB6Hgu3y9DbKMClKTkJx0Y4biAEqjwqTR14oJHy",
-        callbackURL: 'http://localhost/auth/twitter/callback',
+        callbackURL: `${getEnv("APP_URL")}/auth/twitter/callback`,
         includeEmail: true
       },
       async (accessToken, refreshToken, profile, done) => {
