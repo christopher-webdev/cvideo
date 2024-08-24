@@ -202,8 +202,8 @@ app.use('/admin', require('./routes/admin'));
 
 //handles user info updates
 app.use('/api/user-info', ensureAuthenticated, userInfoController);
-app.use('/api/billings', ensureAuthenticated, userBillingController);
-
+aapp.use('/api/billings', userBillingController);
+app.use('/api/packages', userPackageController);
 // Serve index.html for the root URL
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
