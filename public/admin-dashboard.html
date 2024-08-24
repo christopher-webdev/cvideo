@@ -1722,197 +1722,79 @@
                 </div>
                 <!-- ////////////////////////////////////////////////////////////////////////////////////////////Manage  Project Section ////////////////////////////// -->
                 <!-- Manage Projects Section -->
-                <div id="manageProjectsSection" class="hidden p-6 bg-gray-50">
-                    <h2 class="text-3xl font-semibold text-gray-800 mb-6">
+                <div id="manageProjectsSection" class="hidden">
+                    <h2 class="text-3xl font-semibold text-gray-700 mb-6">
                         Manage Projects
                     </h2>
                     <div class="mb-4">
                         <input
                             type="text"
                             id="projectSearchInput"
-                            class="p-3 border border-gray-300 rounded-md w-full md:w-1/2 lg:w-1/3 text-gray-800 placeholder-gray-500"
+                            class="p-2 border border-gray-300 rounded-md w-full md:w-1/2 lg:w-1/3"
                             placeholder="Search projects by id and status"
                         />
                     </div>
                     <div class="overflow-x-auto">
-                        <table
-                            class="min-w-full bg-white text-sm text-gray-800 border border-gray-200"
-                        >
-                            <thead class="bg-gray-700 text-white">
+                        <table class="min-w-full bg-white text-xs">
+                            <thead class="bg-gray-800 text-white">
                                 <tr>
-                                    <th class="py-3 px-4 border-b">#</th>
-                                    <th class="py-3 px-4 border-b">
+                                    <th class="py-2 px-4 border-b text-left">
+                                        #
+                                    </th>
+                                    <th
+                                        class="py-2 px-4 text-xl border-b text-left"
+                                    >
                                         Project & User ID
                                     </th>
-                                    <th class="py-3 px-4 border-b">Title</th>
-                                    <th class="py-3 px-4 border-b">Status</th>
-                                    <th class="py-3 px-4 border-b">
+                                    <th
+                                        class="py-2 px-4 text-xl border-b text-left"
+                                    >
+                                        Title
+                                    </th>
+                                    <th
+                                        class="py-2 px-4 text-xl border-b text-left"
+                                    >
+                                        Status
+                                    </th>
+                                    <th
+                                        class="py-2 px-4 text-xl border-b text-left"
+                                    >
                                         Created At
                                     </th>
-                                    <th class="py-3 px-4 border-b">Options</th>
-                                    <th class="py-3 px-4 border-b">Actions</th>
+                                    <th
+                                        class="py-2 px-4 text-xl border-b text-left"
+                                    >
+                                        Options
+                                    </th>
+                                    <th
+                                        class="py-2 px-4 text-xl border-b text-left"
+                                    >
+                                        Actions
+                                    </th>
                                 </tr>
+                                <hr class="border-t-2 border-gray-300 my-4" />
                             </thead>
-                            <tbody id="projectsTableBody" class="text-gray-700">
+                            <tbody
+                                id="projectsTableBody"
+                                class="text-gray-700 text-xl"
+                            >
                                 <!-- Rows will be dynamically inserted here -->
                             </tbody>
                         </table>
 
                         <!-- Status Update Modal -->
-                        <div
-                            id="updateStatusModal"
-                            class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50"
-                        >
-                            <div
-                                class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative"
-                            >
-                                <button
-                                    id="closeUpdateStatusModal"
-                                    class="absolute top-4 right-4 text-gray-600"
-                                    onclick="closeUpdateStatusModal()"
-                                >
-                                    <svg
-                                        class="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </button>
-                                <h2
-                                    class="text-xl font-semibold text-gray-800 mb-4"
-                                >
-                                    Update Project Status
-                                </h2>
-                                <form id="updateStatusForm">
-                                    <label for="status" class="block mb-2"
-                                        >Status</label
-                                    >
-                                    <select
-                                        id="status"
-                                        class="block w-full px-4 py-2 border rounded text-gray-800 focus:outline-none focus:border-blue-500"
-                                    >
-                                        <option value="Pending">Pending</option>
-                                        <option value="Processing">
-                                            Processing
-                                        </option>
-                                        <option value="Declined">
-                                            Declined
-                                        </option>
-                                        <option value="Completed">
-                                            Completed
-                                        </option>
-                                    </select>
-                                    <label for="comment" class="block mt-4 mb-2"
-                                        >Comment</label
-                                    >
-                                    <textarea
-                                        id="comment"
-                                        class="block w-full px-4 py-2 border rounded text-gray-800 focus:outline-none focus:border-blue-500"
-                                    ></textarea>
-                                    <label
-                                        for="estimatedTime"
-                                        class="block mt-4 mb-2"
-                                        >Estimated Completion Time</label
-                                    >
-                                    <input
-                                        type="datetime-local"
-                                        id="estimatedTime"
-                                        class="block w-full px-4 py-2 border rounded text-gray-800 focus:outline-none focus:border-blue-500"
-                                    />
-                                    <div class="mt-6 flex justify-end">
-                                        <button
-                                            type="submit"
-                                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                                        >
-                                            Update
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onclick="closeUpdateStatusModal()"
-                                            class="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Reupload Modal -->
-                        <div
-                            id="reuploadModal"
-                            class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50"
-                        >
-                            <div
-                                class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative"
-                            >
-                                <button
-                                    id="closeReuploadModal"
-                                    class="absolute top-4 right-4 text-gray-600"
-                                    onclick="closeReuploadModal()"
-                                >
-                                    <svg
-                                        class="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </button>
-                                <h2
-                                    class="text-xl font-semibold text-gray-800 mb-4"
-                                >
-                                    Reupload Edited File
-                                </h2>
-                                <form id="reuploadForm">
-                                    <input
-                                        type="file"
-                                        id="editedFile"
-                                        class="block w-full px-4 py-2 border rounded text-gray-800"
-                                    />
-                                    <div class="mt-6 flex justify-end">
-                                        <button
-                                            type="submit"
-                                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                                        >
-                                            Upload
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onclick="closeReuploadModal()"
-                                            class="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Media Modal -->
+                        <!-- Update Status Modal -->
+                        <!-- Modal Section -->
                         <div
                             id="mediaModal"
-                            class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50"
+                            class="fixed inset-0 z-[100] hidden items-center justify-center bg-black bg-opacity-50"
                         >
                             <div
-                                class="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative"
+                                class="bg-white dark:bg-navy-800 rounded-lg shadow-lg p-6 max-w-lg w-full relative overflow-y-auto max-h-screen"
                             >
                                 <button
                                     id="closeMediaModal"
-                                    class="absolute top-4 right-4 text-gray-600"
+                                    class="absolute top-4 right-4 text-gray-600 dark:text-gray-300"
                                     onclick="closeMediaModal()"
                                 >
                                     <svg
@@ -1930,13 +1812,53 @@
                                     </svg>
                                 </button>
                                 <h2
-                                    class="text-xl font-semibold text-gray-800 mb-4"
+                                    class="text-xl font-semibold text-slate-800 dark:text-navy-100 mb-4"
+                                >
+                                    Project Media
+                                </h2>
+                                <ul id="videoList" class="mb-4"></ul>
+                                <ul id="pictureList" class="mb-4"></ul>
+                                <ul id="audioList" class="mb-4"></ul>
+                            </div>
+                        </div>
+
+                        <!-- Buttons and Modals -->
+                        <!-- Media Modal Section -->
+                        <div
+                            id="mediaModal"
+                            class="fixed inset-0 z-[100] hidden items-center justify-center bg-black bg-opacity-50"
+                        >
+                            <div
+                                class="bg-white dark:bg-navy-800 rounded-lg shadow-lg p-6 max-w-lg w-full relative"
+                            >
+                                <button
+                                    id="closeMediaModal"
+                                    class="absolute top-4 right-4 text-gray-600 dark:text-gray-300"
+                                >
+                                    <svg
+                                        class="w-6 h-6"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        />
+                                    </svg>
+                                </button>
+
+                                <h2
+                                    class="text-xl font-semibold text-slate-800 dark:text-navy-100 mb-4"
                                 >
                                     Project Files
                                 </h2>
-                                <div id="mediaContainer"></div>
+
                                 <!-- Picture Gallery -->
                                 <div id="pictureGallery" class="mb-4"></div>
+
                                 <!-- Audio Player -->
                                 <div id="audioPlayerContainer" class="mb-4">
                                     <audio
@@ -1952,12 +1874,13 @@
                                         tag.
                                     </audio>
                                 </div>
+
                                 <!-- Video Player -->
-                                <div id="videoPlayerContainer" class="mb-4">
+                                <div id="videoPlayerContainer">
                                     <video
                                         id="videoPlayerModal"
                                         controls
-                                        class="w-full rounded-lg bg-gray-800"
+                                        class="w-full rounded-lg mb-4 bg-gray-800"
                                     >
                                         <source
                                             id="videoSourceModal"
@@ -1967,14 +1890,112 @@
                                         tag.
                                     </video>
                                 </div>
+
                                 <a
                                     id="downloadLinkModal"
                                     href="#"
                                     download
-                                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                    class="btn bg-blue-500 text-white hover:bg-blue-600 focus:bg-blue-700 rounded-md px-4 py-2"
+                                    >Download</a
                                 >
-                                    Download
-                                </a>
+                            </div>
+                        </div>
+
+                        <div
+                            id="updateStatusModal"
+                            class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center"
+                        >
+                            <div
+                                class="bg-white p-6 rounded shadow-lg w-full max-w-md text-xs"
+                            >
+                                <h2 class="text-lg font-bold mb-4">
+                                    Update Project Status
+                                </h2>
+                                <label for="status" class="block mb-2"
+                                    >Status</label
+                                >
+                                <select
+                                    id="status"
+                                    class="block w-full px-4 py-2 border rounded text-gray-700 focus:outline-none focus:border-blue-500"
+                                >
+                                    <option value="Pending">Pending</option>
+                                    <option value="Processing">
+                                        Processing
+                                    </option>
+                                    <option value="Declined">Declined</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                                <label for="comment" class="block mt-4 mb-2"
+                                    >Comment</label
+                                >
+                                <textarea
+                                    id="comment"
+                                    class="block w-full px-4 py-2 border rounded text-gray-700 focus:outline-none focus:border-blue-500"
+                                ></textarea>
+                                <label
+                                    for="estimatedTime"
+                                    class="block mt-4 mb-2"
+                                    >Estimated Completion Time</label
+                                >
+                                <input
+                                    type="datetime-local"
+                                    id="estimatedTime"
+                                    class="block w-full px-4 py-2 border rounded text-gray-700 focus:outline-none focus:border-blue-500"
+                                />
+                                <div class="mt-6 flex justify-end">
+                                    <button
+                                        onclick="updateProjectStatus()"
+                                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        onclick="closeUpdateStatusModal()"
+                                        class="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reupload Modal -->
+                        <div
+                            id="reuploadModal"
+                            class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center"
+                        >
+                            <div
+                                class="bg-white p-6 rounded shadow-lg w-full max-w-md text-xs"
+                            >
+                                <h2 class="text-lg font-bold mb-4">
+                                    Reupload Edited File
+                                </h2>
+                                <input
+                                    type="file"
+                                    id="editedFile"
+                                    class="block w-full px-4 py-2 border rounded text-gray-700 focus:outline-none focus:border-blue-500"
+                                />
+                                <div class="mt-6 flex justify-end">
+                                    <button
+                                        onclick="reuploadEditedFile()"
+                                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                    >
+                                        Upload
+                                    </button>
+                                    <button
+                                        onclick="closeReuploadModal()"
+                                        class="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Media Modal -->
+                        <div id="mediaModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <div id="mediaContainer"></div>
                             </div>
                         </div>
                     </div>
@@ -3058,7 +3079,7 @@
                                 'bg-gray-100',
                                 'border-b',
                                 'hover:bg-gray-200',
-                                'text-sm',
+                                'text-xl',
                                 'font-medium'
                             );
 
@@ -3075,9 +3096,9 @@
                 <td class="py-2 px-4">
                     <button
                         onclick="deleteUser('${user._id}')"
-                        class="text-red-600 hover:text-red-800 font-semibold mr-4">
+                        class="text-red-600 hover:text-red-800 font-semibold">
                         Delete user
-                    </button><br>
+                    </button><br><br>
                     <button
                         onclick="window.openSubscriptionModal('${user._id}', '${
                                 user.subscriptionPlan
@@ -3254,26 +3275,26 @@
                         const projectRow = document.createElement('tr');
 
                         const numberCell = document.createElement('td');
-                        numberCell.className = 'py-2 px-4';
+                        numberCell.className = 'py-2 text-xl px-4';
                         numberCell.innerText = index + 1;
                         projectRow.appendChild(numberCell);
 
                         const idCell = document.createElement('td');
-                        idCell.className = 'py-2 px-4';
+                        idCell.className = 'py-2 text-xl px-4';
                         idCell.innerText = `${project._id} / ${project.userId._id}`;
                         projectRow.appendChild(idCell);
 
                         const titleCell = document.createElement('td');
-                        titleCell.className = 'py-2 px-4';
+                        titleCell.className = 'py-2 text-xl px-4';
                         titleCell.innerText = project.title;
                         projectRow.appendChild(titleCell);
 
                         const statusCell = document.createElement('td');
-                        statusCell.className = 'py-2 px-4';
-                        let statusContent = `<strong>Status: ${project.status}</strong>`;
+                        statusCell.className = 'py-2 text-xl px-4';
+                        let statusContent = `Status: ${project.status}`;
 
                         if (project.estimatedCompletionTime) {
-                            statusContent += `<p><strong>ETA:</strong> ${new Date(
+                            statusContent += `<p class="text-xl">ETA:${new Date(
                                 project.estimatedCompletionTime
                             ).toLocaleString()}</p>`;
                         }
@@ -3287,7 +3308,7 @@
                                     project.statusHistory.length - 1
                                 ];
                             if (latestStatus.comment) {
-                                statusContent += `<p>Comment: ${latestStatus.comment}</p>`;
+                                statusContent += `<p class="text-xl">Comment: ${latestStatus.comment}</p>`;
                             }
                         }
 
@@ -3295,65 +3316,65 @@
                         projectRow.appendChild(statusCell);
 
                         const createdAtCell = document.createElement('td');
-                        createdAtCell.className = 'py-2 px-4';
+                        createdAtCell.className = 'py-2 text-xl px-4';
                         createdAtCell.innerText = new Date(
                             project.createdAt
                         ).toLocaleString();
                         projectRow.appendChild(createdAtCell);
 
                         const optionsCell = document.createElement('td');
-                        optionsCell.className = 'py-2 px-4';
+                        optionsCell.className = 'py-2 text-xl px-4';
 
                         // Display multiple video links
                         if (project.videoLink && project.videoLink.length > 0) {
                             project.videoLink.forEach((link) => {
-                                optionsCell.innerHTML += `<p><strong>Video Link:</strong> <a href="${
+                                optionsCell.innerHTML += `<p class="text-xl">Video Link: <a href="${
                                     link.startsWith('http')
                                         ? link
                                         : `http://${link}`
-                                }" class="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">${link}</a></p>`;
+                                }" class="text-blue-600 text-xl hover:text-blue-800" target="_blank" rel="noopener noreferrer">${link}</a></p>`;
                             });
                         }
 
                         if (project.videoDescription) {
-                            optionsCell.innerHTML += `<p><strong>Description:</strong> ${project.videoDescription}</p>`;
+                            optionsCell.innerHTML += `<p class="text-xl">Description: ${project.videoDescription}</p>`;
                         }
 
                         if (project.orientation) {
-                            optionsCell.innerHTML += `<p><strong>Orientation:</strong> ${project.orientation}</p>`;
+                            optionsCell.innerHTML += `<p class="text-xl">Orientation: ${project.orientation}</p>`;
                         }
 
                         if (project.location) {
-                            optionsCell.innerHTML += `<p><strong>Location:</strong> ${project.location}</p>`;
+                            optionsCell.innerHTML += `<p class="text-xl">Location: ${project.location}</p>`;
                         }
 
                         if (project.avatar) {
-                            optionsCell.innerHTML += `<p><strong>Avatar:</strong> ${project.avatar}</p>`;
+                            optionsCell.innerHTML += `<p class="text-xl"><Avatar: ${project.avatar}</p>`;
                         }
 
                         projectRow.appendChild(optionsCell);
 
                         const actionsCell = document.createElement('td');
-                        actionsCell.className = 'py-2 px-4';
+                        actionsCell.className = 'py-2 text-xl px-4';
                         actionsCell.innerHTML += `
                 <button
                     onclick="openUpdateStatusModal('${project._id}')"
-                    class="bg-blue-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 mr-2">
+                    class="bg-blue-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 mr-2">
                     Update Status
                 </button><br>
                 <button
                     onclick="openReuploadModal('${project._id}')"
-                    class="bg-green-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-300 mr-2">
+                    class="bg-green-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-300 mr-2">
                     Reupload
                 </button><br> 
                 <button
                     onclick="openMediaModal('${project._id}')"
-                    class="bg-indigo-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
+                    class="bg-indigo-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
                     View Project Files
                 </button>
                 <button
                     onclick="deleteProject('${project._id}')"
-                    class="bg-red-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-red-700 hover:shadow-lg transition-all duration-300">
+                    class="bg-red-500 text-white font-bold py-2 px-4 text-xl rounded shadow-md hover:bg-red-700 hover:shadow-lg transition-all duration-300">
                     Delete Project
                 </button><br><br>
             `;
@@ -3365,7 +3386,7 @@
                         const hrCell = document.createElement('td');
                         hrCell.setAttribute('colspan', '7');
                         hrCell.innerHTML =
-                            '<hr class="border-t-2 border-gray-300 my-4">';
+                            '<hr class="border-t-2 text-xl border-gray-300 my-4">';
                         hrRow.appendChild(hrCell);
                         projectsTableBody.appendChild(hrRow);
                     });
