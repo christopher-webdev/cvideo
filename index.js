@@ -953,21 +953,6 @@ app.post('/admin/videos/add', async (req, res) => {
     }
 });
 
-// app.post('/admin/videos/remove', async (req, res) => {
-//     const { page, videoLink } = req.body;
-
-//     try {
-//         await Video.findOneAndUpdate(
-//             { page },
-//             { $pull: { videoLinks: { link: videoLink } } }
-//         );
-
-//         res.redirect('/admin-dashboard.html'); // Redirect back to the admin dashboard
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('An error occurred while removing the video.');
-//     }
-// });
 app.post('/admin/videos/remove', async (req, res) => {
     const { page, videoLink } = req.body;
 
