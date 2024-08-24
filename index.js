@@ -871,6 +871,115 @@ app.put('/update-subscription/:userId', updateCreditsMiddleware, (req, res) => {
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+app.post(
+    '/api/avatars',
+
+    upload.fields([
+        { name: 'avatarImage', maxCount: 1 },
+        { name: 'locationImages[office]', maxCount: 1 },
+        { name: 'locationImages[street]', maxCount: 1 },
+        { name: 'locationImages[forest]', maxCount: 1 },
+        { name: 'locationImages[home]', maxCount: 1 },
+    ]),
+    async (req, res) => {
+        try {
+            const updatedData = {
+                name: req.body.name,
+            };
+
+            if (await Avatar.exists({ name: updatedData.name })) {
+                return res
+                    .status(400)
+                    .json({
+                        success: false,
+                        errors: `Name '${updatedData.name} already exists. Please try another name`,
+                    });
+            }
+
+            if (req.files['avatarImage']) {
+                updatedData.image = req.files['avatarImage'][0].path;
+            }
+
+            updatedData.locations = [];
+
+            ['office', 'street', 'forest', 'home'].forEach(async (location) => {
+                if (req.files[`locationImages[${location}]`]) {
+                    const exists = req.files[`locationImages[${location}]`];
+
+                    if (exists) {
+                        updatedData.locations.push({
+                            name: location,
+                            image: req.files[`locationImages[${location}]`][0]
+                                .path,
+                        });
+                    }
+                }
+            });
+
+            const updatedAvatar = await Avatar.create(updatedData);
+
+            res.status(201).json({ success: true, data: updatedAvatar });
+        } catch (error) {
+            res.status(500).json({ success: false, errors: error.message });
+        }
+    }
+);
+app.put(
+    '/api/avatars',
+
+    upload.any(),
+    async (req, res) => {
+        try {
+            const updatedData = {
+                name: req.body.name,
+            };
+
+            if (!req.body.avatarId) {
+                return res
+                    .status(400)
+                    .json({ success: false, errors: `Avatar ID is required` });
+            }
+
+            if (!(await Avatar.exists({ _id: req.body.avatarId }))) {
+                return res
+                    .status(404)
+                    .json({
+                        success: false,
+                        errors: `Name '${updatedData.name} does not exists.`,
+                    });
+            }
+
+            if (req.files['avatarImage']) {
+                updatedData.image = req.files['avatarImage'][0].path;
+            }
+
+            updatedData.locations = [];
+
+            ['office', 'street', 'forest', 'home'].forEach(async (location) => {
+                if (req.files[`locationImages[${location}]`]) {
+                    const exists = req.files[`locationImages[${location}]`];
+
+                    if (exists) {
+                        updatedData.locations.push({
+                            name: location,
+                            image: req.files[`locationImages[${location}]`][0]
+                                .path,
+                        });
+                    }
+                }
+            });
+
+            const updatedAvatar = await Avatar.findByIdAndUpdate(
+                req.body.avatarId,
+                updatedData
+            );
+
+            res.status(200).json({ success: true, data: updatedAvatar });
+        } catch (error) {
+            res.status(500).json({ success: false, errors: error.message });
+        }
+    }
+);
 app.get('/avatars/:id', async (req, res) => {
     try {
         const avatar = await Avatar.findById(req.params.id);
