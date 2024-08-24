@@ -512,25 +512,38 @@
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
                                 id="manageplanBtn"
                             >
-                                Manage Plans
+                                Manage Plans Pricing View
                             </li>
                             <li
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
                                 id="addplanBtn"
                             >
-                                Add Plans
+                                Add More Pricing Plan View
                             </li>
                             <li
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
                                 id="ManageComparisonBtn"
                             >
-                                Manage Comparison
+                                Manage Pricing Plan View Comparison
                             </li>
                             <li
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
                                 id="AddComparisonBtn"
                             >
-                                Add Comparison
+                                Add More Pricing Plan Comparison
+                            </li>
+                            <li
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                                id="manageAvatarBtn"
+                            >
+                                Manage Avatar
+                            </li>
+                            <li
+                                class="router px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                                id="managePackagesBtn"
+                                data-url="manage-packages"
+                            >
+                                Manage subscription Plans and Packages
                             </li>
                             <li
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
@@ -2071,6 +2084,143 @@
                         </tbody>
                     </table>
                 </div>
+                <div
+                    id="manageAvatarSection"
+                    class="hidden sidebar-content manage-projects"
+                >
+                    <style>
+                        .submitAvatar,
+                        .avatarBtn {
+                            background-color: #1f2937;
+                            color: white;
+                            font-weight: 600;
+                        }
+                    </style>
+                    <h2 class="text-3xl font-semibold text-gray-700 mb-6">
+                        Manage Avatars
+                    </h2>
+                    <div class="flex items-center gap-4">
+                        <label for="avatarSelect">Upload Avatar:</label>
+                        <button
+                            type="button"
+                            class="avatarBtn create mx-3 p-2"
+                            id="createAvatarBtn"
+                        >
+                            Create Avatar
+                        </button>
+                        <button
+                            type="button"
+                            class="avatarBtn create mx-3 p-2"
+                            id="updateAvatarBtn"
+                        >
+                            Update Avatar
+                        </button>
+                    </div>
+                    <!-- <form id="updateAvatarForm" enctype="multipart/form-data"> -->
+                    <!-- <select id="avatarSelect" name="avatarId">
+                             <option value="1">Avatar 1</option>
+                             <option value="2">Avatar 2</option>
+                             <option value="3">Avatar 3</option>
+                             <option value="4">Avatar 4</option>
+                        </select> -->
+
+                    <div id="UploaderContainer"></div>
+
+                    <!-- <label for="avatarImage">Upload Avatar Image:</label>
+                        <input
+                            type="file"
+                            id="avatarImage"
+                            name="avatarImage"
+                            accept="image/*"
+                        />
+
+                        <label>Upload Images for Available Locations:</label>
+                        <div id="locationImages">
+                            <div>
+                                <label for="locationOffice">Office:</label>
+                                <input
+                                    type="file"
+                                    id="locationOffice"
+                                    name="locationImages[office]"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div>
+                                <label for="locationStreet">Street:</label>
+                                <input
+                                    type="file"
+                                    id="locationStreet"
+                                    name="locationImages[street]"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div>
+                                <label for="locationForest">Forest:</label>
+                                <input
+                                    type="file"
+                                    id="locationForest"
+                                    name="locationImages[forest]"
+                                    accept="image/*"
+                                />
+                            </div>
+                            <div>
+                                <label for="locationHome">Home:</label>
+                                <input
+                                    type="file"
+                                    id="locationHome"
+                                    name="locationImages[home]"
+                                    accept="image/*"
+                                />
+                            </div>
+                        </div> -->
+
+                    <!-- <button type="submit" class="avatarBtn p-2 my-3 text-white font-bold">Update Avatar</button> -->
+                    <!-- </form> -->
+                </div>
+                <!-- Manage Subscriptons packages and benefits  Section -->
+                <div
+                    id="managePackageAndPricingSection"
+                    class="hidden sidebar-content manage-packages"
+                >
+                    <h4 class="text-3xl font-semibold text-gray-700 mb-6">
+                        Create Packages and Benefits
+                    </h4>
+                    <div class="mx-auto bg-white shadow-lg rounded-lg p-8">
+                        <h3
+                            class="text-2xl font-semibold text-gray-800 mb-6 text-center"
+                        >
+                            Set Subscription Plans
+                        </h3>
+                        <div
+                            id=""
+                            class="mx-auto p-6 bg-white shadow-md rounded-md"
+                        >
+                            <!-- <form id="" class="space-y-1"> -->
+                            <button
+                                type="button"
+                                id="AddPackageBtn"
+                                class="block p-2 border bg-green-500"
+                            >
+                                Add A Plan
+                            </button>
+                            <!-- <template> -->
+                            <div class="flex mb-4">
+                                <!-- <div class="w-full sm:w-1/2 px-2 mb-4"> -->
+
+                                <div id="packagesContainer"></div>
+
+                                <!-- </div> -->
+                            </div>
+                            <!-- </template> -->
+
+                            <!-- </form> -->
+
+                            <div id="messageContainer" class="mt-4 p-4 hidden">
+                                <span id="messageText" class="text-sm"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2619,6 +2769,15 @@
                         document
                             .getElementById('manageNewsletter')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
                     });
                 document
                     .getElementById('manageDAshboardBtn')
@@ -2670,6 +2829,12 @@
                             .classList.add('hidden');
                         document
                             .getElementById('manageNewsletter')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
                 //manage Admin start here
@@ -2723,6 +2888,12 @@
                         document
                             .getElementById('manageNewsletter')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
                     });
                 //Manage user start here
                 document
@@ -2774,6 +2945,12 @@
                             .classList.add('hidden');
                         document
                             .getElementById('manageNewsletter')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
                 //manage and submit price
@@ -2829,6 +3006,12 @@
                             .classList.add('hidden');
                         document
                             .getElementById('manageNewsletter')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
                 //manage project
@@ -2891,6 +3074,12 @@
                         document
                             .getElementById('manageNewsletter')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
                     });
                 //manage comparision start here
                 document
@@ -2947,6 +3136,12 @@
                         document
                             .getElementById('manageNewsletter')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
                     });
 
                 //manage plan button start here
@@ -2999,6 +3194,12 @@
                             .classList.remove('hidden');
                         document
                             .getElementById('manageNewsletter')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
 
@@ -3053,6 +3254,12 @@
                         document
                             .getElementById('manageNewsletter')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
                     });
 
                 document
@@ -3102,6 +3309,12 @@
                         document
                             .getElementById('manageNewsletter')
                             .classList.remove('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
                     });
                 //addplan btn start here
 
@@ -3152,6 +3365,120 @@
                         document
                             .getElementById('manageNewsletter')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
+                    });
+                document
+                    .getElementById('manageAvatarBtn')
+                    .addEventListener('click', function () {
+                        const manageProjectsBtn =
+                            document.getElementById('listAllnavigators');
+                        const listItems =
+                            manageProjectsBtn.getElementsByTagName('li');
+                        for (let i = 0; i < listItems.length; i++) {
+                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
+                        }
+                        document
+                            .getElementById('manageAvatarBtn')
+                            .classList.add('active');
+                        // Show Manage Projects Section
+                        document
+                            .getElementById('manageUsersSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageSubmitsAndPricingSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageProjectsSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManageCompareSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('addplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManagemainSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('editplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managecompasionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.remove('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.add('hidden');
+                    });
+                document
+                    .getElementById('managePackagesBtn')
+                    .addEventListener('click', function () {
+                        const manageProjectsBtn =
+                            document.getElementById('listAllnavigators');
+                        const listItems =
+                            manageProjectsBtn.getElementsByTagName('li');
+                        for (let i = 0; i < listItems.length; i++) {
+                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
+                        }
+                        document
+                            .getElementById('managePackagesBtn')
+                            .classList.add('active');
+                        // Show Manage Projects Section
+                        document
+                            .getElementById('manageUsersSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageSubmitsAndPricingSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageProjectsSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManageCompareSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('addplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManagemainSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('editplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managecompasionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageAvatarSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managePackageAndPricingSection')
+                            .classList.remove('hidden');
                     });
                 manageUsersBtn.addEventListener('click', () => {
                     manageUsersSection.classList.remove('hidden');
@@ -5059,6 +5386,7 @@
                 fetchSubscribers();
             });
         </script>
+        <script src="./js/create-avatar.js"></script>
 
         <style>
             .responser {
