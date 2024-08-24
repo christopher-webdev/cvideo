@@ -5,7 +5,7 @@ const SANDBOX_URL = 'https://api-m.sandbox.paypal.com/v1'; //"https://api.playgr
 // let USERNAME="rofesol.ng@gmail.com"
 // let PASSWORD='Femi@real0071234'
 
-CALLBACK_URL = 'http://localhost:5000/api/billings/klarna/callback';
+CALLBACK_URL = `${getEnv('APP_URL')}/api/billings/klarna/callback`;
 
 // /payments/v1/sessions
 // Create axios instance
