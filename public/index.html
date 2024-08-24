@@ -20,6 +20,7 @@
             rel="stylesheet"
             href="assets/css/plugins/fontawesome-all.min.css"
         />
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link rel="stylesheet" href="assets/css/plugins/feature.css" />
         <link rel="stylesheet" href="assets/css/plugins/animation.css" />
         <link rel="stylesheet" href="assets/css/plugins/slick.css" />
@@ -1495,7 +1496,7 @@
             <!-- End CTA Style-one Area  -->
 
             <!-- Pricing Part -->
-            <div class="cashvipe-pricing-area wrapper rainbow-section-gap-big">
+            <!-- <div class="cashvipe-pricing-area wrapper rainbow-section-gap-big">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -2261,7 +2262,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Service Area -->
             <div class="cashvipe-service-area rainbow-section-gap">
@@ -3540,15 +3541,18 @@
                                         </a>
                                     </div>
                                     <p class="b1 desc-text">
-                                        It has long been known that a reader's
-                                        <br />
-                                        attention will be diverted from
+                                        Cashvipe<br />
+                                        Powerful Intelligent video editing tool
                                     </p>
                                     <h6 class="subtitle">Join a Newsletter</h6>
-                                    <form class="newsletter-form" action="#">
+                                    <form
+                                        class="newsletter-form"
+                                        id="newsletterForm"
+                                    >
                                         <div class="form-group">
                                             <input
                                                 type="email"
+                                                id="emailInput"
                                                 placeholder="Enter Your Email Here"
                                             />
                                             <button
@@ -3561,6 +3565,10 @@
                                             </button>
                                         </div>
                                     </form>
+                                    <div
+                                        id="subscriptionMessage"
+                                        class="mt-4 text-green-600"
+                                    ></div>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-6 col-sm-6 col-12">
@@ -3632,7 +3640,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                                <div class="rainbow-footer-widget">
+                                <!-- <div class="rainbow-footer-widget">
                                     <div class="widget-menu-top">
                                         <h4 class="title">Contact</h4>
                                         <div class="inner">
@@ -3647,8 +3655,8 @@
                                                         >12349 KIMO street off
                                                         Earths location</a
                                                     >
-                                                </li>
-                                                <li>
+                                                </li> -->
+                                <!-- <li>
                                                     <i
                                                         class="contact-icon fa-sharp fa-regular fa-envelope"
                                                     ></i
@@ -3667,7 +3675,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -3719,6 +3727,39 @@
                 </svg>
             </div>
         </main>
+        <script>
+            document
+                .getElementById('newsletterForm')
+                .addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const email = document.getElementById('emailInput').value;
+                    const subscriptionMessage = document.getElementById(
+                        'subscriptionMessage'
+                    );
+
+                    axios
+                        .post('/subscribe', { email })
+                        .then((response) => {
+                            subscriptionMessage.innerText =
+                                'Subscription successful!';
+                            subscriptionMessage.classList.remove(
+                                'text-red-600'
+                            );
+                            subscriptionMessage.classList.add('text-green-600');
+                        })
+                        .catch((error) => {
+                            subscriptionMessage.innerText =
+                                'Subscription failed: ' + error.response.data;
+                            subscriptionMessage.classList.remove(
+                                'text-green-600'
+                            );
+                            subscriptionMessage.classList.add('text-red-600');
+                        });
+
+                    // Optionally clear the input field
+                    document.getElementById('emailInput').value = '';
+                });
+        </script>
 
         <!-- All Scripts  -->
 

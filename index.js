@@ -8,6 +8,7 @@ const { SubscriptionPlan } = require('./models/User');
 const Project = require('./models/Project');
 const Avatar = require('./models/Avatar');
 const Video = require('./models/VideoModel');
+const Newsletter = require('./models/Newsletter');
 
 const signupRoute = require('./routes/signupRoute');
 const bodyParser = require('body-parser');
@@ -26,6 +27,9 @@ const Admin = require('./models/Admin');
 const bcrypt = require('bcryptjs');
 const userInfoController = require('./controllers/user.controller');
 const userBillingController = require('./controllers/user-billing.controller');
+const Package = require('./models/Package');
+const userPackageController = require('./controllers/package.controller');
+const { createAvatar } = require('./routes/create-avatar');
 
 // Passport Config
 require('./config/passport')(passport);
@@ -1024,6 +1028,28 @@ app.get('/admin/videos', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+// Route to handle form submission for NEWSLETTER
+app.post('/subscribe', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const newSubscriber = new Newsletter({ email });
+        await newSubscriber.save();
+        res.status(200).send('Subscription successful!');
+    } catch (error) {
+        res.status(400).send('Subscription failed: ' + error.message);
+    }
+});
+
+// Route to display the list of subscribed emails in JSON format
+app.get('/admin/newsletter-subscribers', async (req, res) => {
+    try {
+        const subscribers = await Newsletter.find().sort({ subscribedAt: -1 });
+        res.json(subscribers); // Send the subscribers as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching subscribers: ' + error.message);
+    }
+});
+
 // Route to get the list of videos
 // Route to get the list of videos
 

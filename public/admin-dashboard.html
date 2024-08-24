@@ -538,6 +538,12 @@
                             >
                                 Add video
                             </li>
+                            <li
+                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
+                                id="manageNewsletterBtn"
+                            >
+                                Manage Newsletter
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -1233,12 +1239,12 @@
                     </div>
                 </div>
                 <!-- Manage User Submits and Pricing Section -->
-                <div id="manageSubmitsAndPricingSection" class="hidden">
+                <div id="manageSubmitsAndPricingSection" class="hidden fles">
                     <h4 class="text-3xl font-semibold text-gray-700 mb-6">
                         Set Subscription Plan Credits
                     </h4>
                     <div
-                        class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6"
+                        class="max-w-3xl mx-auto bg-white w-1/2 bg-blue-500 p-4 shadow-lg rounded-lg p-6"
                     >
                         <div
                             id="creditSettingsContainer"
@@ -1400,44 +1406,45 @@
                                     </button>
                                 </div>
                             </form>
-
+                            <br />
                             <div id="messageContainer" class="mt-4 p-4 hidden">
                                 <span id="messageText" class="text-sm"></span>
                             </div>
-                        </div>
-                        <!-- Table Container -->
-                        <div class="w-full lg:w-1/2 px-2 mb-4">
-                            <div
-                                class="overflow-x-auto bg-white shadow-md rounded-md p-4"
-                            >
-                                <table
-                                    class="min-w-full border-collapse border border-gray-200"
+                            <br />
+                            <div class="w-full px-2 mb-4 p-4">
+                                <div
+                                    class="overflow-x-auto bg-white shadow-md rounded-md p-4"
                                 >
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="border px-4 py-2 bg-indigo-600 text-white"
-                                            >
-                                                Subscription Plan
-                                            </th>
-                                            <th
-                                                class="border px-4 py-2 bg-indigo-600 text-white"
-                                            >
-                                                Feature
-                                            </th>
-                                            <th
-                                                class="border px-4 py-2 bg-indigo-600 text-white"
-                                            >
-                                                Credits
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="creditsTableBody">
-                                        <!-- Credit details will be loaded here dynamically -->
-                                    </tbody>
-                                </table>
+                                    <table
+                                        class="min-w-full border-collapse border border-gray-200"
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    class="border px-4 py-2 bg-indigo-600 text-white"
+                                                >
+                                                    Subscription Plan
+                                                </th>
+                                                <th
+                                                    class="border px-4 py-2 bg-indigo-600 text-white"
+                                                >
+                                                    Feature
+                                                </th>
+                                                <th
+                                                    class="border px-4 py-2 bg-indigo-600 text-white"
+                                                >
+                                                    Credits
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="creditsTableBody">
+                                            <!-- Credit details will be loaded here dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
+                        <!-- Table Container -->
                     </div>
                 </div>
 
@@ -2045,6 +2052,25 @@
                         </table>
                     </div>
                 </div>
+                <div id="manageNewsletter" class="hidden p-6 bg-gray-50">
+                    <h1 class="text-2xl font-bold mb-5">
+                        Newsletter Subscribers
+                    </h1>
+                    <table
+                        id="subscribersTable"
+                        class="min-w-full bg-white border"
+                    >
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2 border">Email</th>
+                                <th class="px-4 py-2 border">Subscribed At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be populated here by JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -2587,9 +2613,11 @@
                         document
                             .getElementById('managecompasionsection')
                             .classList.remove('hidden');
-
                         document
                             .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
                             .classList.add('hidden');
                     });
                 document
@@ -2640,6 +2668,9 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
                     });
                 //manage Admin start here
                 document
@@ -2689,6 +2720,9 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
                     });
                 //Manage user start here
                 document
@@ -2737,6 +2771,9 @@
                             .classList.add('hidden');
                         document
                             .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
                             .classList.add('hidden');
                     });
                 //manage and submit price
@@ -2789,6 +2826,9 @@
                             .classList.add('hidden');
                         document
                             .getElementById('manageVideoSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
                             .classList.add('hidden');
                     });
                 //manage project
@@ -2848,6 +2888,9 @@
                         document
                             .getElementById('manageVideoSection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
                     });
                 //manage comparision start here
                 document
@@ -2901,6 +2944,9 @@
                         document
                             .getElementById('manageVideoSection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
                     });
 
                 //manage plan button start here
@@ -2951,6 +2997,9 @@
                         document
                             .getElementById('manageVideoSection')
                             .classList.remove('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
                     });
 
                 //manage plan button start here
@@ -3001,6 +3050,58 @@
                         document
                             .getElementById('manageVideoSection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.add('hidden');
+                    });
+
+                document
+                    .getElementById('manageNewsletterBtn')
+                    .addEventListener('click', function () {
+                        const manageProjectsBtn =
+                            document.getElementById('listAllnavigators');
+                        const listItems =
+                            manageProjectsBtn.getElementsByTagName('li');
+                        for (let i = 0; i < listItems.length; i++) {
+                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
+                        }
+                        document
+                            .getElementById('addplanBtn')
+                            .classList.add('active');
+                        // Show Manage Projects Section
+                        document
+                            .getElementById('manageUsersSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageSubmitsAndPricingSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageProjectsSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManageCompareSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('addplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManagemainSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('editplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managecompasionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
+                            .classList.remove('hidden');
                     });
                 //addplan btn start here
 
@@ -3047,6 +3148,9 @@
                             .classList.add('hidden');
                         document
                             .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageNewsletter')
                             .classList.add('hidden');
                     });
                 manageUsersBtn.addEventListener('click', () => {
@@ -4916,6 +5020,44 @@
                 loadVideos();
             });
             loadVideos();
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Function to fetch and display the newsletter subscribers
+                async function fetchSubscribers() {
+                    try {
+                        const response = await fetch(
+                            '/admin/newsletter-subscribers'
+                        );
+                        if (!response.ok)
+                            throw new Error('Network response was not ok');
+                        const subscribers = await response.json();
+
+                        const tableBody = document.querySelector(
+                            '#subscribersTable tbody'
+                        );
+                        tableBody.innerHTML = ''; // Clear existing rows
+
+                        subscribers.forEach((subscriber) => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td class="px-4 py-2 border">${
+                                    subscriber.email
+                                }</td>
+                                <td class="px-4 py-2 border">${new Date(
+                                    subscriber.subscribedAt
+                                ).toLocaleString()}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    } catch (error) {
+                        console.error('Error fetching subscribers:', error);
+                    }
+                }
+
+                // Call the function to fetch subscribers on page load
+                fetchSubscribers();
+            });
         </script>
 
         <style>

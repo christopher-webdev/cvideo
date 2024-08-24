@@ -26,6 +26,28 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
             rel="stylesheet"
         />
+        <style>
+            /* Style for the chat button */
+            #chat-button {
+                position: relative;
+                bottom: 20px;
+                right: 20px;
+                background-color: #007bff;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 50px;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;
+                margin-left: 20px;
+            }
+
+            #chat-button:hover {
+                background-color: #0056b3;
+            }
+        </style>
         <script>
             /**
              * THIS SCRIPT REQUIRED FOR PREVENT FLICKERING IN SOME BROWSERS
@@ -34,62 +56,7 @@
                 document.documentElement.classList.add('dark');
         </script>
     </head>
-    <!-- Start of LiveChat (www.livechat.com) code -->
-    <script>
-        window.__lc = window.__lc || {};
-        window.__lc.license = 18422055;
-        window.__lc.integration_name = 'manual_channels';
-        window.__lc.product_name = 'livechat';
-        (function (n, t, c) {
-            function i(n) {
-                return e._h ? e._h.apply(null, n) : e._q.push(n);
-            }
-            var e = {
-                _q: [],
-                _h: null,
-                _v: '2.0',
-                on: function () {
-                    i(['on', c.call(arguments)]);
-                },
-                once: function () {
-                    i(['once', c.call(arguments)]);
-                },
-                off: function () {
-                    i(['off', c.call(arguments)]);
-                },
-                get: function () {
-                    if (!e._h)
-                        throw new Error(
-                            "[LiveChatWidget] You can't use getters before load."
-                        );
-                    return i(['get', c.call(arguments)]);
-                },
-                call: function () {
-                    i(['call', c.call(arguments)]);
-                },
-                init: function () {
-                    var n = t.createElement('script');
-                    (n.async = !0),
-                        (n.type = 'text/javascript'),
-                        (n.src = 'https://cdn.livechatinc.com/tracking.js'),
-                        t.head.appendChild(n);
-                },
-            };
-            !n.__lc.asyncInit && e.init(),
-                (n.LiveChatWidget = n.LiveChatWidget || e);
-        })(window, document, [].slice);
-    </script>
-    <noscript
-        ><a href="https://www.livechat.com/chat-with/18422055/" rel="nofollow"
-            >Chat with us</a
-        >, powered by
-        <a
-            href="https://www.livechat.com/?welcome"
-            rel="noopener nofollow"
-            target="_blank"
-            >LiveChat</a
-        ></noscript
-    >
+
     <!-- End of LiveChat code -->
 
     <body
@@ -689,16 +656,6 @@
                                         <span>Manage subscription</span></a
                                     >
                                 </li>
-                                <li x-data="accordionItem('menu-item-5')">
-                                    <a
-                                        :class="expanded ? 'text-slate-800 font-semibold dark:text-navy-50' : 'text-slate-600 dark:text-navy-200  hover:text-slate-800  dark:hover:text-navy-50'"
-                                        @click="expanded = !expanded"
-                                        class="flex items-center justify-between py-2 text-xs+ tracking-wide outline-none transition-[color,padding-left] duration-300 ease-in-out"
-                                        href="help-center.html"
-                                    >
-                                        <span>Help center</span></a
-                                    >
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -774,18 +731,28 @@
                                             />
                                         </div>
                                     </div>
-                                    <label class="block">
-                                        <p class="text-warning">
-                                            Add video link
-                                        </p>
-                                        <input
-                                            class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            placeholder="Add video link from internet"
-                                            id="videoLink"
-                                            name="videoLink"
-                                            type="text"
-                                        />
-                                    </label>
+                                    <!-- Add Video Links Section -->
+                                    <div class="mt-5">
+                                        <label class="block">
+                                            <p class="text-warning"></p>
+                                            <div id="videoLinksContainer">
+                                                <input
+                                                    class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                                    placeholder="Add video link from internet"
+                                                    name="videoLink[]"
+                                                    type="text"
+                                                />
+                                                <!-- Additional video link fields will be added here -->
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onclick="addVideoLinkField()"
+                                                class="mt-2 text-primary hover:underline"
+                                            >
+                                                Add More Link
+                                            </button>
+                                        </label>
+                                    </div>
                                 </div>
                                 <br />
                                 <div align="center">
@@ -824,7 +791,7 @@
                                 </div>
                                 <br />
                                 <div>
-                                    <p class="pt-3">Enter video description</p>
+                                    <!-- <p class="pt-3">Enter video description</p>
                                     <label class="block">
                                         <textarea
                                             rows="4"
@@ -835,7 +802,7 @@
                                         ></textarea>
                                     </label>
                                     <br />
-                                    <br />
+                                    <br /> -->
                                 </div>
                                 <div class="code-wrapper hidden pt-4">
                                     <pre
@@ -865,10 +832,12 @@
                     class="text-center mt-3 text-slate-600 dark:text-navy-100"
                 ></div>
                 <div id="remainingCredits"></div>
-                <br />
-                <br />
+                <br /><br />
+                <div id="chat-button">Click here to chat with support</div>
+
                 <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
-                <br />
+                <br /><br />
+
                 <!-- Table Section -->
                 <div class="flex flex-col">
                     <div
@@ -990,7 +959,9 @@
                 const videoPond = FilePond.create(
                     document.querySelector('input[name="videoFiles"]')
                 );
-
+                const picturePond = FilePond.create(
+                    document.querySelector('input[name="pictureFiles"]')
+                );
                 const audioPond = FilePond.create(
                     document.querySelector('input[name="audioFiles"]')
                 );
@@ -1006,7 +977,7 @@
 
                         // Access files from FilePond instances
                         const videoFiles = videoPond.getFiles();
-
+                        const pictureFiles = picturePond.getFiles();
                         const audioFiles = audioPond.getFiles();
 
                         // Create a new FormData object
@@ -1017,20 +988,60 @@
                             formData.append('videoFiles', fileItem.file);
                         });
 
+                        // Append picture files
+                        pictureFiles.forEach((fileItem) => {
+                            formData.append('pictureFiles', fileItem.file);
+                        });
+
                         // Append audio files
                         audioFiles.forEach((fileItem) => {
                             formData.append('audioFiles', fileItem.file);
                         });
 
                         // Append other form fields
-                        formData.append(
-                            'videoLink',
-                            document.getElementById('videoLink').value
+                        const videoLinkInputs = document.querySelectorAll(
+                            'input[name="videoLink[]"]'
                         );
+                        const videoLinks = Array.from(videoLinkInputs).map(
+                            (input) => (input ? input.value : '')
+                        );
+                        formData.append(
+                            'videoLinks',
+                            JSON.stringify(
+                                videoLinks.filter((link) => link.trim() !== '')
+                            )
+                        ); // Convert array to JSON string and filter out empty links
+
+                        const videoDescriptionElement =
+                            document.getElementById('videoDescription');
                         formData.append(
                             'videoDescription',
-                            document.getElementById('videoDescription').value
+                            videoDescriptionElement
+                                ? videoDescriptionElement.value
+                                : ''
                         );
+
+                        // Append selected radio button values if they exist
+                        const selectedAvatar = document.querySelector(
+                            'input[name="selectedAvatar"]:checked'
+                        );
+                        if (selectedAvatar) {
+                            formData.append(
+                                'selectedAvatar',
+                                selectedAvatar.value
+                            );
+                        }
+
+                        const location_avatar = document.querySelector(
+                            'input[name="location_avatar"]:checked'
+                        );
+                        if (location_avatar) {
+                            formData.append(
+                                'location_avatar',
+                                location_avatar.value
+                            );
+                        }
+
                         // Get the page title
                         const pageTitle = document.title;
 
@@ -1045,6 +1056,7 @@
                                     },
                                 }
                             );
+
                             console.log(response.data);
                             messageDiv.textContent =
                                 'Video submitted successfully!';
@@ -1057,44 +1069,101 @@
 
                             // Clear the FilePond instances
                             videoPond.removeFiles();
+                            picturePond.removeFiles();
                             audioPond.removeFiles();
                         } catch (error) {
-                                console.error(error);
-                                if (
-                                    error.response &&
-                                    error.response.status === 403
-                                ) {
-                                    // Display modal with message and link
-                                    showExhaustedCreditsModal(
-                                        error.response.data.error
-                                    );
-                                } else {
-                                    messageDiv.textContent =
-                                        'An error occurred while submitting the video.';
-                                    messageDiv.style.color = 'red';
-                                }
+                            console.error(error);
+                            if (
+                                error.response &&
+                                error.response.status === 403
+                            ) {
+                                // Display modal with message and link
+                                showExhaustedCreditsModal(
+                                    error.response.data.error
+                                );
+                            } else {
+                                messageDiv.textContent =
+                                    'An error occurred while submitting the video.';
+                                messageDiv.style.color = 'red';
                             }
+                        }
 
-                            setTimeout(() => {
-                                messageDiv.textContent = '';
-                                remainingCreditsDiv.textContent = '';
-                            }, 5000);
-                        });
-                });
-                function showExhaustedCreditsModal(message) {
-                    // Create modal element
-                    const modal = document.createElement('div');
-                    modal.id = 'creditsModal';
-                    modal.style.position = 'fixed';
-                    modal.style.left = '50%';
-                    modal.style.top = '50%';
-                    modal.style.transform = 'translate(-50%, -50%)';
-                    modal.style.backgroundColor = '#bcc5ca';
-                    modal.style.padding = '30px';
-                    modal.style.boxShadow = '0px 0px 20px rgba(0, 0, 0, 0.3)';
-                    modal.style.zIndex = '1000';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            remainingCreditsDiv.textContent = '';
+                        }, 5000);
+                    });
+            });
+            function showExhaustedCreditsModal(message) {
+                // Create modal element
+                const modal = document.createElement('div');
+                modal.id = 'creditsModal';
+                modal.style.position = 'fixed';
+                modal.style.left = '50%';
+                modal.style.top = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
+                modal.style.backgroundColor = '#fff';
+                modal.style.padding = '20px';
+                modal.style.boxShadow = '0px 0px 30px rgba(0, 0, 0, 0.1)';
+                modal.style.borderRadius = '8px';
+                modal.style.zIndex = '1000';
+                modal.style.maxWidth = '400px';
+                modal.style.width = '90%';
+                modal.style.textAlign = 'center';
+                modal.style.fontFamily = 'Arial, sans-serif';
 
+                // Modal content
+                const modalContent = `
+                    <br><div style="font-size: 50px; color: #d9534f;">
+                        😢
+                    </div><br>
+                    <h2 style="color: #333;">Oops!</h2><br>
+                    <p style="color: #555;">${message}</p>
+                    <p style="color: #555;">Please click <a href="/plans-billing.html" style="color: #007bff; text-decoration: none; font-weight: bold;">here</a> to upgrade and submit more videos.</p>
+                   <br> <button onclick="closeExhaustedCreditsModal()" style="
+                        background-color: #d9534f;
+                        color: white;
+                        padding: 12px 12px;
+                        border: none;
+                        border-radius: 5px;
+                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                        font-size: 16px;
+                    ">Close</button>
+                `;
 
+                modal.innerHTML = modalContent;
+
+                // Append modal to body
+                document.body.appendChild(modal);
+
+                // Add overlay
+                const overlay = document.createElement('div');
+                overlay.id = 'modalOverlay';
+                overlay.style.position = 'fixed';
+                overlay.style.left = '0';
+                overlay.style.top = '0';
+                overlay.style.width = '100%';
+                overlay.style.height = '100%';
+                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+                overlay.style.zIndex = '999';
+                document.body.appendChild(overlay);
+            }
+
+            function closeExhaustedCreditsModal() {
+                const modal = document.getElementById('creditsModal');
+                const overlay = document.getElementById('modalOverlay');
+                if (modal) {
+                    document.body.removeChild(modal);
+                }
+                if (overlay) {
+                    document.body.removeChild(overlay);
+                }
+            }
+        </script>
+        <script>
             function deleteProject(projectId) {
                 axios
                     .delete(`/api/project/${projectId}`)
@@ -1145,39 +1214,39 @@
                             if (video.status === 'Completed') {
                                 downloadButton = `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`;
                                 watchButton = `
-                                        <button
-                                            id="openModal"
-                                            data-video-src="${video.downloadLink}"
-                                            data-video-title="${video.title}"
-                                            class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">
-                                            Watch Video
-                                        </button>`;
+                                    <button 
+                                        id="openModal"
+                                        data-video-src="${video.downloadLink}"
+                                        data-video-title="${video.title}"
+                                        class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">
+                                        Watch Video
+                                    </button>`;
                             }
 
                             row.innerHTML = `
-                                    <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
-                                        index + 1
-                                    }</td>
-                                    <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
-                                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
+                                <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
+                                    index + 1
+                                }</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
+                                    video.id
+                                }</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
+                                    video.createdAt
+                                ).toLocaleDateString()}</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                                    <button onclick="deleteProject('${
                                         video.id
-                                    }</td>
-                                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
-                                        video.createdAt
-                                    ).toLocaleDateString()}</td>
-                                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
-                                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                                        <button onclick="deleteProject('${
-                                            video.id
-                                        }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
-                                        <br>
-                                        <br>
-                                        ${watchButton}
-                                    </td>
-                                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                                        ${downloadButton}
-                                    </td>
-                                `;
+                                    }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
+                                    <br>
+                                    <br>
+                                    ${watchButton}
+                                </td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                                    ${downloadButton}
+                                </td>
+                            `;
 
                             outputHistory.appendChild(row);
                         });
@@ -1190,7 +1259,9 @@
             updateOutputHistory();
             // Optionally, set an interval to periodically update the output history
             setInterval(updateOutputHistory, 5000); // Update every 3 seconds
+        </script>
 
+        <script>
             document.addEventListener('DOMContentLoaded', function () {
                 // Fetch user info on page load
                 axios
@@ -1281,6 +1352,48 @@
                     }
                 });
             });
+        </script>
+        <script>
+            function addVideoLinkField() {
+                const container = document.getElementById(
+                    'videoLinksContainer'
+                );
+                const inputCount = container.querySelectorAll('input').length;
+                if (inputCount < 5) {
+                    const newInput = document.createElement('input');
+                    newInput.className =
+                        'form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent mt-2';
+                    newInput.placeholder = 'Add video link from internet';
+                    newInput.name = 'videoLink[]';
+                    newInput.type = 'text';
+                    container.appendChild(newInput);
+                } else {
+                    alert('Maximum of 5 video links are allowed.');
+                }
+            }
+        </script>
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {},
+                Tawk_LoadStart = new Date();
+            (function () {
+                var s1 = document.createElement('script'),
+                    s0 = document.getElementsByTagName('script')[0];
+                s1.async = true;
+                s1.src =
+                    'https://embed.tawk.to/66c15835146b7af4a43ba50d/1i5hk14f1';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+
+            // Add click event listener to the chat button
+            document
+                .getElementById('chat-button')
+                .addEventListener('click', function () {
+                    if (Tawk_API) {
+                        Tawk_API.maximize(); // Open the Tawk.to chat widget
+                    }
+                });
         </script>
     </body>
 </html>

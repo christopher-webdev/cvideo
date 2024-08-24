@@ -653,16 +653,6 @@
                                         <span>Manage subscription</span></a
                                     >
                                 </li>
-                                <li x-data="accordionItem('menu-item-5')">
-                                    <a
-                                        :class="expanded ? 'text-slate-800 font-semibold dark:text-navy-50' : 'text-slate-600 dark:text-navy-200  hover:text-slate-800  dark:hover:text-navy-50'"
-                                        @click="expanded = !expanded"
-                                        class="flex items-center justify-between py-2 text-xs+ tracking-wide outline-none transition-[color,padding-left] duration-300 ease-in-out"
-                                        href="help-center.html"
-                                    >
-                                        <span>Help center</span></a
-                                    >
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -744,9 +734,7 @@
                                 <!-- Add Video Links Section -->
                                 <div class="mt-5">
                                     <label class="block">
-                                        <p class="text-warning">
-                                            Add Video Links
-                                        </p>
+                                        <p class="text-warning"></p>
                                         <div id="videoLinksContainer">
                                             <input
                                                 class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
@@ -2150,26 +2138,7 @@
                     }
                 }
             </script>
-            <script>
-                function addVideoLinkField() {
-                    const container = document.getElementById(
-                        'videoLinksContainer'
-                    );
-                    const inputCount =
-                        container.querySelectorAll('input').length;
-                    if (inputCount < 5) {
-                        const newInput = document.createElement('input');
-                        newInput.className =
-                            'form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent mt-2';
-                        newInput.placeholder = 'Add video link from internet';
-                        newInput.name = 'videoLink[]';
-                        newInput.type = 'text';
-                        container.appendChild(newInput);
-                    } else {
-                        alert('Maximum of 5 video links are allowed.');
-                    }
-                }
-            </script>
+
             <script>
                 async function fetchAvatars() {
                     const response = await fetch('/api/avatars');
@@ -2280,9 +2249,6 @@
                         }
                     });
             </script>
-            <!--Start of Tawk.to Script-->
-
-            <!--End of Tawk.to Script-->
             <!-- End of Tawk.to Script -->
             <br />
             <br />

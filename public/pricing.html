@@ -28,6 +28,7 @@
             rel="stylesheet"
             href="assets/css/plugins/bootstrap-select.min.css"
         />
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link rel="stylesheet" href="assets/css/plugins/prism.css" />
         <link rel="stylesheet" href="assets/css/style.css" />
     </head>
@@ -1801,10 +1802,15 @@
                                         attention will be diverted from
                                     </p>
                                     <h6 class="subtitle">Join a Newsletter</h6>
-                                    <form class="newsletter-form" action="#">
+
+                                    <form
+                                        class="newsletter-form"
+                                        id="newsletterForm"
+                                    >
                                         <div class="form-group">
                                             <input
                                                 type="email"
+                                                id="emailInput"
                                                 placeholder="Enter Your Email Here"
                                             />
                                             <button
@@ -1817,6 +1823,10 @@
                                             </button>
                                         </div>
                                     </form>
+                                    <div
+                                        id="subscriptionMessage"
+                                        class="mt-4 text-green-600"
+                                    ></div>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-6 col-sm-6 col-12">
@@ -1889,7 +1899,7 @@
                             </div>
                             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                                 <div class="rainbow-footer-widget">
-                                    <div class="widget-menu-top">
+                                    <!-- <div class="widget-menu-top">
                                         <h4 class="title">Contact</h4>
                                         <div class="inner">
                                             <ul
@@ -1922,7 +1932,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -2560,5 +2570,38 @@
         <script src="assets/js/vendor/jquery-one-page-nav.js"></script>
         <!-- Main JS -->
         <script src="assets/js/main.js"></script>
+        <script>
+            document
+                .getElementById('newsletterForm')
+                .addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const email = document.getElementById('emailInput').value;
+                    const subscriptionMessage = document.getElementById(
+                        'subscriptionMessage'
+                    );
+
+                    axios
+                        .post('/subscribe', { email })
+                        .then((response) => {
+                            subscriptionMessage.innerText =
+                                'Subscription successful!';
+                            subscriptionMessage.classList.remove(
+                                'text-red-600'
+                            );
+                            subscriptionMessage.classList.add('text-green-600');
+                        })
+                        .catch((error) => {
+                            subscriptionMessage.innerText =
+                                'Subscription failed: ' + error.response.data;
+                            subscriptionMessage.classList.remove(
+                                'text-green-600'
+                            );
+                            subscriptionMessage.classList.add('text-red-600');
+                        });
+
+                    // Optionally clear the input field
+                    document.getElementById('emailInput').value = '';
+                });
+        </script>
     </body>
 </html>
