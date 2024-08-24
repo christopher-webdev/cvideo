@@ -24,7 +24,7 @@ module.exports = function (passport) {
                 clientID:
                     '250038052754-atan58f9rgc9q6oacvrq11mfdlneecph.apps.googleusercontent.com',
                 clientSecret: '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',
-                callbackURL: 'https://eldravideo/auth/google/callback',
+                callbackURL: 'https://eldravideo.com/auth/google/callback',
             },
             async (accessToken, refreshToken, profile, done) => {
                 // Extract full name from profile
@@ -146,7 +146,7 @@ module.exports = function (passport) {
                 consumerKey: 'alDLgZJUVrZFbZGPjNXD0SoGr',
                 consumerSecret:
                     't71NKUcE5fkcB6Hgu3y9DbKMClKTkJx0Y4biAEqjwqTR14oJHy',
-                callbackURL: 'https://eldravideo/auth/google/callback',
+                callbackURL: 'https://eldravideo.com/auth/google/callback',
                 includeEmail: true,
             },
             async (accessToken, refreshToken, profile, done) => {

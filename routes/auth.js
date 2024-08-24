@@ -536,6 +536,17 @@ router.get(
     }
 );
 
+router.get('/twitter', passport.authenticate('twitter'));
+
+router.get(
+    '/twitter/callback',
+    passport.authenticate('twitter', { failureRedirect: '/login.html' }),
+    function (req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/dashboard.html');
+    }
+);
+
 // Local login route
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
