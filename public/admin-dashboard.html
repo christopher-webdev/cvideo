@@ -81,7 +81,7 @@
 
             /* Sidebar Styling */
             .Sidebar--bars {
-                height: 100vh;
+                height: auto;
                 width: 20% !important;
                 background-color: #252a34;
                 color: #fff;
@@ -531,6 +531,12 @@
                                 id="AddComparisonBtn"
                             >
                                 Add Comparison
+                            </li>
+                            <li
+                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
+                                id="manageVideoBtn"
+                            >
+                                Add video
                             </li>
                         </ul>
                     </div>
@@ -1974,6 +1980,50 @@
                     </div>
                 </div>
                 <!-- ///////////////////////////////////////// End of Manage Projects////////////////////////////////// -->
+                <div id="manageVideoSection" class="hidden p-6 bg-gray-50">
+                    <!-- In admin-dashboard.html -->
+                    <form
+                        id="videoForm"
+                        method="POST"
+                        action="/admin/videos/add"
+                    >
+                        <label for="page">Select Page:</label>
+                        <select id="page" name="page">
+                            <option value="utilize">Utilize</option>
+                            <option value="affiliate">Affiliate</option>
+                        </select>
+
+                        <label for="videoLink">YouTube Video Link:</label>
+                        <input
+                            type="text"
+                            id="videoLink"
+                            name="videoLink"
+                            required
+                        />
+
+                        <button type="submit">Add Video</button>
+                    </form>
+                    <br /><br />
+                    <!-- To remove a video -->
+                    <!-- In admin-dashboard.html -->
+                    <div>
+                        <table id="videoTable" class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="text-left py-2 px-4">Page</th>
+                                    <th class="text-left py-2 px-4">
+                                        Video Link
+                                    </th>
+                                    <th class="text-left py-2 px-4">
+                                        Added At
+                                    </th>
+                                    <th class="text-left py-2 px-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="videoTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2716,6 +2766,9 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageVideoSection')
+                            .classList.add('hidden');
                     });
                 //manage project
                 document
@@ -2771,6 +2824,9 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageVideoSection')
+                            .classList.add('hidden');
                     });
                 //manage comparision start here
                 document
@@ -2821,7 +2877,61 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
+                        document
+                            .getElementById('manageVideoSection')
+                            .classList.add('hidden');
                     });
+
+                //manage plan button start here
+                document
+                    .getElementById('manageVideoBtn')
+                    .addEventListener('click', function () {
+                        const manageProjectsBtn =
+                            document.getElementById('listAllnavigators');
+                        const listItems =
+                            manageProjectsBtn.getElementsByTagName('li');
+                        for (let i = 0; i < listItems.length; i++) {
+                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
+                        }
+                        document
+                            .getElementById('manageVideoBtn')
+                            .classList.add('active');
+                        // Show Manage plan Section
+                        document
+                            .getElementById('manageUsersSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageSubmitsAndPricingSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageProjectsSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManageCompareSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('addplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('ManagemainSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('editplanSection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('managecompasionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageVideoSection')
+                            .classList.remove('hidden');
+                    });
+
                 //manage plan button start here
                 document
                     .getElementById('manageplanBtn')
@@ -2866,6 +2976,9 @@
                             .classList.add('hidden');
                         document
                             .getElementById('EditComparesectionsection')
+                            .classList.add('hidden');
+                        document
+                            .getElementById('manageVideoSection')
                             .classList.add('hidden');
                     });
                 //addplan btn start here
@@ -4485,7 +4598,7 @@
         <script>
             const sidebarLinks = document.querySelectorAll('.cursor-pointer');
             const sections = document.querySelectorAll(
-                '#manageAdminSection, #adminListSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
+                '#manageAdminSection, #manageVideoSection, #adminListSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
             );
 
             // Function to hide all sections
@@ -4524,6 +4637,8 @@
                         showSection('manageAvatarSection');
                     } else if (targetId === 'manageplanBtn') {
                         showSection('manageplanSection');
+                    } else if (targetId === 'manageVideoBtn') {
+                        showSection('manageVideoSection');
                     }
 
                     // Toggle visibility of nested ul elements
@@ -4667,6 +4782,119 @@
                         );
                 }
             }
+        </script>
+        <!-- In admin-dashboard.html -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Handle the Add Video form submission
+                const videoForm = document.getElementById('videoForm');
+                videoForm.addEventListener('submit', async function (event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    const formData = new FormData(videoForm);
+                    const data = {
+                        page: formData.get('page'),
+                        videoLink: formData.get('videoLink'),
+                    };
+
+                    try {
+                        const response = await fetch('/admin/videos/add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        });
+
+                        if (response.ok) {
+                            alert('Video added successfully!');
+                        } else {
+                            alert('Failed to add video.');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Fetch and display video links
+                async function loadVideos() {
+                    try {
+                        const response = await fetch('/admin/videos');
+                        const videos = await response.json();
+
+                        const videoTableBody =
+                            document.getElementById('videoTableBody');
+                        videoTableBody.innerHTML = ''; // Clear the table body
+
+                        videos.forEach((video) => {
+                            video.videoLinks.forEach((link) => {
+                                const row = document.createElement('tr');
+
+                                row.innerHTML = `
+                                    <td class="py-2 px-4">${video.page}</td>
+                                    <td class="py-2 px-4">${link.link}</td>
+                                    <td class="py-2 px-4">${new Date(
+                                        link.addedAt
+                                    ).toLocaleString()}</td>
+                                    <td class="py-2 px-4">
+                                        <button class="remove-btn bg-red-500 text-white px-2 py-1 rounded" data-page="${
+                                            video.page
+                                        }" data-link="${
+                                    link.link
+                                }">Remove</button>
+                                    </td>
+                                `;
+
+                                videoTableBody.appendChild(row);
+                            });
+                        });
+
+                        // Add event listeners to remove buttons
+                        const removeButtons =
+                            document.querySelectorAll('.remove-btn');
+                        removeButtons.forEach((button) => {
+                            button.addEventListener('click', handleRemoveVideo);
+                        });
+                    } catch (error) {
+                        console.error('Failed to load videos:', error);
+                    }
+                }
+
+                async function handleRemoveVideo(event) {
+                    const page = event.target.getAttribute('data-page');
+                    const videoLink = event.target.getAttribute('data-link');
+
+                    const confirmation = confirm(
+                        'Are you sure you want to delete this video?'
+                    );
+                    if (!confirmation) return;
+
+                    try {
+                        const response = await fetch('/admin/videos/remove', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ page, videoLink }),
+                        });
+
+                        if (response.ok) {
+                            alert('Video removed successfully!');
+                            loadVideos(); // Reload the videos after successful removal
+                        } else {
+                            alert('Failed to remove video.');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+
+                // Load videos on page load
+                loadVideos();
+            });
+            loadVideos();
         </script>
 
         <style>

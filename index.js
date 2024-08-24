@@ -7,6 +7,7 @@ const { User } = require('./models/User');
 const { SubscriptionPlan } = require('./models/User');
 const Project = require('./models/Project');
 const Avatar = require('./models/Avatar');
+const Video = require('./models/VideoModel');
 
 const signupRoute = require('./routes/signupRoute');
 const bodyParser = require('body-parser');
@@ -930,6 +931,117 @@ app.get('/api/avatars', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch avatars' });
     }
 });
+app.post('/admin/videos/add', async (req, res) => {
+    const { page, videoLink } = req.body;
+
+    try {
+        const video = await Video.findOne({ page });
+        if (video) {
+            video.videoLinks.push({ link: videoLink });
+            await video.save();
+        } else {
+            await Video.create({
+                page,
+                videoLinks: [{ link: videoLink }],
+            });
+        }
+
+        res.redirect('/admin-dashboard.html'); // Redirect back to the admin dashboard
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while adding the video.');
+    }
+});
+
+// app.post('/admin/videos/remove', async (req, res) => {
+//     const { page, videoLink } = req.body;
+
+//     try {
+//         await Video.findOneAndUpdate(
+//             { page },
+//             { $pull: { videoLinks: { link: videoLink } } }
+//         );
+
+//         res.redirect('/admin-dashboard.html'); // Redirect back to the admin dashboard
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('An error occurred while removing the video.');
+//     }
+// });
+app.post('/admin/videos/remove', async (req, res) => {
+    const { page, videoLink } = req.body;
+
+    try {
+        const video = await Video.findOne({ page });
+
+        if (video) {
+            // Remove the specific video link
+            video.videoLinks = video.videoLinks.filter(
+                (link) => link.link !== videoLink
+            );
+            await video.save();
+
+            res.status(200).send('Video removed');
+        } else {
+            res.status(404).send('Video not found');
+        }
+    } catch (error) {
+        console.error('Failed to remove video:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+app.get('/utilize', async (req, res) => {
+    try {
+        const videos = await Video.findOne({ page: 'utilize' });
+        res.render('utilize.html', {
+            videos: videos ? videos.videoLinks.slice(0, 10) : [],
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while retrieving videos.');
+    }
+});
+
+app.get('/affiliate', async (req, res) => {
+    try {
+        const videos = await Video.findOne({ page: 'affiliate' });
+        res.render('affiliate.html', {
+            videos: videos ? videos.videoLinks.slice(0, 10) : [],
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while retrieving videos.');
+    }
+});
+// Route to fetch video links for a specific page
+app.get('/videos/:page', async (req, res) => {
+    const { page } = req.params;
+
+    try {
+        const videoData = await Video.findOne({ page });
+        const videos = videoData ? videoData.videoLinks : [];
+        res.json(videos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: 'An error occurred while fetching videos.',
+        });
+    }
+});
+
+app.get('/admin/videos', async (req, res) => {
+    try {
+        const videos = await Video.find();
+        res.json(videos);
+    } catch (error) {
+        console.error('Failed to fetch videos:', error);
+        res.status(500).send('Server error');
+    }
+});
+// Route to get the list of videos
+// Route to get the list of videos
+
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
