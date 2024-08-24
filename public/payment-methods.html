@@ -687,6 +687,16 @@
                                         <span>Manage subscription</span></a
                                     >
                                 </li>
+                                <li x-data="accordionItem('menu-item-5')">
+                                    <a
+                                        :class="expanded ? 'text-slate-800 font-semibold dark:text-navy-50' : 'text-slate-600 dark:text-navy-200  hover:text-slate-800  dark:hover:text-navy-50'"
+                                        @click="expanded = !expanded"
+                                        class="flex items-center justify-between py-2 text-xs+ tracking-wide outline-none transition-[color,padding-left] duration-300 ease-in-out"
+                                        href="help-center.html"
+                                    >
+                                        <span>Help center</span></a
+                                    >
+                                </li>
                             </ul>
                         </div>
                     </div>
