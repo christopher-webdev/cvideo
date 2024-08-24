@@ -870,51 +870,7 @@ app.put('/update-subscription/:userId', updateCreditsMiddleware, (req, res) => {
     });
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-app.put(
-    '/update-avatar/:id',
-    upload.fields([
-        { name: 'avatarImage', maxCount: 1 },
-        { name: 'locationImages[office]', maxCount: 1 },
-        { name: 'locationImages[street]', maxCount: 1 },
-        { name: 'locationImages[forest]', maxCount: 1 },
-        { name: 'locationImages[home]', maxCount: 1 },
-    ]),
-    async (req, res) => {
-        try {
-            const avatarId = req.params.id;
-            const updatedData = {};
 
-            if (req.files['avatarImage']) {
-                updatedData.image = req.files['avatarImage'][0].path;
-            }
-
-            updatedData.locations = [];
-
-            ['office', 'street', 'forest', 'home'].forEach((location) => {
-                if (req.files[`locationImages[${location}]`]) {
-                    updatedData.locations.push({
-                        name: location,
-                        image: req.files[`locationImages[${location}]`][0].path,
-                    });
-                }
-            });
-
-            const updatedAvatar = await Avatar.findByIdAndUpdate(
-                avatarId,
-                updatedData,
-                { new: true }
-            );
-
-            if (!updatedAvatar) {
-                return res.status(404).json({ error: 'Avatar not found' });
-            }
-
-            res.status(200).json(updatedAvatar);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-);
 app.get('/avatars/:id', async (req, res) => {
     try {
         const avatar = await Avatar.findById(req.params.id);

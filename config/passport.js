@@ -1,5 +1,6 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 const mongoose = require('mongoose');
 const { User } = require('../models/User');
 const { SubscriptionPlan } = require('../models/User');
@@ -23,7 +24,7 @@ module.exports = function (passport) {
                 clientID:
                     '250038052754-atan58f9rgc9q6oacvrq11mfdlneecph.apps.googleusercontent.com',
                 clientSecret: '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',
-                callbackURL: 'http://gunnyfrisch.shop/auth/google/callback',
+                callbackURL: 'https://eldravideo/auth/google/callback',
             },
             async (accessToken, refreshToken, profile, done) => {
                 // Extract full name from profile
@@ -134,6 +135,53 @@ module.exports = function (passport) {
                     return done(null, admin);
                 } catch (err) {
                     return done(err);
+                }
+            }
+        )
+    );
+
+    passport.use(
+        new TwitterStrategy(
+            {
+                consumerKey: 'alDLgZJUVrZFbZGPjNXD0SoGr',
+                consumerSecret:
+                    't71NKUcE5fkcB6Hgu3y9DbKMClKTkJx0Y4biAEqjwqTR14oJHy',
+                callbackURL: 'https://eldravideo/auth/google/callback',
+                includeEmail: true,
+            },
+            async (accessToken, refreshToken, profile, done) => {
+                // Extract full name from profile
+                const fullName = profile.displayName || '';
+                const parsedName = parseFullName(fullName);
+
+                const newUser = {
+                    firstName: parsedName.first || '',
+                    lastName: parsedName.last || '',
+                    email: profile.emails[0].value,
+                    profilePicture: profile.photos[0].value,
+                };
+
+                try {
+                    let user = await User.findOne({ email: newUser.email });
+
+                    if (user) {
+                        // User already exists, update isSignedIn to true
+                        user.isSignedIn = true;
+                        await user.save();
+                        done(null, user);
+                    } else {
+                        // Create a new user with isSignedIn set to true
+                        newUser.isSignedIn = true;
+                        user = await User.create(newUser);
+
+                        // Apply credits based on the user's subscription plan
+                        await applyDefaultCredits(user._id, 'Free'); // Default subscription plan, adjust as necessary
+
+                        done(null, user);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    done(err, false);
                 }
             }
         )
