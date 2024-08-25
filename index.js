@@ -651,7 +651,7 @@ app.get('/api/video-status', ensureAuthenticated, async (req, res) => {
 
 //admin api for dashboard
 //gets all project
-app.get('/api/projects', async (req, res) => {
+app.get('/api/projects', ensureAdminAuthenticated, async (req, res) => {
     try {
         const projects = await Project.find().populate('userId');
         res.json({ projects });
@@ -682,7 +682,7 @@ app.post(
 );
 
 //deletes project by admin
-app.delete('/api/projects/:id', async (req, res) => {
+app.delete('/api/projects/:id', ensureAdminAuthenticated, async (req, res) => {
     try {
         await Project.findByIdAndDelete(req.params.id);
         res.json({ message: 'Project deleted successfully' });
@@ -691,58 +691,66 @@ app.delete('/api/projects/:id', async (req, res) => {
     }
 });
 //updating project sttus
-app.post('/api/admin/update-project-status/:projectId', async (req, res) => {
-    const { projectId } = req.params;
-    const { status, comment, estimatedCompletionTime } = req.body;
+app.post(
+    '/api/admin/update-project-status/:projectId',
+    ensureAdminAuthenticated,
+    async (req, res) => {
+        const { projectId } = req.params;
+        const { status, comment, estimatedCompletionTime } = req.body;
 
-    try {
-        const project = await Project.findById(projectId);
-        if (!project) {
-            return res.status(404).json({ message: 'Project not found' });
+        try {
+            const project = await Project.findById(projectId);
+            if (!project) {
+                return res.status(404).json({ message: 'Project not found' });
+            }
+
+            // Update status and history
+            project.status = status;
+            project.statusHistory.push({
+                status,
+                comment,
+                updatedAt: new Date(),
+            });
+
+            // Save estimated completion time
+            project.estimatedCompletionTime = estimatedCompletionTime;
+
+            await project.save();
+
+            res.status(200).json({ message: 'Status updated successfully' });
+        } catch (error) {
+            console.error('Error updating status:', error);
+            res.status(500).json({ message: 'Failed to update status' });
         }
-
-        // Update status and history
-        project.status = status;
-        project.statusHistory.push({
-            status,
-            comment,
-            updatedAt: new Date(),
-        });
-
-        // Save estimated completion time
-        project.estimatedCompletionTime = estimatedCompletionTime;
-
-        await project.save();
-
-        res.status(200).json({ message: 'Status updated successfully' });
-    } catch (error) {
-        console.error('Error updating status:', error);
-        res.status(500).json({ message: 'Failed to update status' });
     }
-});
+);
 //get media routes
-app.get('/api/admin/get-project-media/:projectId', async (req, res) => {
-    const { projectId } = req.params;
+app.get(
+    '/api/admin/get-project-media/:projectId',
+    ensureAdminAuthenticated,
+    async (req, res) => {
+        const { projectId } = req.params;
 
-    try {
-        const project = await Project.findById(projectId);
-        if (!project) {
-            return res.status(404).json({ message: 'Project not found' });
+        try {
+            const project = await Project.findById(projectId);
+            if (!project) {
+                return res.status(404).json({ message: 'Project not found' });
+            }
+
+            res.status(200).json({
+                videoFiles: project.videoFiles,
+                pictureFiles: project.pictureFiles,
+                audioFiles: project.audioFiles,
+            });
+        } catch (error) {
+            console.error('Error fetching project media:', error);
+            res.status(500).json({ message: 'Failed to fetch project media' });
         }
-
-        res.status(200).json({
-            videoFiles: project.videoFiles,
-            pictureFiles: project.pictureFiles,
-            audioFiles: project.audioFiles,
-        });
-    } catch (error) {
-        console.error('Error fetching project media:', error);
-        res.status(500).json({ message: 'Failed to fetch project media' });
     }
-});
+);
 
 //get all users
-app.get('/api/users', async (req, res) => {
+app.get('/api/users', ensureAdminAuthenticated, async (req, res) => {
     try {
         const users = await User.find();
         res.json({ users });
@@ -764,7 +772,7 @@ app.get('/api/users/:id', async (req, res) => {
     }
 });
 // Delete user
-app.delete('/users/:id', async (req, res) => {
+app.delete('/users/:id', ensureAdminAuthenticated, async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
@@ -825,7 +833,7 @@ app.get('/api/get-dashboard-visibility', (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////END OF AI VISABILITY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////// set credit ADMIN daashboard
-app.post('/set-credits', async (req, res) => {
+app.post('/set-credits', ensureAdminAuthenticated, async (req, res) => {
     const { subscriptionPlan, credits } = req.body;
 
     try {
@@ -848,7 +856,7 @@ app.post('/set-credits', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-app.get('/get-credits', async (req, res) => {
+app.get('/get-credits', ensureAdminAuthenticated, async (req, res) => {
     try {
         // Retrieve all subscription plans
         const subscriptionPlans = await SubscriptionPlan.find({});
@@ -1005,7 +1013,7 @@ app.get('/api/avatars', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch avatars' });
     }
 });
-app.post('/admin/videos/add', async (req, res) => {
+app.post('/admin/videos/add', ensureAdminAuthenticated, async (req, res) => {
     const { page, videoLink } = req.body;
 
     try {
@@ -1111,14 +1119,22 @@ app.post('/subscribe', async (req, res) => {
 });
 
 // Route to display the list of subscribed emails in JSON format
-app.get('/admin/newsletter-subscribers', async (req, res) => {
-    try {
-        const subscribers = await Newsletter.find().sort({ subscribedAt: -1 });
-        res.json(subscribers); // Send the subscribers as JSON
-    } catch (error) {
-        res.status(500).send('Error fetching subscribers: ' + error.message);
+app.get(
+    '/admin/newsletter-subscribers',
+    ensureAdminAuthenticated,
+    async (req, res) => {
+        try {
+            const subscribers = await Newsletter.find().sort({
+                subscribedAt: -1,
+            });
+            res.json(subscribers); // Send the subscribers as JSON
+        } catch (error) {
+            res.status(500).send(
+                'Error fetching subscribers: ' + error.message
+            );
+        }
     }
-});
+);
 
 // Route to get the list of videos
 // Route to get the list of videos
