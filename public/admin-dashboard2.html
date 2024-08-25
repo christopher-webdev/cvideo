@@ -1,4 +1,4 @@
-<!DOCTYPE html>
++<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -20,190 +20,46 @@
                 transform: translateX(100%);
             }
         </style>
-        <style>
-            /* Custom class for the <a> elements */
-            .custom-li {
-                color: #f97316; /* Tailwind's text-orange-500 */
-                background-color: transparent; /* Default background color */
-                padding: 0.5rem 1rem; /* px-4 py-2 */
-                border-radius: 0.5rem; /* rounded-lg */
-                transition: color 0.3s ease, background-color 0.3s ease; /* transition-colors duration-300 */
-                text-decoration: none; /* Remove underline from links */
-            }
-
-            .custom-li:hover {
-                color: #f97316; /* Tailwind's hover:text-orange-700 (same color in this example) */
-                background-color: #fef3c7; /* Tailwind's hover:bg-orange-100 */
-            }
-        </style>
-        <style>
-            .Sidebar--bars {
-                height: 100vh;
-                width: 20% !important;
-                font-size: 14px;
-            }
-            .sidebar {
-                padding: 10px;
-            }
-            .sidebar-admin ul {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-            }
-            .sidebar-admin ul li.active {
-                background: orange;
-                color: #000;
-            }
-            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-            * {
-                font-family: 'Poppins', sans-serif;
-            }
-            #rainbow-compare-table,
-            #manageplanSection,
-            #addplanSection,
-            #manageProjectsSection,
-            #ManagemainSection,
-            #manageAdminSection,
-            #manageUsersSection,
-            #manageSubmitsAndPricingSection,
-            #editplanSection,
-            #addplanSection,
-            #ManageCompareSection,
-            #EditComparesectionsection {
-                height: 100vh;
-                overflow: hidden;
-                overflow-x: auto;
-                overflow-y: auto;
-                width: 100%;
-                padding-bottom: 4rem;
-            }
-            #planTable_filter,
-            #planTable_length {
-                display: none;
-            }
-            td > div > button.btn {
-                padding: 10px;
-            }
-            h2,
-            h1,
-            h6,
-            h4 {
-                color: #000;
-            }
-            thead {
-                background: #c0c0c02e;
-                height: 100px;
-            }
-            .rainbow-compare-table.style-1 table .heading-row td > h6 {
-                color: #fff !important;
-            }
-            .rainbow-compare-table.style-1 table th.style-prymary {
-                background: transparent !important;
-            }
-            input,
-            select {
-                height: 40px !important;
-                border: 1px solid #df7f0d !important;
-                border-radius: 0 !important;
-                border-radius: 5px !important;
-
-                background: transparent !important;
-            }
-            .flex-1.p-6 {
-                width: 75% !important;
-            }
-            button {
-                padding: 10px !important;
-            }
-            body {
-                font-size: 1.4rem;
-            }
-            .p-8 {
-                padding: 2.5rem;
-            }
-            #managecompasionsection {
-                background: #000;
-                color: #df7f0d;
-            }
-        </style>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <!-- CSS Assets -->
-        <link rel="stylesheet" href="css/app.css" />
-
-        <!-- Javascript Assets -->
-        <link
-            rel="stylesheet"
-            href="https://cdn.datatables.net/1.13.0/css/jquery.dataTables.min.css"
-        />
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
-        <!-- <script src="js/app.js" defer></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <link
-            href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css"
-            rel="stylesheet"
-        />
-
-        <!-- JS
-     ============================================ -->
-        <script src="assets/js/vendor/modernizr.min.js"></script>
-        <!-- <script src="assets/js/vendor/jquery.min.js"></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com/" />
-        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-        <link rel="stylesheet" href="assets/css/style.css" />
-        <!-- CSS ============================================ -->
-        <script src="assets/js/vendor/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css" />
-        <link
-            rel="stylesheet"
-            href="assets/css/plugins/fontawesome-all.min.css"
-        />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
-            rel="stylesheet"
-        />
     </head>
     <body class="bg-gray-100">
         <div class="flex">
             <!-- Sidebar -->
-            <div class="bg-gray-800 h-screen text-white">
+            <div class="w-64 h-screen bg-gray-800 text-white">
                 <div class="p-4 text-2xl font-semibold">Admin Dashboard</div>
-                <ul class="mt-8 font-semibold custom-li">
+                <ul class="mt-8">
                     <li
                         class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                         id="manageAdminBtn"
+                        data-url="manage-admins"
                     >
                         Manage Admin
                     </li>
-                    <ul
-                        class="ml-4 mt-2 custom-li hidden"
-                        id="allAdminFunctions"
-                    >
+                    <ul class="ml-4 mt-2 hidden" id="allAdminFunctions">
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             id="registerAdmin"
                         >
-                            🚀 Register Admin
+                            Register Admin
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             id="changeAdminPasswordSectionBtn"
                         >
-                            🚀 Change Admin Password
+                            Change Admin Password
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             id="adminListBtn"
                         >
-                            🚀 Admin List
+                            Admin List
                         </li>
                     </ul>
                     <li
                         class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                         id="manageUsersBtn"
+                        data-url="manage-users"
                     >
                         Manage Users
                     </li>
@@ -228,57 +84,54 @@
                     >
                         Manage Projects
                     </li>
-                    <ul
-                        class="ml-4 mt-2 custom-li hidden"
-                        id="manageProjectslinkBtn"
-                    >
+                    <ul class="ml-4 mt-2 hidden" data-url="manage-projects" id="manageProjectslinkBtn">
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category=""
                         >
-                            🚀 All Projects
+                            All Projects
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Video Editor AI"
                         >
-                            🚀 Video Editor
+                            Video Editor
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Video Restyling AI"
                         >
-                            🚀 Video Restyle
+                            Video Restyle
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Video Voicing"
                         >
-                            🚀 Video Voicing
+                            Video Voicing
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Lip Sync AI"
                         >
-                            🚀 Lip Sync
+                            Lip Sync
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Face Swap AI"
                         >
-                            🚀 Face Swap
+                            Face Swap
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="3D Video Modeling AI"
                         >
-                            🚀 3D Video Modeling
+                            3D Video Modeling
                         </li>
                         <li
                             class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                             data-category="Add Avatar"
                         >
-                            🚀 My Avatar
+                            My Avatar
                         </li>
                     </ul>
                     <li
@@ -287,30 +140,10 @@
                     >
                         Manage Avatar
                     </li>
-                    <li
-                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                        id="manageplanBtn"
-                    >
-                        Manage Plans
-                    </li>
-                    <li
-                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                        id="addplanBtn"
-                    >
-                        Add Plans
-                    </li>
-                    <li
-                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                        id="ManageComparisonBtn"
-                    >
-                        Manage Comparison
-                    </li>
-                    <li
-                        class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                        id="AddComparisonBtn"
-                    >
-                        Add Comparison
-                    </li>
+                    <li class="router px-4 py-2 hover:bg-gray-600 cursor-pointer" id="managePackagesBtn"
+                    data-url="manage-packages">
+                    Manage Plans
+                </li>
                 </ul>
             </div>
 
@@ -408,7 +241,7 @@
                                 >
                                 <input
                                     type="email"
-                                    id="email"
+                                    id="chemail"
                                     name="email"
                                     required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -422,7 +255,7 @@
                                 >
                                 <input
                                     type="password"
-                                    id="password"
+                                    id="chpassword"
                                     name="password"
                                     required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -483,9 +316,10 @@
                         </table>
                     </div>
                 </section>
+                
                 <!-- /////////////////////////////////////// Start of Manage Users ////////////////////////// -->
                 <!-- Manage Users Section -->
-                <div id="manageUsersSection" class="hidden">
+                <div id="manageUsersSection" class="sidebar-content manage-users">
                     <h2 class="text-3xl font-semibold text-gray-700 mb-6">
                         Manage Users
                     </h2>
@@ -612,7 +446,7 @@
                                 </div>
                             </label>
                         </div>
-                        End of Video Editor Toggle
+                        <!-- End of Video Editor Toggle -->
 
                         <!-- Start of Video Restyle Toggle -->
                         <div
@@ -815,7 +649,7 @@
                 </div>
 
                 <!-- Manage User Submits and Pricing Section -->
-                <div id="manageSubmitsAndPricingSection" class="hidden">
+                <div id="manageSubmitsAndPricingSection" class="hidden sidebar-content manage-pricings">
                     <h4 class="text-3xl font-semibold text-gray-700 mb-6">
                         Set Subscription Plan Credits
                     </h4>
@@ -989,7 +823,7 @@
                 </div>
                 <!-- ////////////////////////////////////////////////////////////////////////////////////////////Manage  Project Section ////////////////////////////// -->
                 <!-- Manage Projects Section -->
-                <div id="manageProjectsSection" class="hidden">
+                <div id="manageProjectsSection" class="hidden sidebar-content manage-projects">
                     <h2 class="text-3xl font-semibold text-gray-700 mb-6">
                         Manage Projects
                     </h2>
@@ -1253,17 +1087,33 @@
                     </div>
                 </div>
                 <!-- ///////////////////////////////////////// End of Manage Projects////////////////////////////////// -->
-                <div id="manageAvatarSection" class="hidden">
+                <div id="manageAvatarSection"  class="hidden sidebar-content manage-projects">
+                    <style>
+                        .submitAvatar, .avatarBtn{
+                            background-color: #1F2937;
+                            color: white;
+                            font-weight: 600;
+                        }
+                    </style>
                     <h2 class="text-3xl font-semibold text-gray-700 mb-6">
                         Manage Avatars
                     </h2>
-                    <form id="updateAvatarForm" enctype="multipart/form-data">
-                        <label for="avatarSelect">Select Avatar:</label>
-                        <select id="avatarSelect" name="avatarId">
-                            <!-- Populate options dynamically -->
-                        </select>
+                   <div class="flex items-center gap-4">
+                    <label for="avatarSelect">Upload Avatar:</label>
+                    <button type="button" class="avatarBtn create mx-3 p-2" id="createAvatarBtn">Create Avatar</button>
+                    <button type="button" class="avatarBtn create mx-3 p-2" id="updateAvatarBtn">Update Avatar</button>
+                   </div>
+                    <!-- <form id="updateAvatarForm" enctype="multipart/form-data"> -->
+                        <!-- <select id="avatarSelect" name="avatarId">
+                             <option value="1">Avatar 1</option>
+                             <option value="2">Avatar 2</option>
+                             <option value="3">Avatar 3</option>
+                             <option value="4">Avatar 4</option>
+                        </select> -->
 
-                        <label for="avatarImage">Upload Avatar Image:</label>
+<div id="UploaderContainer"></div>
+
+                        <!-- <label for="avatarImage">Upload Avatar Image:</label>
                         <input
                             type="file"
                             id="avatarImage"
@@ -1309,45 +1159,385 @@
                                     accept="image/*"
                                 />
                             </div>
-                        </div>
+                        </div> -->
 
-                        <button type="submit">Update Avatar</button>
+                        <!-- <button type="submit" class="avatarBtn p-2 my-3 text-white font-bold">Update Avatar</button> -->
                     </form>
                 </div>
-                <!-- Manage plan Section -->
-                <div id="manageplanSection" class="hidden">
-                    <div class="container mx-auto">
-                        <h1 class="text-2xl font-bold mb-4">Manage Plans</h1>
-                        <div class="overflow-x-auto">
-                            <table
-                                class="table table-bordered table-responsive table-striped"
-                                id="planTable"
-                            >
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Plan Title</th>
-                                        <th>Plan Heading</th>
-                                        <th>Price</th>
-                                        <th>Subscription</th>
-                                        <th>Status</th>
-                                        <th>Features</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="plans-table-body">
-                                    <!-- Plan rows will be injected here by JavaScript -->
-                                </tbody>
-                            </table>
+
+                
+            <!-- Manage Subscriptons packages and benefits  Section -->
+            <div id="managePackageAndPricingSection" class="hidden sidebar-content manage-packages">
+                <h4 class="text-3xl font-semibold text-gray-700 mb-6">
+                    Create Packages and Benefits
+                </h4>
+                <div class="mx-auto bg-white shadow-lg rounded-lg p-8">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+                        Set Subscription Plans
+                    </h3>
+                    <div id="" class="mx-auto p-6 bg-white shadow-md rounded-md">
+                        <!-- <form id="" class="space-y-1"> -->
+                        <button type="button" id="AddPackageBtn" class="block p-2 border bg-green-500">Add A
+                            Plan</button>
+                        <!-- <template> -->
+                        <div class="flex  mb-4">
+                            <!-- <div class="w-full sm:w-1/2 px-2 mb-4"> -->
+
+                            <div id="packagesContainer"></div>
+
+                            <!-- </div> -->
+                        </div>
+                        <!-- </template> -->
+
+                        <!-- </form> -->
+
+                        <div id="messageContainer" class="mt-4 p-4 hidden">
+                            <span id="messageText" class="text-sm"></span>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
+                const routers = document.querySelectorAll(".router")
+                const path = (new URL(window.location)).pathname
+    
+                routers.forEach(el => el.addEventListener("click", handleRouting), false)
+    
+                function handleRouting($this) {
+                    const url = $this.target.dataset.url
+                    window.history.pushState(url, undefined, `/${url}`)
+                    document.querySelectorAll(`.sidebar-content`).forEach(el => el.classList.add("hidden"))
+                    document.querySelector(`.${url.replaceAll("/", "")}`).classList.remove("hidden")
+                }
+            })
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
                 // Function  user
+    let AvailablePackages = {}
+
+            document.getElementById('AddPackageBtn').addEventListener("click", () => addNewPackageField(undefined, false))
+
+            function buildFormData(form) {
+                // Convert form data to a JSON object, handling multiple fields with the same name
+                const formData = new FormData(form);
+                const formObject = {};
+                const benefits = [];
+
+                for (const [key, value] of formData) {
+                    if (key === 'benefits') {
+                        // If key is benefit_name, push a new object into benefits array
+                        benefits.push({ name: value, isAvailable: false });
+                    } else if (key === 'isAvailable' && benefits.length > 0) {
+                        // Update the isAvailable field of the last benefit in the array
+                        benefits[benefits.length - 1].isAvailable = value == 'on'
+                    } else {
+                        // For other fields, add them directly to the formObject
+                        if (formObject[key]) {
+                            // If the key already exists, convert it to an array and push the new value
+                            if (Array.isArray(formObject[key])) {
+                                formObject[key].push(value);
+                            } else {
+                                formObject[key] = [formObject[key], value];
+                            }
+                        } else {
+                            formObject[key] = value;
+                        }
+                    }
+                };
+
+                // Add the benefits array to the formObject
+                formObject.benefits = benefits;
+                return formObject
+            }
+
+
+            function addNewPackageField(pkg, isNew = true) {
+                const container = document.createElement("form")
+                const benefitInfoField = document.createElement("p")
+                const benefitcontainer = document.createElement("div")
+                const packagePrice = document.createElement('input')
+
+                const packageHiddenId = document.createElement('input')
+
+                const addBenefitBtn = document.createElement('button')
+                const removePackageBtn = document.createElement('button')
+                const submitButton = document.createElement('button')
+
+                // const packageInterval = document.createElement('select')
+                benefitInfoField.innerText = "Please check the box if the corresponding benefit is available for this package"
+                const packageName = document.createElement('select')
+                packageName.name = "name"
+                packageName.disabled = isNew
+
+
+                const packageInterval = document.createElement('select')
+                packageInterval.name = "interval"
+                packageInterval.disabled = isNew
+
+                AvailablePackages?.allowedIntervals?.forEach(el => {
+                    const option = document.createElement('option')
+                    option.value = el
+                    option.innerText = pkg?.interval || el
+                    packageInterval.append(option)
+                })
+
+
+                AvailablePackages?.allowedPackages?.forEach(el => {
+                    const option = document.createElement('option')
+                    option.value = el.name
+                    option.innerText = pkg?.name || el.name
+                    packageName.append(option)
+                })
+
+
+                // packageName.value = pkg?.name || ""
+                // packageName.disabled = isNew
+
+
+                packageHiddenId.name = "packageId"
+                packageHiddenId.value = pkg?._id || ""
+                packageHiddenId.hidden = true
+
+
+                packagePrice.name = "amount"
+                packagePrice.value = pkg?.amount || ""
+                packagePrice.disabled = pkg?.name === "Free"
+
+                // packageInterval.name = "interval"
+                // packageInterval.value = pkg?.interval || ""
+                // packageInterval.disabled = true
+
+                packageName.placeholder = "Write Package name"
+                packagePrice.placeholder = "Add Price"
+                packageInterval.placeholder = "month, year"
+
+                container.className = "p-4 border border-blue-500 my-4 bg-gray-300 rounded-md"
+                benefitInfoField.className = "p-4 border my-4 bg-yellow-100 text-yellow-600"
+                benefitcontainer.className = "p-2"
+                packageName.className = "p-2 mr-2"
+
+                packagePrice.className = "p-2 mr-2"
+                packageInterval.className = "p-2 mr-2"
+                packageInterval.disabled = isNew
+
+                addBenefitBtn.className = "p-2 border bg-gray-500 rounded-md text-white mr-2"
+                removePackageBtn.className = "p-2 border bg-gray-500 rounded-md text-white mr-2"
+                submitButton.className = "p-2 border bg-gray-500 rounded-md text-white mr-2 text-white"
+
+                removePackageBtn.type = "button"
+                // removePackageBtn.hidden = isNew
+
+                addBenefitBtn.type = "button"
+                submitButton.type = "submit"
+
+                addBenefitBtn.innerText = "Add benefit"
+                removePackageBtn.innerText = "Dismiss Section"
+                submitButton.innerText = "Create Package"
+
+                pkg?.benefits.map(b => {
+                    addBenefitField(benefitcontainer, b)
+                })
+
+                addBenefitBtn.addEventListener('click', () => addBenefitField(benefitcontainer, undefined))
+                addBenefitField(benefitcontainer, undefined)
+                removePackageBtn.addEventListener('click', () => {
+                    const canContinue = packageName.value.length < 2 || packagePrice.value.length < 2 || packageInterval.value.length < 2
+                    if (!canContinue) {
+                        if (confirm("Your inputs will be cleared")) {
+                            container.remove()
+                        }
+                    } else {
+                        container.remove()
+                    }
+                })
+
+
+                container.append( packageName, packagePrice, packageInterval, addBenefitBtn, removePackageBtn, packageHiddenId)
+                container.append(benefitInfoField,benefitcontainer)
+                container.append(submitButton)
+
+                container.addEventListener("submit", handleSubmitNewPackage)
+
+
+                document.getElementById('packagesContainer').append(container)
+            }
+
+            async function handleSubmitNewPackage(event) {
+                event.preventDefault()
+
+
+
+                const formData = buildFormData(event.target);
+                const formElements = event.target.elements;
+                try {
+                    for (let i = 0; i < formElements.length; i++) {
+                        formElements[i].disabled = true;
+                    }
+                    const response = await fetch(`/api/packages${formData?.packageId ? `/${formData?.packageId}` : ""}`, {
+                        method: `${formData?.packageId ? `PUT` : "POST"}`,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ packages: formData })
+                    })
+
+                    if (!response.ok) {
+                        alert(response.errors)
+                    }
+                    const data = (await response.json()).data
+                } catch (error) {
+                    console.log("🚀 ~ handleSubmitNewPackage ~ error:", error)
+
+                } finally {
+                    for (let i = 0; i < formElements.length; i++) {
+                        formElements[i].disabled = false;
+                    }
+                }
+
+            }
+
+            function addBenefitField(container, benefit) {
+                const benefitContainer = document.createElement("div")
+                const input = document.createElement('input')
+                const isAvailable = document.createElement('input')
+                const addMoreBtn = document.createElement('button')
+                const removeBtn = document.createElement('button')
+
+
+                input.name = "benefits"
+                input.value = benefit?.name || ""
+
+                isAvailable.name = "isAvailable"
+                isAvailable.checked = !!benefit?.isAvailable || false
+                isAvailable.className = "p-2 mx-3"
+                isAvailable.type = "checkbox"
+
+                benefitContainer.className = "p-2"
+                input.placeholder = "Write something interesting..."
+                input.className = "p-2 mr-2"
+                addMoreBtn.className = "p-2 border bg-gray-500 rounded-md text-white"
+                removeBtn.className = "p-2 border bg-gray-500 rounded-md text-white mr-2"
+
+
+                addMoreBtn.innerText = "Add"
+                removeBtn.innerText = "Remove"
+
+                addMoreBtn.type = "button"
+                addMoreBtn.hidden = true
+                removeBtn.type = "button"
+
+
+                addMoreBtn.addEventListener('click', () => addBenefitField(benefitContainer))
+                removeBtn.addEventListener('click', () => {
+                    if (input.value.length > 2) {
+                        if (confirm("Your input will be cleared")) {
+                            benefitContainer.remove()
+                        }
+                    } else {
+                        benefitContainer.remove()
+                    }
+                })
+
+
+                benefitContainer.append(isAvailable, input, addMoreBtn, removeBtn)
+
+                container.append(benefitContainer)
+            }
+
+            const routers = document.querySelectorAll(".router")
+            const path = (new URL(window.location)).pathname
+
+            routers.forEach(el => el.addEventListener("click", handleRouting), false)
+
+            function handleRouting($this) {
+                const url = $this.target.dataset.url
+                window.history.pushState(url, undefined, `/${url}`)
+                document.querySelectorAll(`.sidebar-content`).forEach(el => el.classList.add("hidden"))
+                document.querySelector(`.${url.replaceAll("/", "")}`).classList.remove("hidden")
+            }
+
+            getPackages()
+
+
+
+            function getPackages() {
+                fetch("/api/packages")
+                    .then(e => e.json())
+                    .then(async ({ data }) => {
+                        // console.log(data);
+
+
+                        const resq = await fetch("/api/packages/list")
+                        AvailablePackages = (await resq.json()).data
+                        // console.log("🚀 ~ .then ~ AvailablePackages:", AvailablePackages)
+
+                        // AvailablePackages = {
+                        //     allowedPackages: data.allowedPackages,
+                        //     allowedIntervals: data.allowedIntervals
+                        // }
+
+                        let options = ``
+                        for (const pkg of AvailablePackages.allowedPackages) {
+                            options += `<option value='${pkg.name}'>${pkg.name}</option>`
+                        }
+
+                        const package = document.getElementById("subscriptionPlan")
+                        package.innerHTML = options
+
+
+                        for (const pkg of data.pkgs) {
+                            addNewPackageField(pkg)
+                        }
+
+                        // package.addEventListener("change", (e)=>getPackagePoints(e.target.value), false)
+
+                    })
+            }
+            async function updatePackage(data) {
+                try {
+                    const response = await fetch("/api/packages", {
+                        method: "PUT",
+                        body: JSON.stringify(data),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+
+                    const data = await response.json()
+                    console.log(data);
+
+                } catch (error) {
+                    console.log("🚀 ~ updatePackage ~ error:", error)
+
+                }
+
+            }
+
+            async function createPackage(data) {
+                try {
+                    const response = await fetch("/api/packages", {
+                        method: "PUT",
+                        body: JSON.stringify(data),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+
+                    const data = await response.json()
+                    console.log(data);
+
+                } catch (error) {
+                    console.log("🚀 ~ updatePackage ~ error:", error)
+
+                }
+
+            }
 
                 const fetchUsers = async () => {
                     try {
@@ -1509,20 +1699,20 @@
                 fetchProjects();
 
                 // Event listener for Update Status form submission
-                document
-                    .getElementById('updateStatusForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await updateProjectStatus();
-                    });
+                // document
+                //     .getElementById('updateStatusForm')
+                //     .addEventListener('submit', async (e) => {
+                //         e.preventDefault();
+                //         await updateProjectStatus();
+                //     });
 
                 // Event listener for Reupload form submission
-                document
-                    .getElementById('reuploadForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await reuploadEditedFile();
-                    });
+                // document
+                //     .getElementById('reuploadForm')
+                //     .addEventListener('submit', async (e) => {
+                //         e.preventDefault();
+                //         await reuploadEditedFile();
+                //     });
             });
 
             // Add event listeners to all category buttons
@@ -1800,152 +1990,6 @@
                     });
                 });
         </script>
-        <!-- edit plan section -->
-        <script>
-            document
-                .getElementById('update-btn')
-                .addEventListener('click', async function () {
-                    const form = document.getElementById('update-plan-form');
-
-                    if (!form.checkValidity()) {
-                        handleNotificator(
-                            'error',
-                            'Please fill in all required fields.'
-                        );
-                        return;
-                    }
-
-                    const formData = new FormData(form);
-                    const planData = {};
-
-                    // formData.forEach((value, key) => {
-                    //     if (key === 'features') {
-                    //         planData.features = planData.features || [];
-                    //         planData.features.push(value);
-                    //     } else {
-                    //         planData[key] = value;
-                    //     }
-                    // });
-
-                    // Manually handle the FormData entries
-                    formData.forEach((value, key) => {
-                        if (key === 'features[]') {
-                            // Handle features as an array
-                            if (!planData.features) {
-                                planData.features = [];
-                            }
-                            planData.features.push(value);
-                        } else {
-                            planData[key] = value;
-                        }
-                    });
-                    const planId =
-                        document.getElementById('update-plan-id').value;
-
-                    if (!planId) {
-                        handleNotificator(
-                            'error',
-                            'No plan ID provided. Cannot update plan.'
-                        );
-                        return;
-                    }
-
-                    try {
-                        const response = await fetch(
-                            `/auth/update-plans/${planId}`,
-                            {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify(planData),
-                            }
-                        );
-
-                        if (!response.ok) {
-                            const result = await response.json();
-                            // console.error('Server responded with an error:', result);
-                            handleNotificator(
-                                'error',
-                                result.message || 'Failed to update plan'
-                            );
-                            return;
-                        }
-
-                        const result = await response.json();
-                        // console.log('Response received:', result);
-                        handleNotificator('success', result.message);
-                        form.reset();
-                        document.getElementById('update-plan-id').value = '';
-                        // fetchPlans();
-                    } catch (error) {
-                        console.error('Error:', error);
-                        handleNotificator(
-                            'danger',
-                            'An error occurred while submitting the form.'
-                        );
-                    }
-                });
-        </script>
-        <!-- Add Plan section script -->
-        <script>
-            document
-                .getElementById('submit-btn')
-                .addEventListener('click', async function () {
-                    const form = document.getElementById('add-plan-form');
-
-                    // Validate form
-                    if (!form.checkValidity()) {
-                        handleNotificator(
-                            'info',
-                            'Please fill in all required fields.'
-                        );
-                        return;
-                    }
-
-                    // Create FormData object from the form
-                    const formData = new FormData(form);
-                    const planData = {};
-
-                    // Manually handle the FormData entries
-                    formData.forEach((value, key) => {
-                        if (key === 'features[]') {
-                            // Handle features as an array
-                            if (!planData.features) {
-                                planData.features = [];
-                            }
-                            planData.features.push(value);
-                        } else {
-                            planData[key] = value;
-                        }
-                    });
-
-                    try {
-                        const response = await fetch('/auth/add-plan', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(planData),
-                        });
-
-                        if (!response.ok) {
-                            throw new Error('Failed to add plan');
-                        }
-
-                        const result = await response.json();
-                        handleNotificator('success', result.message);
-                        form.reset(); // Optionally, reset the form fields
-                    } catch (error) {
-                        console.error('Error:', error);
-                        handleNotificator(
-                            'error',
-                            'An error occurred while submitting the form.'
-                        );
-                    }
-                });
-        </script>
-
         <script>
             document
                 .getElementById('setCreditSettingsForm')
@@ -2196,7 +2240,7 @@
         <script>
             const sidebarLinks = document.querySelectorAll('.cursor-pointer');
             const sections = document.querySelectorAll(
-                '#manageAdminSection, #adminListSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
+                '#manageAdminSection, #manageAvatarSection, #managePackageAndPricingSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection, #adminListSection'
             );
 
             // Function to hide all sections
@@ -2233,8 +2277,6 @@
                         showSection('manageAdminSection');
                     } else if (targetId === 'manageAvatarBtn') {
                         showSection('manageAvatarSection');
-                    } else if (targetId === 'manageplanBtn') {
-                        showSection('manageplanSection');
                     }
 
                     // Toggle visibility of nested ul elements
@@ -2380,747 +2422,67 @@
             }
         </script>
         <script>
-            document
-                .getElementById('updateAvatarForm')
-                .addEventListener('submit', async function (event) {
-                    event.preventDefault();
+            // document
+            //     .getElementById('updateAvatarForm')
+            //     .addEventListener('submit', async function (event) {
+            //         event.preventDefault();
 
-                    const formData = new FormData(this);
-                    const avatarId = formData.get('avatarId');
-                    if (!avatarId) {
-                        alert('Please select an avatar to update.');
-                        return;
-                    }
+            //         const formData = new FormData(this);
+            //         const avatarId = formData.get('avatarId');
+            //         if (!avatarId) {
+            //             alert('Please select an avatar to update.');
+            //             return;
+            //         }
 
-                    try {
-                        const response = await fetch(
-                            `/api/update-avatar/${avatarId}`,
-                            {
-                                method: 'PUT',
-                                body: formData,
-                            }
-                        );
+            //         try {
+            //             const response = await fetch(
+            //                 `/api/update-avatar/${avatarId}`,
+            //                 {
+            //                     method: 'PUT',
+            //                     body: formData,
+            //                 }
+            //             );
 
-                        if (response.ok) {
-                            const updatedAvatar = await response.json();
-                            alert('Avatar updated successfully!');
-                        } else {
-                            const errorData = await response.json();
-                            alert(
-                                `Failed to update avatar: ${errorData.error}`
-                            );
-                        }
-                    } catch (error) {
-                        console.error('Error updating avatar:', error);
-                        alert('An error occurred while updating the avatar.');
-                    }
-                });
+            //             if (response.ok) {
+            //                 const updatedAvatar = await response.json();
+            //                 alert('Avatar updated successfully!');
+            //             } else {
+            //                 const errorData = await response.json();
+            //                 alert(
+            //                     `Failed to update avatar: ${errorData.error}`
+            //                 );
+            //             }
+            //         } catch (error) {
+            //             console.error('Error updating avatar:', error);
+            //             alert('An error occurred while updating the avatar.');
+            //         }
+            //     });
 
-            async function populateAvatars() {
-                try {
-                    const response = await fetch('/api/avatars');
-                    const avatars = await response.json();
-                    const avatarSelect =
-                        document.getElementById('avatarSelect');
+            // async function populateAvatars() {
+            //     try {
+            //         const response = await fetch('/api/avatars');
+            //         const avatars = await response.json();
+            //         const avatarSelect =
+            //             document.getElementById('avatarSelect');
 
-                    // Clear existing options
-                    avatarSelect.innerHTML = '';
+            //         // Clear existing options
+            //         avatarSelect.innerHTML = '';
 
-                    avatars.forEach((avatar) => {
-                        const option = document.createElement('option');
-                        option.value = avatar._id;
-                        option.textContent = `Avatar ${avatar.number}`; // Adjust according to your data
-                        avatarSelect.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error fetching avatars:', error);
-                    alert('Failed to load avatars.');
-                }
-            }
+            //         avatars.forEach((avatar) => {
+            //             const option = document.createElement('option');
+            //             option.value = avatar._id;
+            //             option.textContent = `Avatar ${avatar.number}`; // Adjust according to your data
+            //             avatarSelect.appendChild(option);
+            //         });
+            //     } catch (error) {
+            //         console.error('Error fetching avatars:', error);
+            //         alert('Failed to load avatars.');
+            //     }
+            // }
 
-            populateAvatars();
+            // populateAvatars();
         </script>
-        <script>
-            // MANAGE THE COMPARISION SECTION TABLE
 
-            async function fetchSubscriptionPlans() {
-                try {
-                    const response = await fetch('/data/subscription.json');
-                    if (!response.ok) {
-                        throw new Error('Failed to load subscription data');
-                    }
-                    const data = await response.json();
-                    // console.log('Subscription Plans:', data); // Log the actual data
-
-                    // Flatten the nested array and extract the first element
-                    const subscriptions = data.flat().map((item) => item.plan);
-                    if (subscriptions.length === 0) {
-                        throw new Error('No valid subscription data found');
-                    }
-
-                    console.log('sub found', subscriptions.length);
-                    // Extract unique plan names across all subscriptions
-                    function extractPlanNames(subscriptions) {
-                        if (subscriptions.length === 0) return [];
-                        return Array.from(
-                            new Set(
-                                subscriptions.flatMap((subscription) =>
-                                    Object.keys(subscription)
-                                )
-                            )
-                        );
-                    }
-
-                    const planNames = extractPlanNames(subscriptions);
-                    let tableHeader = `<thead><tr><th></th>`;
-                    subscriptions.forEach((subscription, index) => {
-                        planNames.forEach((planName) => {
-                            const plan = subscription[planName];
-                            if (plan && plan.name) {
-                                // Ensure the plan and name exist
-                                // console.log('our x', plan.name);
-                                const name = plan.name;
-                                const htv = 'style-prymary';
-                                if (name === 'free' || name === 'Free') {
-                                    const htv = 'sm-radius-top-left';
-                                }
-                                tableHeader += `<th class="${htv}">${name}\n <div class="d-flex justify-content-center"><div class="col-3"><button class="btn btn-sm btn-warning" onclick="editSubscriptionBtn('${name}')" name="${name}"><i class="fa fa-edit"></i></button></div><div class="col-3"><button class="btn btn-sm btn-danger" onclick="deleteComparisonPlan('${name}')" name="${name}" ><i class="fa fa-trash"></i></button> </div></div> </th>`; // Append each plan name as a table header
-                            }
-                        });
-                    });
-                    tableHeader += `</tr></thead>`;
-                    tableHeader += `<tbody>`;
-                    // console.log(tableHeader);
-                    function extractFeatureNames(subscriptions) {
-                        let featureNames = [];
-                        subscriptions.forEach((subscription) => {
-                            for (const plan of Object.values(subscription)) {
-                                if (Array.isArray(plan.data)) {
-                                    featureNames.push(
-                                        ...plan.data.map((item) => item.name)
-                                    );
-                                }
-                            }
-                        });
-                        return Array.from(new Set(featureNames)); // Remove duplicates
-                    }
-                    const featureNames = extractFeatureNames(subscriptions);
-                    for (x = 0; x < featureNames.length; x++) {
-                        // console.log('Feature Names:', featureNames[x]); // Log feature names
-                        const id = featureNames[x].replace(/ /g, '_');
-                        tableHeader += `<tr class="heading-row " id="${id}"><td><h6>${featureNames[x]}</h6></td>`;
-                        for (s = 0; s < subscriptions.length; s++) {
-                            tableHeader += `<td><h6>${featureNames[x]}</h6></td>`;
-                        }
-                    }
-                    tableHeader += `</tr>`;
-                    const tableHtml = `
-            <table class="table-responsive">
-                ${tableHeader}
-            </table>
-        `;
-
-                    const container = document.getElementById(
-                        'rainbow-compare-table'
-                    );
-                    container.innerHTML = tableHtml;
-                    // Log plan names and their data
-                    subscriptions.forEach((subscription, index) => {
-                        // console.log(`Subscription ${index + 1}:`);
-                        planNames.forEach((planName) => {
-                            const plan = subscription[planName];
-                            if (plan) {
-                                // console.log(`  Plan Name: ${planName}`);
-                                // console.log(`  Plan Data:`);
-                                if (Array.isArray(plan.data)) {
-                                    plan.data.forEach((dataItem) => {
-                                        const trid = dataItem.name.replace(
-                                            / /g,
-                                            '_'
-                                        );
-                                        const trElement =
-                                            document.getElementById(trid);
-                                        // console.log('the plan',plan.data);
-                                        if (trElement) {
-                                            const tridid =
-                                                trid +
-                                                dataItem.subOption.replace(
-                                                    / /g,
-                                                    '__'
-                                                );
-                                            const trElement2 =
-                                                document.getElementById(tridid);
-                                            if (!trElement2) {
-                                                // Select the existing row by its ID
-                                                var existingRow = trElement;
-
-                                                // Create a new row element
-                                                var newRow =
-                                                    document.createElement(
-                                                        'tr'
-                                                    );
-
-                                                // Set the ID of the new row
-                                                newRow.id = tridid;
-                                                let extratable = '';
-
-                                                const planNamesforrow =
-                                                    extractPlanNames(
-                                                        subscriptions
-                                                    );
-                                                // Loop through subscriptions and add a new cell for each item
-                                                for (
-                                                    let d = 0;
-                                                    d < subscriptions.length;
-                                                    d++
-                                                ) {
-                                                    extratable += `<td id="${
-                                                        planNamesforrow[d]
-                                                    }" name="${dataItem.subOption
-                                                        .replace(/ /g, '_')
-                                                        .replace(
-                                                            /\//g,
-                                                            '_'
-                                                        )}" title="${dataItem.name
-                                                        .replace(/ /g, '_')
-                                                        .replace(
-                                                            /\//g,
-                                                            '_'
-                                                        )}" ></td>`;
-                                                }
-                                                newRow.innerHTML =
-                                                    '<td>' +
-                                                    dataItem.subOption +
-                                                    '</td>' +
-                                                    extratable;
-                                                // Insert the new row after the existing row
-                                                existingRow.parentNode.insertBefore(
-                                                    newRow,
-                                                    existingRow.nextSibling
-                                                );
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    console.log(
-                                        `    No data found for this plan.`
-                                    );
-                                }
-                            } else {
-                                console.log(
-                                    `  Plan ${planName} not found in this subscription.`
-                                );
-                            }
-                        });
-                    });
-                    // Log plan names and their data
-                    subscriptions.forEach((subscription, index) => {
-                        planNames.forEach((planName) => {
-                            const plan = subscription[planName];
-                            if (plan) {
-                                if (Array.isArray(plan.data)) {
-                                    plan.data.forEach((dataItem) => {
-                                        const trid = dataItem.name.replace(
-                                            / /g,
-                                            '_'
-                                        );
-                                        const trElement =
-                                            document.getElementById(trid);
-                                        const tridid = dataItem.subOption
-                                            .replace(/ /g, '_')
-                                            .replace(/\//g, '_');
-                                        const trElement2 =
-                                            document.getElementById(tridid);
-
-                                        // Find the target element using the ID and name attributes
-                                        var element = document.querySelector(
-                                            '#' +
-                                                planName +
-                                                '[name="' +
-                                                tridid +
-                                                '"]' +
-                                                '[title="' +
-                                                trid +
-                                                '"]'
-                                        );
-                                        console.log(
-                                            'id:' +
-                                                planName +
-                                                'title:' +
-                                                trid +
-                                                'name:' +
-                                                tridid
-                                        );
-                                        if (element) {
-                                            let lastvalue = dataItem.value; // Use let instead of const here to allow re-assignment
-                                            const newSpan =
-                                                document.createElement('span'); // Create a new span element
-
-                                            if (dataItem.value === 'check') {
-                                                lastvalue = `<span class="icon">
-                                            <i class="fa-sharp fa-solid fa-check"></i>
-                                         </span>`;
-                                            } else if (
-                                                dataItem.value === 'uncheck'
-                                            ) {
-                                                lastvalue = `<span class="icon bg-dark">
-                                            <i class="fa-sharp fa-solid fa-xmark"></i>
-                                         </span>`;
-                                            }
-
-                                            // Set the innerHTML of the new span to the value of lastvalue
-                                            newSpan.innerHTML = lastvalue;
-
-                                            // Append the new span to the element
-                                            element.appendChild(newSpan);
-                                        }
-                                    });
-                                } else {
-                                    console.log(
-                                        `    No data found for this plan.`
-                                    );
-                                }
-                            } else {
-                                console.log(
-                                    `  Plan ${planName} not found in this subscription.`
-                                );
-                            }
-                        });
-                    });
-                    subscriptions.forEach((subscription, index) => {
-                        console.log(index);
-                        planNames.forEach((planName) => {
-                            const plan = subscription[planName];
-                            // console.log(plan.data);
-                            if (plan) {
-                                if (Array.isArray(plan.data)) {
-                                    plan.data.forEach((dataItem) => {
-                                        plan.data.forEach((dataItem) => {
-                                            const trid = dataItem.name.replace(
-                                                / /g,
-                                                '_'
-                                            );
-                                            const trElement =
-                                                document.getElementById(trid);
-                                            // console.log('id1: ',trid);
-                                            if (trElement) {
-                                                const tridid =
-                                                    trid +
-                                                    dataItem.subOption.replace(
-                                                        / /g,
-                                                        '__'
-                                                    );
-                                                const trElement2 =
-                                                    document.getElementById(
-                                                        tridid
-                                                    );
-                                                // console.log('id1: ',tridid);
-                                                // Create a new <tr> element
-                                                if (trElement2) {
-                                                    // Select the existing row by its ID
-                                                    var existingRow =
-                                                        document.getElementById(
-                                                            tridid
-                                                        );
-                                                    if (existingRow) {
-                                                        console.log('1');
-                                                    }
-                                                    // // Append new content to the existing row
-                                                    // existingRow.innerHTML += '<td>'+dataItem.subOption+'</td>';
-                                                }
-                                            }
-                                        });
-                                    });
-                                }
-                            } else {
-                                console.log(
-                                    `  Plan not found in this subscription.`
-                                );
-                            }
-                        });
-                    });
-                    console.clear();
-                } catch (error) {
-                    console.error('Error loading subscription data:', error);
-                    const container = document.getElementById(
-                        'rainbow-compare-table'
-                    );
-                    container.innerHTML =
-                        '<p class="text-danger">Failed to load subscription plans. Please try again later.</p>';
-                }
-            }
-
-            fetchSubscriptionPlans();
-            async function editSubscriptionBtn(Planname) {
-                // Set up the UI as needed
-                document
-                    .getElementById('AddComparisonBtn')
-                    .classList.add('active');
-                document
-                    .getElementById('manageUsersSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('manageSubmitsAndPricingSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('manageProjectsSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('ManageCompareSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('EditComparesectionsection')
-                    .classList.remove('hidden');
-                document
-                    .getElementById('manageplanSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('addplanSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('ManagemainSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('editplanSection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('managecompasionsection')
-                    .classList.add('hidden');
-                document
-                    .getElementById('manageAdminSection')
-                    .classList.add('hidden');
-
-                const planName = Planname; // Get the plan name passed to the function
-
-                try {
-                    const response = await fetch('/data/subscription.json');
-                    if (!response.ok) {
-                        throw new Error('Failed to load subscription data');
-                    }
-                    const data = await response.json();
-
-                    // Locate the plan using the `Array.from(new Set(...))` pattern
-                    const planData = data
-                        .flatMap((subscriptionArray) => subscriptionArray)
-                        .flatMap((subscriptionObj) => {
-                            return Object.entries(subscriptionObj.plan || {});
-                        })
-                        .find(([key, value]) => value.name === planName);
-
-                    if (!planData) {
-                        throw new Error(
-                            `Plan with name "${planName}" not found`
-                        );
-                    }
-
-                    const [key, plan] = planData;
-
-                    // Get the container where the form fields will be added
-                    const plansContainer =
-                        document.getElementById('plansContaineredit');
-                    plansContainer.innerHTML = ''; // Clear any existing content
-
-                    // Populate the form with the plan data
-                    let planGroupHtml = `
-            <div class="plan-group-edit mb-4">
-                <h4>${plan.name}</h4>
-                <div class="form-group">
-                    <label for="planName">Plan Name</label>
-                    <input type="text" class="form-control" id="planNameInput" value="${plan.name}" required>
-                </div>
-                <div class="dataContaineredit">
-        `;
-
-                    plan.data.forEach((dataItem, index) => {
-                        const dataIndex = index + 1;
-                        planGroupHtml += `
-            <div><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                <div class="data-group-edit mb-3">
-                    <h5>Data ${dataIndex}</h5>
-                    <div class="form-group">
-                        <label for="dataName${dataIndex}">Data Name</label>
-                        <select class="form-control dataName" id="dataName${dataIndex}" required>
-                            <option value="Price & Credits" ${
-                                dataItem.name === 'Price & Credits'
-                                    ? 'selected'
-                                    : ''
-                            }>Price & Credits</option>
-                            <option value="Avatars" ${
-                                dataItem.name === 'Avatars' ? 'selected' : ''
-                            }>Avatars</option>
-                            <option value="All Features" ${
-                                dataItem.name === 'All Features'
-                                    ? 'selected'
-                                    : ''
-                            }>All Features</option>
-                            <option value="Team Collaboration" ${
-                                dataItem.name === 'Team Collaboration'
-                                    ? 'selected'
-                                    : ''
-                            }>Team Collaboration</option>
-                            <option value="Video Creation" ${
-                                dataItem.name === 'Video Creation'
-                                    ? 'selected'
-                                    : ''
-                            }>Video Creation</option>
-                            <option value="" ${
-                                ![
-                                    'Price & Credits',
-                                    'Avatars',
-                                    'All Features',
-                                    'Team Collaboration',
-                                    'Video Creation',
-                                ].includes(dataItem.name)
-                                    ? 'selected'
-                                    : ''
-                            }>Add More...</option>
-                        </select>
-                        <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: ${
-                            ![
-                                'Price & Credits',
-                                'Avatars',
-                                'All Features',
-                                'Team Collaboration',
-                                'Video Creation',
-                            ].includes(dataItem.name)
-                                ? 'block'
-                                : 'none'
-                        };" value="${dataItem.name}">
-                    </div>
-                    <div class="form-group">
-                        <label for="subOption${dataIndex}">Sub-option</label>
-                        <input type="text" class="form-control subOption" id="subOption${dataIndex}" value="${
-                            dataItem.subOption
-                        }" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subOptionValue${dataIndex}">Sub-option Value</label>
-                        <input type="text" class="form-control subOptionValue" id="subOptionValue${dataIndex}" value="${
-                            dataItem.value
-                        }" required>
-                    </div>
-                </div></div>
-            `;
-                    });
-
-                    planGroupHtml += `</div><button type="button" class="btn btn-secondary addDataBtn_edit">Add More Data</button></div>`;
-                    plansContainer.innerHTML = planGroupHtml;
-
-                    // Handle the "Add More Data" button (optional if you want to add this functionality)
-                    document
-                        .querySelector('.addDataBtn_edit')
-                        .addEventListener('click', function () {
-                            const dataIndex =
-                                document.querySelectorAll('.data-group')
-                                    .length + 1;
-                            const newDataGroupHtml = `
-            <div><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                <div class="data-group-edit mb-3">
-                    <h5>Data ${dataIndex}</h5>
-                    <div class="form-group">
-                        <label for="dataName${dataIndex}">Data Name</label>
-                        <select class="form-control dataName" id="dataName${dataIndex}" required>
-                            <option value="Price & Credits">Price & Credits</option>
-                            <option value="Avatars">Avatars</option>
-                            <option value="All Features">All Features</option>
-                            <option value="Team Collaboration">Team Collaboration</option>
-                            <option value="Video Creation">Video Creation</option>
-                            <option value="">Add More...</option>
-                        </select>
-                        <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: none;">
-                    </div>
-                    <div class="form-group">
-                        <label for="subOption${dataIndex}">Sub-option</label>
-                        <input type="text" class="form-control subOption" id="subOption${dataIndex}" placeholder="Enter sub-option" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subOptionValue${dataIndex}">Sub-option Value</label>
-                        <input type="text" class="form-control subOptionValue" id="subOptionValue${dataIndex}" placeholder="Enter sub-option value" required>
-                    </div>
-                </div></div>
-            `;
-                            document
-                                .querySelector('.dataContainer')
-                                .insertAdjacentHTML(
-                                    'beforeend',
-                                    newDataGroupHtml
-                                );
-                        });
-                } catch (error) {
-                    console.error('Error loading subscription data:', error);
-                    handleNotificator(
-                        'info',
-                        'Failed to load the selected plan for editing.'
-                    );
-                }
-            }
-            async function deleteComparisonPlan(planName) {
-                try {
-                    const response = await fetch(
-                        `/auth/delete-comparison-plan/${encodeURIComponent(
-                            planName
-                        )}`,
-                        {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        }
-                    );
-
-                    if (!response.ok) {
-                        throw new Error(
-                            'Failed to update the subscription data'
-                        );
-                    }
-
-                    handleNotificator(
-                        'success',
-                        `Plan "${planName}" has been successfully deleted.`
-                    );
-                    location.reload(); // Reload the page to reflect the changes
-                } catch (error) {
-                    console.error('Error deleting the comparison plan:', error);
-                    handleNotificator(
-                        'error',
-                        `Failed to delete the plan: ${error.message}`
-                    );
-                }
-            }
-
-            //update comparision plan
-            document
-                .getElementById('subscriptionEditForm')
-                .addEventListener('submit', async (event) => {
-                    event.preventDefault(); // Prevent the default form submission
-
-                    const generateUniqueId = () =>
-                        '_' + Math.random().toString(36).substr(2, 9);
-
-                    // This will hold the entire structure of the plan data
-                    const jsonData = {};
-                    const planNameEdit =
-                        document.getElementById('planNameInput').value;
-                    // Loop through each plan group to collect its data
-                    document
-                        .querySelectorAll('.plan-group-edit')
-                        .forEach((planGroup) => {
-                            const planName = planGroup
-                                .querySelector('input[type="text"]')
-                                .value.trim();
-                            const planId = generateUniqueId(); // Generate a unique ID for this plan
-
-                            // Initialize dataEntries as an empty array for each plan
-                            const dataEntries = [];
-
-                            // Loop through each data group to collect data entries
-                            planGroup
-                                .querySelectorAll('.data-group-edit')
-                                .forEach((dataGroup) => {
-                                    const dataId = generateUniqueId();
-                                    let dataName = dataGroup
-                                        .querySelector('.dataName')
-                                        .value.trim();
-                                    if (dataName === '') {
-                                        dataName = dataGroup
-                                            .querySelector('.newDataName')
-                                            .value.trim();
-                                    }
-                                    const subOption = dataGroup
-                                        .querySelector('.subOption')
-                                        .value.trim();
-                                    const subOptionValue = dataGroup
-                                        .querySelector('.subOptionValue')
-                                        .value.trim();
-
-                                    // Push each data entry to the dataEntries array
-                                    dataEntries.push({
-                                        id: dataId,
-                                        name: dataName,
-                                        subOption: subOption,
-                                        value: subOptionValue,
-                                    });
-                                });
-
-                            // Add the plan data to the jsonData object using the planId
-                            jsonData[planId] = {
-                                name: planName,
-                                data: dataEntries,
-                            };
-                        });
-
-                    // Wrap the jsonData in the format that matches your JSON file structure
-                    const subscriptionData = [{ plan: jsonData }];
-
-                    // console.log('Subscription Data to be sent:', JSON.stringify(subscriptionData, null, 2));
-                    try {
-                        const response = await fetch(`/auth/update-com`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(subscriptionData),
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(
-                                `HTTP error! Status: ${response.status}`
-                            );
-                        }
-
-                        const result = await response.json();
-                        // console.log(subscriptionData);
-                        // console.log(result.subscription);
-                        handleNotificator('success', result.message);
-                    } catch (error) {
-                        // console.log(error);
-                        handleNotificator('error', 'Error:', error);
-                    }
-                });
-            const handleNotificator = (status, text) => {
-                let alertHTML = '';
-
-                switch (status) {
-                    case 'success':
-                        alertHTML = `<div class="alert alert-success">${text}</div>`;
-                        break;
-                    case 'info':
-                        alertHTML = `<div class="alert alert-info">${text}</div>`;
-                        break;
-                    default:
-                        alertHTML = `<div class="alert alert-danger">${text}</div>`;
-                        break;
-                }
-
-                const notificator = document.querySelector('.responser');
-                notificator.innerHTML = alertHTML; // Insert the generated HTML into the notificator
-                notificator.style.display = 'block'; // Show the notificator
-
-                // Hide after 3 seconds
-                setTimeout(() => (notificator.style.display = 'none'), 3000);
-
-                // Hide on click
-                notificator.onclick = () =>
-                    (notificator.style.display = 'none');
-            };
-        </script>
-        <style>
-            .responser {
-                position: fixed;
-                right: 0;
-                top: 10%;
-                width: 30%;
-                z-index: 100;
-                display: none;
-            }
-            @media (max-width: 600px) {
-                .responser {
-                    width: 90%;
-                }
-            }
-        </style>
-        <div class="responser">
-            <div class="loader-responder small"></div>
-        </div>
+        <script src="./js/create-avatar.js"></script>
     </body>
 </html>

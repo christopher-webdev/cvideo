@@ -30,6 +30,7 @@ const userBillingController = require('./controllers/user-billing.controller');
 const Package = require('./models/Package');
 const userPackageController = require('./controllers/package.controller');
 const { createAvatar } = require('./routes/create-avatar');
+const getEnv = require('./config/env');
 
 // Passport Config
 require('./config/passport')(passport);
@@ -202,7 +203,7 @@ app.use('/admin', require('./routes/admin'));
 
 //handles user info updates
 app.use('/api/user-info', ensureAuthenticated, userInfoController);
-aapp.use('/api/billings', userBillingController);
+app.use('/api/billings', userBillingController);
 app.use('/api/packages', userPackageController);
 // Serve index.html for the root URL
 app.get('/', (req, res) => {
@@ -888,12 +889,10 @@ app.post(
             };
 
             if (await Avatar.exists({ name: updatedData.name })) {
-                return res
-                    .status(400)
-                    .json({
-                        success: false,
-                        errors: `Name '${updatedData.name} already exists. Please try another name`,
-                    });
+                return res.status(400).json({
+                    success: false,
+                    errors: `Name '${updatedData.name} already exists. Please try another name`,
+                });
             }
 
             if (req.files['avatarImage']) {
@@ -941,12 +940,10 @@ app.put(
             }
 
             if (!(await Avatar.exists({ _id: req.body.avatarId }))) {
-                return res
-                    .status(404)
-                    .json({
-                        success: false,
-                        errors: `Name '${updatedData.name} does not exists.`,
-                    });
+                return res.status(404).json({
+                    success: false,
+                    errors: `Name '${updatedData.name} does not exists.`,
+                });
             }
 
             if (req.files['avatarImage']) {
