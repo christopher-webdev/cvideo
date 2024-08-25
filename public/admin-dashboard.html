@@ -6,7 +6,6 @@
         <title>Admin Dashboard</title>
         <!-- CSS Assets -->
         <link rel="stylesheet" href="css/app.css" />
-        <link rel="stylesheet" href="css/styles.css" />
 
         <!-- Javascript Assets -->
         <link
@@ -17,15 +16,15 @@
         <script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
         <script src="js/app.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <!-- <link
+        <link
             href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css"
             rel="stylesheet"
-        /> -->
+        />
 
         <!-- JS
     ============================================ -->
         <script src="assets/js/vendor/modernizr.min.js"></script>
-        <script src="assets/js/vendor/jquery.min.js"></script>
+        <!-- <script src="assets/js/vendor/jquery.min.js"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com/" />
@@ -537,14 +536,16 @@
                                 class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                                 id="manageAvatarBtn"
                             >
-                                Manage Avatar
+                                <a href="manageavatar.html">Manage Avatar</a>
                             </li>
                             <li
                                 class="router px-4 py-2 hover:bg-gray-600 cursor-pointer"
                                 id="managePackagesBtn"
                                 data-url="manage-packages"
                             >
-                                Manage subscription Plans and Packages
+                                <a href="manageplanx.html"
+                                    >Manage subscription Plans and Packages</a
+                                >
                             </li>
                             <li
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
@@ -561,6 +562,12 @@
                         </ul>
                     </div>
                 </div>
+                <li
+                    class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
+                    id="logoutBtn"
+                >
+                    <a href="/logout">Logout</a>
+                </li>
             </div>
 
             <!-- Main Content -->
@@ -2085,101 +2092,8 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- /////////////////////////////////////////////////////Manage Avatar Section/////////////////////////////////////////// -->
-                <div
-                    id="manageAvatarSection"
-                    class="hidden sidebar-content manage-projects"
-                >
-                    <style>
-                        .submitAvatar,
-                        .avatarBtn {
-                            background-color: #1f2937;
-                            color: white;
-                            font-weight: 600;
-                        }
-                    </style>
-                    <h2 class="text-3xl font-semibold text-gray-700 mb-6">
-                        Manage Avatars
-                    </h2>
-                    <div class="flex items-center gap-4">
-                        <label for="avatarSelect">Upload Avatar:</label>
-                        <button
-                            type="button"
-                            class="avatarBtn create mx-3 p-2"
-                            id="createAvatarBtn"
-                        >
-                            Create Avatar
-                        </button>
-                        <button
-                            type="button"
-                            class="avatarBtn create mx-3 p-2"
-                            id="updateAvatarBtn"
-                        >
-                            Update Avatar
-                        </button>
-                    </div>
-                    <!-- <form id="updateAvatarForm" enctype="multipart/form-data"> -->
-                    <!-- <select id="avatarSelect" name="avatarId">
-                             <option value="1">Avatar 1</option>
-                             <option value="2">Avatar 2</option>
-                             <option value="3">Avatar 3</option>
-                             <option value="4">Avatar 4</option>
-                        </select> -->
+                <div id="contentArea" class="injected-content"></div>
 
-                    <div id="UploaderContainer"></div>
-
-                    <!-- <label for="avatarImage">Upload Avatar Image:</label>
-                        <input
-                            type="file"
-                            id="avatarImage"
-                            name="avatarImage"
-                            accept="image/*"
-                        />
-
-                        <label>Upload Images for Available Locations:</label>
-                        <div id="locationImages">
-                            <div>
-                                <label for="locationOffice">Office:</label>
-                                <input
-                                    type="file"
-                                    id="locationOffice"
-                                    name="locationImages[office]"
-                                    accept="image/*"
-                                />
-                            </div>
-                            <div>
-                                <label for="locationStreet">Street:</label>
-                                <input
-                                    type="file"
-                                    id="locationStreet"
-                                    name="locationImages[street]"
-                                    accept="image/*"
-                                />
-                            </div>
-                            <div>
-                                <label for="locationForest">Forest:</label>
-                                <input
-                                    type="file"
-                                    id="locationForest"
-                                    name="locationImages[forest]"
-                                    accept="image/*"
-                                />
-                            </div>
-                            <div>
-                                <label for="locationHome">Home:</label>
-                                <input
-                                    type="file"
-                                    id="locationHome"
-                                    name="locationImages[home]"
-                                    accept="image/*"
-                                />
-                            </div>
-                        </div> -->
-
-                    <!-- <button type="submit" class="avatarBtn p-2 my-3 text-white font-bold">Update Avatar</button> -->
-                    <!-- </form> -->
-                </div>
-                <!-- Manage Subscriptons packages and benefits  Section -->
                 <!-- Manage Subscriptons packages and benefits  Section -->
                 <div
                     id="managePackageAndPricingSection"
@@ -3276,9 +3190,9 @@
                             listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
                         }
                         document
-                            .getElementById('addplanBtn')
+                            .getElementById('manageNewsletterBtn')
                             .classList.add('active');
-                        // Show Manage Projects Section
+                        // Show Manage plan Section
                         document
                             .getElementById('manageUsersSection')
                             .classList.add('hidden');
@@ -3310,6 +3224,9 @@
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
                         document
+                            .getElementById('manageVideoSection')
+                            .classList.add('hidden');
+                        document
                             .getElementById('manageNewsletter')
                             .classList.remove('hidden');
                         document
@@ -3319,6 +3236,7 @@
                             .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
+
                 //addplan btn start here
 
                 document
@@ -4188,6 +4106,11 @@
                             .getElementById('messageContainer')
                             .classList.remove('hidden');
                     }
+                    // Set a timer to clear the message after 5 seconds
+                    setTimeout(() => {
+                        messageContainer.classList.add('hidden');
+                        messageText.textContent = '';
+                    }, 5000); // 5000 milliseconds = 5 seconds
                 });
 
             document.addEventListener('DOMContentLoaded', async function () {
@@ -5053,7 +4976,7 @@
         <script>
             const sidebarLinks = document.querySelectorAll('.cursor-pointer');
             const sections = document.querySelectorAll(
-                '#manageAdminSection, #manageVideoSection, #adminListSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
+                '#manageAdminSection, #adminListSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
             );
 
             // Function to hide all sections
@@ -5092,8 +5015,6 @@
                         showSection('manageAvatarSection');
                     } else if (targetId === 'manageplanBtn') {
                         showSection('manageplanSection');
-                    } else if (targetId === 'manageVideoBtn') {
-                        showSection('manageVideoSection');
                     }
 
                     // Toggle visibility of nested ul elements
@@ -5389,8 +5310,68 @@
                 fetchSubscribers();
             });
         </script>
-        <script src="./js/create-avatar.js"></script>
 
+        <script src="./js/create-avatar.js"></script>
+        <script src="./js/create-plan.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Get the URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const trigger = urlParams.get('trigger');
+
+                // Check which button should be triggered
+                if (trigger) {
+                    const buttonMap = {
+                        manageAdminBtn: 'manageAdminBtn',
+                        manageUsersBtn: 'manageUsersBtn',
+                        manageSubmitsAndPricingBtn:
+                            'manageSubmitsAndPricingBtn',
+                        manageProjectAiBtn: 'manageProjectAiBtn',
+                        manageplanBtn: 'manageplanBtn',
+                        addplanBtn: 'addplanBtn',
+                        ManageComparisonBtn: 'ManageComparisonBtn',
+                        AddComparisonBtn: 'AddComparisonBtn',
+                        manageVideoBtn: 'manageVideoBtn',
+                        manageNewsletterBtn: 'manageNewsletterBtn',
+                    };
+
+                    const buttonId = buttonMap[trigger];
+                    if (buttonId) {
+                        const button = document.getElementById(buttonId);
+                        if (button) {
+                            button.click();
+                        }
+                    }
+                }
+            });
+        </script>
+        <script>
+            document
+                .getElementById('logoutBtn')
+                .addEventListener('click', function (event) {
+                    event.preventDefault(); // Prevent the default link behavior
+
+                    // Send a GET request to the logout endpoint
+                    fetch('/admin/logout', {
+                        method: 'GET',
+                        credentials: 'include', // Include cookies in the request
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                // Redirect to login page after successful logout
+                                window.location.href = '/admin-login.html';
+                            } else {
+                                console.error('Logout failed');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(
+                                'An error occurred during logout:',
+                                error
+                            );
+                        });
+                });
+        </script>
         <style>
             .responser {
                 position: fixed;

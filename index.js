@@ -322,14 +322,22 @@ app.get('/login', (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
-// // app.get('/admin-dashboard.html', ensureAdminAuthenticated, (req, res) => {
-// //     res.set('Cache-Control', 'no-store');
-// //     res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
-// });
-// app.get('/admin-dashboard', ensureAdminAuthenticated, (req, res) => {
-//     res.set('Cache-Control', 'no-store');
-//     res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
-// });
+app.get('/admin-dashboard.html', ensureAdminAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
+});
+app.get('/admin-dashboard', ensureAdminAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
+});
+app.get('/manageAvatar.html', ensureAdminAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'manageAvatar.html'));
+});
+app.get('/manageplanx.html', ensureAdminAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'manageplanx.html'));
+});
 //email verification middleware
 // Middleware to check if the user is new (i.e., created within the last 10 minutes)
 

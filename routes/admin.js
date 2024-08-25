@@ -8,6 +8,20 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const path = require('path');
 
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.redirect('/admin-dashboard.html');
+        }
+
+        // Clear the cookie if you're using cookie-based sessions
+        res.clearCookie('connect.sid');
+
+        // Redirect to login page after logout
+        res.redirect('/admin-login.html');
+    });
+});
+
 // Serve the admin registration page
 router.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/admin-register.html'));
