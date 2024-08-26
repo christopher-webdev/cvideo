@@ -14,13 +14,17 @@
         />
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
-        <script src="js/app.js" defer></script>
+        <!-- <script src="js/app.js" defer></script> -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <link
             href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css"
             rel="stylesheet"
         />
-
+        <link
+            href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- JS
     ============================================ -->
         <script src="assets/js/vendor/modernizr.min.js"></script>
@@ -53,312 +57,27 @@
             }
         </style>
         <style>
-            /* Custom class for the <a> elements */
-            .custom-li {
-                color: #f97316; /* Tailwind's text-orange-500 */
-                background-color: transparent; /* Default background color */
-                padding: 0.5rem 1rem; /* px-4 py-2 */
-                border-radius: 0.5rem; /* rounded-lg */
-                transition: color 0.3s ease, background-color 0.3s ease; /* transition-colors duration-300 */
-                text-decoration: none; /* Remove underline from links */
-            }
-
-            .custom-li:hover {
-                color: #f97316; /* Tailwind's hover:text-orange-700 (same color in this example) */
-                background-color: #fef3c7; /* Tailwind's hover:bg-orange-100 */
-            }
-        </style>
-        <style>
-            /* Base Styling */
-            body {
-                font-family: 'Poppins', sans-serif;
-                font-size: 1.2rem;
-                background-color: #f4f7f9;
-                color: #333;
-                margin: 0;
-                padding: 0;
-            }
-
-            /* Sidebar Styling */
             .Sidebar--bars {
-                height: auto;
+                height: 100vh;
                 width: 20% !important;
-                background-color: #252a34;
-                color: #fff;
                 font-size: 14px;
-                padding-top: 20px;
             }
-
             .sidebar {
-                padding: 20px;
+                padding: 10px;
             }
-
             .sidebar-admin ul {
                 list-style-type: none;
                 margin: 0;
                 padding: 0;
             }
-
-            .sidebar-admin ul li {
-                padding: 15px 10px;
-                margin: 5px 0;
-                border-radius: 5px;
-                transition: background 0.3s ease;
-            }
-
             .sidebar-admin ul li.active {
-                background: #fca311;
+                background: orange;
                 color: #000;
             }
-
-            .sidebar-admin ul li:hover {
-                background: #444b54;
-                cursor: pointer;
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+            * {
+                font-family: 'Poppins', sans-serif;
             }
-
-            /* Main Content Styling */
-            .flex-1.p-6 {
-                width: 75% !important;
-                background-color: #ffffff;
-                padding: 30px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-                margin: 20px;
-            }
-
-            /* Headings */
-            h1,
-            h2,
-            h4,
-            h6 {
-                color: #252a34;
-                font-weight: 600;
-            }
-
-            /* Table Styling */
-            thead {
-                background: #fca311;
-                height: 60px;
-            }
-
-            thead th {
-                color: #fff;
-                font-weight: 500;
-            }
-
-            tbody tr {
-                transition: background 0.2s ease;
-            }
-
-            tbody tr:hover {
-                background: #f5f5f5;
-            }
-
-            .rainbow-compare-table.style-1 table th.style-prymary {
-                background: #252a34 !important;
-                color: #fff !important;
-            }
-
-            #planTable_filter,
-            #planTable_length {
-                display: none;
-            }
-
-            /* Form Elements */
-            input,
-            select,
-            textarea {
-                height: 40px !important;
-                border: 1px solid #fca311 !important;
-                border-radius: 5px !important;
-                background: #fff !important;
-                padding: 10px;
-                margin-bottom: 20px;
-                width: 100%;
-                box-sizing: border-box;
-                font-size: 1rem;
-                color: #333;
-            }
-
-            input:focus,
-            select:focus,
-            textarea:focus {
-                border-color: #252a34 !important;
-                outline: none;
-                box-shadow: 0 0 5px rgba(252, 163, 17, 0.5);
-            }
-
-            /* Buttons */
-            button {
-                padding: 10px 20px !important;
-                background-color: #fca311;
-                color: #fff;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-weight: 600;
-                transition: background 0.3s ease;
-            }
-            /* Common Section Styling */
-            .hidden {
-                display: none;
-            }
-
-            .min-h-screen {
-                min-height: 100vh;
-            }
-
-            .bg-gray-100 {
-                background-color: #f4f7f9;
-            }
-
-            .text-gray-700 {
-                color: #333;
-            }
-
-            .text-gray-600 {
-                color: #555;
-            }
-
-            /* Form Styling */
-            form {
-                background-color: #fff;
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                width: 100%;
-                max-width: 400px;
-            }
-
-            input,
-            select,
-            textarea {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                background: #fff;
-                margin-bottom: 1rem;
-                font-size: 1rem;
-                color: #333;
-            }
-
-            input:focus,
-            select:focus,
-            textarea:focus {
-                border-color: #007bff;
-                outline: none;
-                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            }
-
-            button {
-                width: 100%;
-                padding: 10px 15px;
-                background-color: #007bff;
-                color: #fff;
-                border: none;
-                border-radius: 5px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            button:hover {
-                background-color: #0056b3;
-            }
-
-            /* Table Styling */
-            #adminTable {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 2rem;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            #adminTable thead {
-                background-color: #007bff;
-                color: #fff;
-            }
-
-            #adminTable th,
-            #adminTable td {
-                padding: 15px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
-
-            #adminTable tbody tr:hover {
-                background-color: #f1f1f1;
-            }
-
-            /* Headings */
-            h2,
-            h1 {
-                color: #333;
-                margin-bottom: 1rem;
-            }
-
-            .text-center {
-                text-align: center;
-            }
-
-            .text-3xl {
-                font-size: 2rem;
-            }
-
-            .text-2xl {
-                font-size: 1.75rem;
-            }
-
-            .font-semibold {
-                font-weight: 600;
-            }
-
-            /* Additional Styling */
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 20px;
-            }
-
-            .overflow-x-auto {
-                overflow-x: auto;
-            }
-
-            .rounded-lg {
-                border-radius: 10px;
-            }
-
-            .shadow-md {
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-
-            .mb-6 {
-                margin-bottom: 1.5rem;
-            }
-
-            .my-8 {
-                margin-top: 2rem;
-                margin-bottom: 2rem;
-            }
-
-            .p-6 {
-                padding: 1.5rem;
-            }
-
-            .p-8 {
-                padding: 2rem;
-            }
-            button:hover {
-                background-color: #e89c0f;
-            }
-
-            button:focus {
-                outline: none;
-                box-shadow: 0 0 5px rgba(252, 163, 17, 0.5);
-            }
-
-            /* Scrollable Sections */
             #rainbow-compare-table,
             #manageplanSection,
             #addplanSection,
@@ -372,26 +91,59 @@
             #ManageCompareSection,
             #EditComparesectionsection {
                 height: 100vh;
+                overflow: hidden;
+                overflow-x: auto;
                 overflow-y: auto;
+                width: 100%;
                 padding-bottom: 4rem;
             }
-
-            /* Custom Scrollbar */
-            ::-webkit-scrollbar {
-                width: 8px;
+            #planTable_filter,
+            #planTable_length {
+                display: none;
             }
-
-            ::-webkit-scrollbar-track {
-                background: #f4f7f9;
+            td > div > button.btn {
+                padding: 10px;
             }
-
-            ::-webkit-scrollbar-thumb {
-                background: #252a34;
-                border-radius: 10px;
+            h2,
+            h1,
+            h6,
+            h4 {
+                color: #000;
             }
+            thead {
+                background: #c0c0c02e;
+                height: 100px;
+            }
+            .rainbow-compare-table.style-1 table .heading-row td > h6 {
+                color: #fff !important;
+            }
+            .rainbow-compare-table.style-1 table th.style-prymary {
+                background: transparent !important;
+            }
+            input,
+            select {
+                height: 40px !important;
+                border: 1px solid #df7f0d !important;
+                border-radius: 0 !important;
+                border-radius: 5px !important;
 
-            ::-webkit-scrollbar-thumb:hover {
-                background: #fca311;
+                background: transparent !important;
+            }
+            .flex-1.p-6 {
+                width: 75% !important;
+            }
+            button {
+                padding: 10px !important;
+            }
+            body {
+                font-size: 1.4rem;
+            }
+            .p-8 {
+                padding: 2.5rem;
+            }
+            #managecompasionsection {
+                background: #000;
+                color: #df7f0d;
             }
         </style>
     </head>
@@ -404,175 +156,82 @@
                     <div class="sidebar-admin">
                         <ul class="mt-8" id="listAllnavigators">
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer active"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer active"
                                 id="manageDAshboardBtn"
                             >
                                 <span class="fa fa-desktop"></span>
                                 Dashboard
                             </li>
-
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                                 id="manageAdminBtn"
                             >
                                 Manage Admin
                             </li>
-                            <ul class="ml-4 mt-2 hidden" id="allAdminFunctions">
-                                <li
-                                    class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                    id="registerAdmin"
-                                >
-                                    🚀 Register Admin
-                                </li>
-                                <li
-                                    class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                    id="changeAdminPasswordSectionBtn"
-                                >
-                                    🚀 Change Admin Password
-                                </li>
-                                <li
-                                    class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                    id="adminListBtn"
-                                >
-                                    🚀 Admin List
-                                </li>
-                            </ul>
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                                 id="manageUsersBtn"
                             >
                                 Manage Users
                             </li>
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                                 id="manageSubmitsAndPricingBtn"
                             >
                                 Manage User Submits and Pricing
                             </li>
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                id="manageProjectAiBtn"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                                id="manageProjectsBtn"
                             >
                                 Manage Projects
                             </li>
-                            <ul
-                                class="ml-4 mt-2 custom-li hidden"
-                                id="manageProjectslinkBtn"
-                            >
-                                <li
-                                    class="px-4 py-2 over:bg-gray-600 cursor-pointer"
-                                    data-category=""
-                                >
-                                    🚀 All Projects
-                                </li>
-                                <li
-                                    class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                    data-category="Video Editor AI"
-                                >
-                                    🚀 Video Editor
-                                </li>
-                                <li
-                                    class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                    data-category="Video Restyling AI"
-                                >
-                                    🚀 Video Restyle
-                                </li>
-                                <li
-                                    class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                    data-category="Video Voicing"
-                                >
-                                    🚀 Video Voicing
-                                </li>
-                                <li
-                                    class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                    data-category="Lip Sync AI"
-                                >
-                                    🚀 Lip Sync
-                                </li>
-                                <li
-                                    class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                    data-category="Face Swap AI"
-                                >
-                                    🚀 Face Swap
-                                </li>
-                                <li
-                                    class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                    data-category="3D Video Modeling AI"
-                                >
-                                    🚀 3D Video Modeling
-                                </li>
-                                <li
-                                    class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                    data-category="Add Avatar"
-                                >
-                                    🚀 My Avatar
-                                </li>
-                            </ul>
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
                                 id="manageplanBtn"
                             >
-                                Manage Plans Pricing View
-                            </li>
-                            <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                id="addplanBtn"
-                            >
-                                Add More Pricing Plan View
-                            </li>
-                            <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                id="ManageComparisonBtn"
-                            >
-                                Manage Pricing Plan View Comparison
-                            </li>
-                            <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                id="AddComparisonBtn"
-                            >
-                                Add More Pricing Plan Comparison
+                                Manage Plans
                             </li>
                             <li
                                 class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                id="manageAvatarBtn"
+                                id="addplanBtn"
                             >
-                                <a href="manageavatar.html">Manage Avatar</a>
+                                Add Plans
                             </li>
                             <li
-                                class="router px-4 py-2 hover:bg-gray-600 cursor-pointer"
-                                id="managePackagesBtn"
-                                data-url="manage-packages"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                                id="ManageComparisonBtn"
                             >
-                                <a href="manageplanx.html"
-                                    >Manage subscription Plans and Packages</a
-                                >
+                                Manage Comparison
                             </li>
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                id="manageVideoBtn"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                                id="AddComparisonBtn"
                             >
-                                Add video
+                                Add Comparison
                             </li>
                             <li
-                                class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                                id="manageNewsletterBtn"
+                                class="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                                id="AffiliatePaymentRequestBtn"
                             >
-                                Manage Newsletter
+                                Payment Request
                             </li>
                         </ul>
                     </div>
                 </div>
-                <li
-                    class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
-                    id="logoutBtn"
-                >
-                    <a href="/logout">Logout</a>
-                </li>
             </div>
 
             <!-- Main Content -->
-
             <div class="flex-1 p-8">
+                <!--  -->
+
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- ---------------------------------------------------Affiliate Section------------------------------------------------------------ -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
                 <div id="AffiliatePaymentRequestSection">
                     <div class="container">
                         <h1>Update Affiliate System</h1>
@@ -626,6 +285,15 @@
                         </table>
                     </div>
                 </div>
+                <!--  -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- ---------------------------------------------------Affiliate Section-  js----------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+                <!-- --------------------------------------------------------------------------------------------------------------- -->
+
                 <script>
                     document.addEventListener('click', async function (event) {
                         if (
@@ -657,12 +325,12 @@
                                 const result = await Swal.fire({
                                     title: 'Payment Details',
                                     html: `
-                                                <p>Email: ${paymentDetails.email}</p>
-                                                <p>Paypal: ${paymentDetails.Paypal}</p>
-                                                <p>Card Number: ${paymentDetails.CardNumber}</p>
-                                                <p>Card Name: ${paymentDetails.CardName}</p>
-                                                <p>Expiring Date: ${paymentDetails.Expiringdate}</p>
-                                            `,
+                            <p>Email: ${paymentDetails.email}</p>
+                            <p>Paypal: ${paymentDetails.Paypal}</p>
+                            <p>Card Number: ${paymentDetails.CardNumber}</p>
+                            <p>Card Name: ${paymentDetails.CardName}</p>
+                            <p>Expiring Date: ${paymentDetails.Expiringdate}</p>
+                        `,
                                     icon: 'info',
                                     showCancelButton: true,
                                     confirmButtonText: 'Complete Payment',
@@ -739,20 +407,20 @@
                                         button += `<button class="btn btn-sm btn-success" id="" name="${referrals.id}">Successful</button>`;
                                     }
                                     row.innerHTML = `
-                                            <td>${index + 1}</td>
-                                            <td>${referral.name}</td>
-                                            <td>${referral.email}</td>
-                                            <td>${referral.total_referred}</td>
-                                            <td>${referral.requestdate}</td>
-                                            <td>${button}</td>
-                                        `;
+                        <td>${index + 1}</td>
+                        <td>${referral.name}</td>
+                        <td>${referral.email}</td>
+                        <td>${referral.total_referred}</td>
+                        <td>${referral.requestdate}</td>
+                        <td>${button}</td>
+                    `;
                                     tableBody.appendChild(row);
                                 });
                             } else {
                                 const row = document.createElement('tr');
                                 row.innerHTML = `
-                                            <td colspan="3" class="text-center">You have no requests yet!</td>
-                                        `;
+                        <td colspan="3" class="text-center">You have no requests yet!</td>
+                    `;
                                 tableBody.appendChild(row);
                             }
                         } catch (error) {
@@ -808,7 +476,6 @@
                             }
                         );
                 </script>
-                <!--  -->
                 <!-- Manage Comparison Section -->
                 <div id="EditComparesectionsection" class="hidden">
                     <div class="container">
@@ -993,175 +660,63 @@
                         id="rainbow-compare-table"
                     ></div>
                 </div>
-                <!-- ///////////////////////////////////////////Manage Admin Section ////////////////////////////////////////////////-->
-
-                <!-- Create Admin Section -->
-                <div
-                    id="manageAdminSection"
-                    class="hidden flex justify-center items-center min-h-screen bg-gray-100"
-                >
-                    <div>
-                        <h2
-                            class="text-3xl font-semibold text-gray-700 mb-6 text-center"
-                        >
-                            Create Admin
-                        </h2>
-                        <p class="text-center text-gray-600 mb-4">
-                            Create Admin SuperUser or Admin
-                        </p>
-                        <form id="admin-register-form">
-                            <div>
-                                <label
-                                    for="email"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Email:</label
-                                >
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    required
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    for="password"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Password:</label
-                                >
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    required
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                />
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    id="isSuperuser"
-                                    name="isSuperuser"
-                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                />
-                                <label
-                                    for="isSuperuser"
-                                    class="text-sm font-medium text-gray-700"
-                                    >Is Superuser</label
-                                >
-                            </div>
-                            <button
-                                type="submit"
-                                class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                            >
-                                Register
-                            </button>
-                            <div
-                                id="message"
-                                class="text-center mt-4 text-gray-600"
-                            ></div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Change Admin Password Section -->
-                <div
-                    id="changeAdminPasswordSection"
-                    class="hidden flex justify-center items-center min-h-screen bg-gray-100"
-                >
-                    <div>
-                        <h2
-                            class="text-3xl font-semibold text-gray-700 mb-6 text-center"
-                        >
-                            Change Admin Password
-                        </h2>
-                        <form id="admin-password-form" class="space-y-16">
-                            <div>
-                                <label
-                                    for="email"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >Email:</label
-                                >
-                                <input
-                                    type="email"
-                                    id="pemail"
-                                    name="email"
-                                    required
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    for="password"
-                                    class="block text-sm font-medium text-gray-700"
-                                    >New Password:</label
-                                >
-                                <input
-                                    type="password"
-                                    id="cpassword"
-                                    name="password"
-                                    required
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                            >
-                                Change Password
-                            </button>
-                            <div
-                                id="changePasswordMessage"
-                                class="text-center mt-4 text-gray-600"
-                            ></div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Admin List Section -->
-                <section
-                    id="adminListSection"
-                    class="container mx-auto my-8 p-6 hidden bg-white shadow-md rounded-lg"
-                >
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-700">
-                        Admin List
+                <!-- Manage Admin Section -->
+                <div id="manageAdminSection" class="hidden">
+                    <h2 class="text-3xl font-semibold text-gray-700 mb-6">
+                        Manage Admin
                     </h2>
-                    <div class="overflow-x-auto">
-                        <table
-                            id="adminTable"
-                            class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm"
+                    Register superuser or just register admin work
+                    <form id="admin-register-form" class="space-y-6">
+                        <div>
+                            <label
+                                for="email"
+                                class="block text-sm font-medium text-black-300"
+                                >Email:</label
+                            >
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                for="password"
+                                class="block text-sm font-medium text-black-300"
+                                >Password:</label
+                            >
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            />
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="isSuperuser"
+                                name="isSuperuser"
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-600 rounded"
+                            />
+                            <label
+                                for="isSuperuser"
+                                class="text-sm font-medium text-black-300"
+                                >Is Superuser</label
+                            >
+                        </div>
+                        <button
+                            type="submit"
+                            class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                         >
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th
-                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
-                                    >
-                                        Admin ID
-                                    </th>
-                                    <th
-                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
-                                    >
-                                        Email
-                                    </th>
-                                    <th
-                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
-                                    >
-                                        Is Super User
-                                    </th>
-                                    <th
-                                        class="py-3 px-6 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
-                                    >
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Admins will be listed here dynamically -->
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
+                            Register
+                        </button>
+                        <div id="message" class="text-center mt-4"></div>
+                    </form>
+                </div>
 
                 <!-- Manage Users Section -->
                 <div id="manageUsersSection" class="hidden">
@@ -1459,17 +1014,11 @@
                                     <option value="BasicMonthly">
                                         Basic Monthly
                                     </option>
-                                    <option value="CreatorMonthly">
-                                        Creator Monthly
-                                    </option>
                                     <option value="PremiumMonthly">
                                         Premium Monthly
                                     </option>
                                     <option value="BasicYearly">
                                         Basic Yearly
-                                    </option>
-                                    <option value="CreatorYearly">
-                                        Creator Yearly
                                     </option>
                                     <option value="PremiumYearly">
                                         Premium Yearly
@@ -1493,26 +1042,31 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Manage User Submits and Pricing Section -->
-                <div id="manageSubmitsAndPricingSection" class="hidden fles">
+                <div id="manageSubmitsAndPricingSection" class="hidden">
                     <h4 class="text-3xl font-semibold text-gray-700 mb-6">
-                        Set Subscription Plan Credits
+                        Manage User Subscription Plan and Submit Credits
                     </h4>
                     <div
-                        class="max-w-3xl mx-auto bg-white w-1/2 bg-blue-500 p-4 shadow-lg rounded-lg p-6"
+                        class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8"
                     >
+                        <h3
+                            class="text-2xl font-semibold text-gray-800 mb-6 text-center"
+                        >
+                            Set Credits for Subscription Plans
+                        </h3>
                         <div
                             id="creditSettingsContainer"
-                            class="p-4 bg-white shadow-md rounded-md"
+                            class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md"
                         >
                             <h3
                                 class="text-lg leading-6 font-medium text-gray-900 mb-4"
                             >
                                 Set Credits for Subscription Plans
                             </h3>
-                            <form id="setCreditSettingsForm" class="space-y-4">
-                                <!-- Subscription Plan Dropdown -->
-                                <div class="flex flex-wrap">
+                            <form id="setCreditSettingsForm" class="space-y-1">
+                                <div class="flex flex-wrap -mx-2 mb-4">
                                     <div class="w-full sm:w-1/2 px-2 mb-4">
                                         <label
                                             for="subscriptionPlan"
@@ -1528,17 +1082,11 @@
                                             <option value="BasicMonthly">
                                                 Basic Monthly
                                             </option>
-                                            <option value="CreatorMonthly">
-                                                Creator Monthly
-                                            </option>
                                             <option value="PremiumMonthly">
                                                 Premium Monthly
                                             </option>
                                             <option value="BasicYearly">
                                                 Basic Yearly
-                                            </option>
-                                            <option value="CreatorYearly">
-                                                Creator Yearly
                                             </option>
                                             <option value="PremiumYearly">
                                                 Premium Yearly
@@ -1547,10 +1095,8 @@
                                     </div>
                                 </div>
 
-                                <!-- Credits Input Fields -->
-                                <div class="flex flex-wrap">
-                                    <!-- Row 1 -->
-                                    <div class="w-full sm:w-1/4 px-2 mb-4">
+                                <div class="flex flex-wrap -mx-2">
+                                    <div class="w-full sm:w-1/3 px-2 mb-4">
                                         <label
                                             for="videoEditorCredits"
                                             class="block text-sm font-medium text-gray-700"
@@ -1564,7 +1110,7 @@
                                         />
                                     </div>
 
-                                    <div class="w-full sm:w-1/4 px-2 mb-4">
+                                    <div class="w-full sm:w-1/3 px-2 mb-4">
                                         <label
                                             for="videoRestyleCredits"
                                             class="block text-sm font-medium text-gray-700"
@@ -1578,7 +1124,7 @@
                                         />
                                     </div>
 
-                                    <div class="w-full sm:w-1/4 px-2 mb-4">
+                                    <div class="w-full sm:w-1/3 px-2 mb-4">
                                         <label
                                             for="videoVoicingCredits"
                                             class="block text-sm font-medium text-gray-700"
@@ -1591,8 +1137,10 @@
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
                                     </div>
+                                </div>
 
-                                    <div class="w-full sm:w-1/4 px-2 mb-4">
+                                <div class="flex flex-wrap -mx-2">
+                                    <div class="w-full sm:w-1/3 px-2 mb-4">
                                         <label
                                             for="myAvatarCredits"
                                             class="block text-sm font-medium text-gray-700"
@@ -1605,11 +1153,8 @@
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
                                     </div>
-                                </div>
 
-                                <div class="flex flex-wrap">
-                                    <!-- Row 2 -->
-                                    <div class="w-full sm:w-1/4 px-2 mb-4">
+                                    <div class="w-full sm:w-1/3 px-2 mb-4">
                                         <label
                                             for="lipSyncCredits"
                                             class="block text-sm font-medium text-gray-700"
@@ -1623,7 +1168,7 @@
                                         />
                                     </div>
 
-                                    <div class="w-full sm:w-1/4 px-2 mb-4">
+                                    <div class="w-full sm:w-1/3 px-2 mb-4">
                                         <label
                                             for="faceSwapCredits"
                                             class="block text-sm font-medium text-gray-700"
@@ -1636,10 +1181,12 @@
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
                                     </div>
+                                </div>
 
-                                    <div class="w-full sm:w-1/4 px-2 mb-4">
+                                <div class="flex flex-wrap -mx-2">
+                                    <div class="w-full sm:w-1/3 px-2 mb-4">
                                         <label
-                                            for="threeDVideoModelingCredits"
+                                            for="3dVideoModellingCredits"
                                             class="block text-sm font-medium text-gray-700"
                                         >
                                             3D Video Modelling Credits
@@ -1661,45 +1208,11 @@
                                     </button>
                                 </div>
                             </form>
-                            <br />
+
                             <div id="messageContainer" class="mt-4 p-4 hidden">
                                 <span id="messageText" class="text-sm"></span>
                             </div>
-                            <br />
-                            <div class="w-full px-2 mb-4 p-4">
-                                <div
-                                    class="overflow-x-auto bg-white shadow-md rounded-md p-4"
-                                >
-                                    <table
-                                        class="min-w-full border-collapse border border-gray-200"
-                                    >
-                                        <thead>
-                                            <tr>
-                                                <th
-                                                    class="border px-4 py-2 bg-indigo-600 text-white"
-                                                >
-                                                    Subscription Plan
-                                                </th>
-                                                <th
-                                                    class="border px-4 py-2 bg-indigo-600 text-white"
-                                                >
-                                                    Feature
-                                                </th>
-                                                <th
-                                                    class="border px-4 py-2 bg-indigo-600 text-white"
-                                                >
-                                                    Credits
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="creditsTableBody">
-                                            <!-- Credit details will be loaded here dynamically -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                         </div>
-                        <!-- Table Container -->
                     </div>
                 </div>
 
@@ -1982,7 +1495,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- ////////////////////////////////////////////////////////////////////////////////////////////Manage  Project Section ////////////////////////////// -->
                 <!-- Manage Projects Section -->
                 <div id="manageProjectsSection" class="hidden">
                     <h2 class="text-3xl font-semibold text-gray-700 mb-6">
@@ -2003,43 +1515,28 @@
                                     <th class="py-2 px-4 border-b text-left">
                                         #
                                     </th>
-                                    <th
-                                        class="py-2 px-4 text-xl border-b text-left"
-                                    >
+                                    <th class="py-2 px-4 border-b text-left">
                                         Project & User ID
                                     </th>
-                                    <th
-                                        class="py-2 px-4 text-xl border-b text-left"
-                                    >
+                                    <th class="py-2 px-4 border-b text-left">
                                         Title
                                     </th>
-                                    <th
-                                        class="py-2 px-4 text-xl border-b text-left"
-                                    >
+                                    <th class="py-2 px-4 border-b text-left">
                                         Status
                                     </th>
-                                    <th
-                                        class="py-2 px-4 text-xl border-b text-left"
-                                    >
+                                    <th class="py-2 px-4 border-b text-left">
                                         Created At
                                     </th>
-                                    <th
-                                        class="py-2 px-4 text-xl border-b text-left"
-                                    >
+                                    <th class="py-2 px-4 border-b text-left">
                                         Options
                                     </th>
-                                    <th
-                                        class="py-2 px-4 text-xl border-b text-left"
-                                    >
+                                    <th class="py-2 px-4 border-b text-left">
                                         Actions
                                     </th>
                                 </tr>
                                 <hr class="border-t-2 border-gray-300 my-4" />
                             </thead>
-                            <tbody
-                                id="projectsTableBody"
-                                class="text-gray-700 text-xl"
-                            >
+                            <tbody id="projectsTableBody" class="text-gray-700">
                                 <!-- Rows will be dynamically inserted here -->
                             </tbody>
                         </table>
@@ -2258,116 +1755,6 @@
                             <div class="modal-content">
                                 <span class="close">&times;</span>
                                 <div id="mediaContainer"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ///////////////////////////////////////// End of Manage Projects////////////////////////////////// -->
-                <div id="manageVideoSection" class="hidden p-6 bg-gray-50">
-                    <!-- In admin-dashboard.html -->
-                    <form
-                        id="videoForm"
-                        method="POST"
-                        action="/admin/videos/add"
-                    >
-                        <label for="page">Select Page:</label>
-                        <select id="page" name="page">
-                            <option value="utilize">Utilize</option>
-                            <option value="affiliate">Affiliate</option>
-                        </select>
-
-                        <label for="videoLink">YouTube Video Link:</label>
-                        <input
-                            type="text"
-                            id="videoLink"
-                            name="videoLink"
-                            required
-                        />
-
-                        <button type="submit">Add Video</button>
-                    </form>
-                    <br /><br />
-                    <!-- To remove a video -->
-                    <!-- In admin-dashboard.html -->
-                    <div>
-                        <table id="videoTable" class="min-w-full bg-white">
-                            <thead>
-                                <tr>
-                                    <th class="text-left py-2 px-4">Page</th>
-                                    <th class="text-left py-2 px-4">
-                                        Video Link
-                                    </th>
-                                    <th class="text-left py-2 px-4">
-                                        Added At
-                                    </th>
-                                    <th class="text-left py-2 px-4">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="videoTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div id="manageNewsletter" class="hidden p-6 bg-gray-50">
-                    <h1 class="text-2xl font-bold mb-5">
-                        Newsletter Subscribers
-                    </h1>
-                    <table
-                        id="subscribersTable"
-                        class="min-w-full bg-white border"
-                    >
-                        <thead>
-                            <tr>
-                                <th class="px-4 py-2 border">Email</th>
-                                <th class="px-4 py-2 border">Subscribed At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Rows will be populated here by JS -->
-                        </tbody>
-                    </table>
-                </div>
-                <div id="contentArea" class="injected-content"></div>
-
-                <!-- Manage Subscriptons packages and benefits  Section -->
-                <div
-                    id="managePackageAndPricingSection"
-                    class="hidden sidebar-content manage-packages"
-                >
-                    <h4 class="text-3xl font-semibold text-gray-700 mb-6">
-                        Create Packages and Benefits
-                    </h4>
-                    <div class="mx-auto bg-white shadow-lg rounded-lg p-8">
-                        <h3
-                            class="text-2xl font-semibold text-gray-800 mb-6 text-center"
-                        >
-                            Set Subscription Plans
-                        </h3>
-                        <div
-                            id=""
-                            class="mx-auto p-6 bg-white shadow-md rounded-md"
-                        >
-                            <!-- <form id="" class="space-y-1"> -->
-                            <button
-                                type="button"
-                                id="AddPackageBtn"
-                                class="block p-2 border bg-green-500"
-                            >
-                                Add A Plan
-                            </button>
-                            <!-- <template> -->
-                            <div class="flex mb-4">
-                                <!-- <div class="w-full sm:w-1/2 px-2 mb-4"> -->
-
-                                <div id="packagesContainer"></div>
-
-                                <!-- </div> -->
-                            </div>
-                            <!-- </template> -->
-
-                            <!-- </form> -->
-
-                            <div id="messageContainer" class="mt-4 p-4 hidden">
-                                <span id="messageText" class="text-sm"></span>
                             </div>
                         </div>
                     </div>
@@ -2914,20 +2301,9 @@
                         document
                             .getElementById('managecompasionsection')
                             .classList.remove('hidden');
+
                         document
                             .getElementById('EditComparesectionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
                 document
@@ -2978,15 +2354,6 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
                     });
                 //manage Admin start here
                 document
@@ -3035,15 +2402,6 @@
                             .classList.add('hidden');
                         document
                             .getElementById('EditComparesectionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
                 //Manage user start here
@@ -3094,15 +2452,6 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
                     });
                 //manage and submit price
                 document
@@ -3152,22 +2501,10 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
-                        document
-                            .getElementById('manageVideoSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
                     });
                 //manage project
                 document
-                    .getElementById('manageProjectAiBtn')
+                    .getElementById('manageProjectsBtn')
                     .addEventListener('click', function () {
                         const manageProjectsBtn =
                             document.getElementById('listAllnavigators');
@@ -3177,7 +2514,7 @@
                             listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
                         }
                         document
-                            .getElementById('manageProjectAiBtn')
+                            .getElementById('manageProjectsBtn')
                             .classList.add('active');
                         // Show Manage Projects Section
                         document
@@ -3189,15 +2526,6 @@
                         document
                             .getElementById('manageProjectsSection')
                             .classList.remove('hidden');
-                        document
-                            .getElementById('manageAdminSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('adminListSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('changeAdminPasswordSection')
-                            .classList.add('hidden');
                         document
                             .getElementById('ManageCompareSection')
                             .classList.add('hidden');
@@ -3218,18 +2546,6 @@
                             .classList.add('hidden');
                         document
                             .getElementById('EditComparesectionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageVideoSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
                             .classList.add('hidden');
                     });
                 //manage comparision start here
@@ -3281,79 +2597,7 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
-                        document
-                            .getElementById('manageVideoSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
                     });
-
-                //manage plan button start here
-                document
-                    .getElementById('manageVideoBtn')
-                    .addEventListener('click', function () {
-                        const manageProjectsBtn =
-                            document.getElementById('listAllnavigators');
-                        const listItems =
-                            manageProjectsBtn.getElementsByTagName('li');
-                        for (let i = 0; i < listItems.length; i++) {
-                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
-                        }
-                        document
-                            .getElementById('manageVideoBtn')
-                            .classList.add('active');
-                        // Show Manage plan Section
-                        document
-                            .getElementById('manageUsersSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageSubmitsAndPricingSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageProjectsSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManageCompareSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('addplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManagemainSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('editplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managecompasionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('EditComparesectionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageVideoSection')
-                            .classList.remove('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
-                    });
-
                 //manage plan button start here
                 document
                     .getElementById('manageplanBtn')
@@ -3399,78 +2643,7 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
-                        document
-                            .getElementById('manageVideoSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
                     });
-
-                document
-                    .getElementById('manageNewsletterBtn')
-                    .addEventListener('click', function () {
-                        const manageProjectsBtn =
-                            document.getElementById('listAllnavigators');
-                        const listItems =
-                            manageProjectsBtn.getElementsByTagName('li');
-                        for (let i = 0; i < listItems.length; i++) {
-                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
-                        }
-                        document
-                            .getElementById('manageNewsletterBtn')
-                            .classList.add('active');
-                        // Show Manage plan Section
-                        document
-                            .getElementById('manageUsersSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageSubmitsAndPricingSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageProjectsSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManageCompareSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('addplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManagemainSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('editplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managecompasionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('EditComparesectionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageVideoSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.remove('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
-                    });
-
                 //addplan btn start here
 
                 document
@@ -3517,123 +2690,6 @@
                         document
                             .getElementById('EditComparesectionsection')
                             .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
-                    });
-                document
-                    .getElementById('manageAvatarBtn')
-                    .addEventListener('click', function () {
-                        const manageProjectsBtn =
-                            document.getElementById('listAllnavigators');
-                        const listItems =
-                            manageProjectsBtn.getElementsByTagName('li');
-                        for (let i = 0; i < listItems.length; i++) {
-                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
-                        }
-                        document
-                            .getElementById('manageAvatarBtn')
-                            .classList.add('active');
-                        // Show Manage Projects Section
-                        document
-                            .getElementById('manageUsersSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageSubmitsAndPricingSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageProjectsSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManageCompareSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('addplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManagemainSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('editplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managecompasionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('EditComparesectionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.remove('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.add('hidden');
-                    });
-                document
-                    .getElementById('managePackagesBtn')
-                    .addEventListener('click', function () {
-                        const manageProjectsBtn =
-                            document.getElementById('listAllnavigators');
-                        const listItems =
-                            manageProjectsBtn.getElementsByTagName('li');
-                        for (let i = 0; i < listItems.length; i++) {
-                            listItems[i].classList.remove('active'); // Replace 'your-class-name' with the actual class name you want to remove
-                        }
-                        document
-                            .getElementById('managePackagesBtn')
-                            .classList.add('active');
-                        // Show Manage Projects Section
-                        document
-                            .getElementById('manageUsersSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageSubmitsAndPricingSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageProjectsSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManageCompareSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('addplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('ManagemainSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('editplanSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managecompasionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('EditComparesectionsection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageNewsletter')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('manageAvatarSection')
-                            .classList.add('hidden');
-                        document
-                            .getElementById('managePackageAndPricingSection')
-                            .classList.remove('hidden');
                     });
                 manageUsersBtn.addEventListener('click', () => {
                     manageUsersSection.classList.remove('hidden');
@@ -3641,13 +2697,11 @@
                     fetchUsers();
                 });
 
-                manageProjectAiBtn.addEventListener('click', () => {
+                manageProjectsBtn.addEventListener('click', () => {
                     manageProjectsSection.classList.remove('hidden');
                     manageUsersSection.classList.add('hidden');
                     fetchProjects();
                 });
-
-                // Function  user
 
                 // Function  user
 
@@ -3665,7 +2719,7 @@
                                 'bg-gray-100',
                                 'border-b',
                                 'hover:bg-gray-200',
-                                'text-xl',
+                                'text-sm',
                                 'font-medium'
                             );
 
@@ -3680,15 +2734,15 @@
                 <td class="py-2 px-4">${user.address || 'N/A'}</td>
                 <td class="py-2 px-4">${user.subscriptionPlan}</td>
                 <td class="py-2 px-4">
-                    <button
-                        onclick="deleteUser('${user._id}')"
-                        class="text-red-600 hover:text-red-800 font-semibold">
+                    <button 
+                        onclick="deleteUser('${user._id}')" 
+                        class="text-red-600 hover:text-red-800 font-semibold mr-4">
                         Delete user
-                    </button><br><br>
-                    <button
+                    </button><br>
+                    <button 
                         onclick="window.openSubscriptionModal('${user._id}', '${
                                 user.subscriptionPlan
-                            }')"
+                            }')" 
                         class="text-blue-600 hover:text-blue-800 font-semibold">
                         Update Plan
                     </button>
@@ -3792,63 +2846,32 @@
             });
         </script>
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const categoryButtons = document.querySelectorAll(
-                    '#manageProjectslinkBtn li'
-                );
+            // document.addEventListener('DOMContentLoaded', () => {
+            //     fetchProjects();
 
-                categoryButtons.forEach((button) => {
-                    button.addEventListener('click', (e) => {
-                        const category = e.target.getAttribute('data-category');
-                        fetchProjects(category);
-                    });
-                });
+            //     // Event listener for Update Status form submission
+            //     document
+            //         .getElementById('updateStatusForm')
+            //         .addEventListener('submit', async (e) => {
+            //             e.preventDefault();
+            //             await updateProjectStatus();
+            //         });
 
-                // Initial fetch to show all projects sorted by createdAt
-                fetchProjects();
-            });
-            document.addEventListener('DOMContentLoaded', () => {
-                fetchProjects();
+            //     // Event listener for Reupload form submission
+            //     document
+            //         .getElementById('reuploadForm')
+            //         .addEventListener('submit', async (e) => {
+            //             e.preventDefault();
+            //             await reuploadEditedFile();
+            //         });
+            // });
 
-                // Event listener for Update Status form submission
-                document
-                    .getElementById('updateStatusForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await updateProjectStatus();
-                    });
-
-                // Event listener for Reupload form submission
-                document
-                    .getElementById('reuploadForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await reuploadEditedFile();
-                    });
-            });
-
-            // Add event listeners to all category buttons
-            document
-                .querySelectorAll('#manageProjectslinkBtn li')
-                .forEach((btn) => {
-                    btn.addEventListener('click', function () {
-                        const category = this.getAttribute('data-category');
-                        fetchProjects(category);
-                    });
-                    fetchProjects();
-                });
-            async function fetchProjects(category = null) {
+            async function fetchProjects() {
                 try {
                     const response = await axios.get('/api/projects');
                     let projects = response.data.projects;
 
-                    if (category) {
-                        projects = projects.filter(
-                            (project) => project.title === category
-                        );
-                    }
-
-                    // Sort projects by most recent
+                    // Sort projects by most recent (assuming `createdAt` field is available)
                     projects.sort(
                         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                     );
@@ -3858,33 +2881,41 @@
                     projectsTableBody.innerHTML = '';
 
                     projects.forEach((project, index) => {
+                        // Project row
                         const projectRow = document.createElement('tr');
 
+                        // Numbering
                         const numberCell = document.createElement('td');
-                        numberCell.className = 'py-2 text-xl px-4';
+                        numberCell.className = 'py-2 px-4';
                         numberCell.innerText = index + 1;
                         projectRow.appendChild(numberCell);
 
+                        // Project & User ID
                         const idCell = document.createElement('td');
-                        idCell.className = 'py-2 text-xl px-4';
+                        idCell.className = 'py-2 px-4';
                         idCell.innerText = `${project._id} / ${project.userId._id}`;
                         projectRow.appendChild(idCell);
 
+                        // Title
                         const titleCell = document.createElement('td');
-                        titleCell.className = 'py-2 text-xl px-4';
+                        titleCell.className = 'py-2 px-4';
                         titleCell.innerText = project.title;
                         projectRow.appendChild(titleCell);
 
+                        // Status
                         const statusCell = document.createElement('td');
-                        statusCell.className = 'py-2 text-xl px-4';
-                        let statusContent = `Status: ${project.status}`;
+                        statusCell.className = 'py-2 px-4';
 
+                        let statusContent = `<strong>Status: ${project.status}</strong>`;
+
+                        // Add ETA if available
                         if (project.estimatedCompletionTime) {
-                            statusContent += `<p class="text-xl">ETA:${new Date(
+                            statusContent += `<p><strong>ETA:</strong> ${new Date(
                                 project.estimatedCompletionTime
                             ).toLocaleString()}</p>`;
                         }
 
+                        // Add comment if available
                         if (
                             project.statusHistory &&
                             project.statusHistory.length > 0
@@ -3894,85 +2925,97 @@
                                     project.statusHistory.length - 1
                                 ];
                             if (latestStatus.comment) {
-                                statusContent += `<p class="text-xl">Comment: ${latestStatus.comment}</p>`;
+                                statusContent += `<p>Comment: ${latestStatus.comment}</p>`;
                             }
                         }
 
                         statusCell.innerHTML = statusContent;
                         projectRow.appendChild(statusCell);
 
+                        // Created At
                         const createdAtCell = document.createElement('td');
-                        createdAtCell.className = 'py-2 text-xl px-4';
+                        createdAtCell.className = 'py-2 px-4';
                         createdAtCell.innerText = new Date(
                             project.createdAt
                         ).toLocaleString();
                         projectRow.appendChild(createdAtCell);
 
+                        // Options
                         const optionsCell = document.createElement('td');
-                        optionsCell.className = 'py-2 text-xl px-4';
-
-                        // Display multiple video links
-                        if (project.videoLink && project.videoLink.length > 0) {
-                            project.videoLink.forEach((link) => {
-                                optionsCell.innerHTML += `<p class="text-xl">Video Link: <a href="${
-                                    link.startsWith('http')
-                                        ? link
-                                        : `http://${link}`
-                                }" class="text-blue-600 text-xl hover:text-blue-800" target="_blank" rel="noopener noreferrer">${link}</a></p>`;
-                            });
-                        }
-
-                        if (project.videoDescription) {
-                            optionsCell.innerHTML += `<p class="text-xl">Description: ${project.videoDescription}</p>`;
-                        }
-
-                        if (project.orientation) {
-                            optionsCell.innerHTML += `<p class="text-xl">Orientation: ${project.orientation}</p>`;
-                        }
-
-                        if (project.location) {
-                            optionsCell.innerHTML += `<p class="text-xl">Location: ${project.location}</p>`;
-                        }
-
-                        if (project.avatar) {
-                            optionsCell.innerHTML += `<p class="text-xl"><Avatar: ${project.avatar}</p>`;
-                        }
-
+                        optionsCell.className = 'py-2 px-4';
+                        optionsCell.innerHTML = `
+                ${
+                    project.videoLink
+                        ? `<p><strong>Video Link:</strong> <a href="${
+                              project.videoLink.startsWith('http')
+                                  ? project.videoLink
+                                  : `http://${project.videoLink}`
+                          }" class="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">${
+                              project.videoLink
+                          }</a></p>`
+                        : ''
+                }
+                ${
+                    project.videoDescription
+                        ? `<p><strong>Description:</strong> ${project.videoDescription}</p>`
+                        : ''
+                }
+                ${
+                    project.orientation
+                        ? `<p><strong>Orientation:</strong> ${project.orientation}</p>`
+                        : ''
+                }
+                ${
+                    project.location
+                        ? `<p><strong>Location:</strong> ${project.location}</p>`
+                        : ''
+                }
+                ${
+                    project.avatar
+                        ? `<p><strong>Avatar:</strong> ${project.avatar}</p>`
+                        : ''
+                }
+            `;
                         projectRow.appendChild(optionsCell);
 
+                        // Actions
                         const actionsCell = document.createElement('td');
-                        actionsCell.className = 'py-2 text-xl px-4';
+                        actionsCell.className = 'py-2 px-4';
                         actionsCell.innerHTML += `
                 <button
                     onclick="openUpdateStatusModal('${project._id}')"
-                    class="bg-blue-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 mr-2">
+                    class="bg-blue-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 mr-2">
                     Update Status
                 </button><br>
                 <button
                     onclick="openReuploadModal('${project._id}')"
-                    class="bg-green-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-300 mr-2">
+                    class="bg-green-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-300 mr-2">
                     Reupload
                 </button><br> 
                 <button
                     onclick="openMediaModal('${project._id}')"
-                    class="bg-indigo-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
+                    class="bg-indigo-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
                     View Project Files
-                </button>
+                 </button>
+                
                 <button
                     onclick="deleteProject('${project._id}')"
-                    class="bg-red-500 text-white font-bold py-2 px-4 text-xl rounded shadow-md hover:bg-red-700 hover:shadow-lg transition-all duration-300">
+                    class="bg-red-500 text-white font-bold py-2 px-4 rounded shadow-md hover:bg-red-700 hover:shadow-lg transition-all duration-300">
                     Delete Project
                 </button><br><br>
+                
             `;
                         projectRow.appendChild(actionsCell);
 
+                        // Append the project row
                         projectsTableBody.appendChild(projectRow);
 
+                        // Add a horizontal line after the row
                         const hrRow = document.createElement('tr');
                         const hrCell = document.createElement('td');
-                        hrCell.setAttribute('colspan', '7');
+                        hrCell.setAttribute('colspan', '7'); // Adjust colspan to match the number of columns
                         hrCell.innerHTML =
-                            '<hr class="border-t-2 text-xl border-gray-300 my-4">';
+                            '<hr class="border-t-2 border-gray-300 my-4">';
                         hrRow.appendChild(hrCell);
                         projectsTableBody.appendChild(hrRow);
                     });
@@ -4084,12 +3127,9 @@
                     );
 
                     rows.forEach((row) => {
-                        // Skip rows that don't have the expected number of cells (7 in this case)
-                        if (row.cells.length < 7) return;
-
                         const projectId =
                             row.cells[1].textContent.toLowerCase(); // Project ID column
-                        const status = row.cells[3].textContent.toLowerCase(); // Status column
+                        const status = row.cells[3].textContent.toLowerCase(); // status column
 
                         if (
                             projectId.includes(searchQuery) ||
@@ -4250,6 +3290,72 @@
         </script>
 
         <script>
+            // document.addEventListener('DOMContentLoaded', () => {
+            //     const form = document.getElementById('setCreditSettingsForm');
+            //     const messageContainer =
+            //         document.getElementById('messageContainer');
+            //     const messageText = document.getElementById('messageText');
+
+            //     form.addEventListener('submit', async (event) => {
+            //         event.preventDefault();
+
+            //         // Gather form data
+            //         const subscriptionPlan =
+            //             document.getElementById('subscriptionPlan').value;
+            //         const videoEditorCredits =
+            //             document.getElementById('videoEditorCredits').value;
+            //         const videoRestyleCredits = document.getElementById(
+            //             'videoRestyleCredits'
+            //         ).value;
+            //         const videoVoicingCredits = document.getElementById(
+            //             'videoVoicingCredits'
+            //         ).value;
+            //         const lipSyncCredits =
+            //             document.getElementById('lipSyncCredits').value;
+            //         const faceSwapCredits =
+            //             document.getElementById('faceSwapCredits').value;
+            //         const myAvatarCredits =
+            //             document.getElementById('myAvatarCredits').value;
+            //         const threeDVideoModelingCredits = document.getElementById(
+            //             'threeDVideoModelingCredits'
+            //         ).value;
+
+            //         try {
+            //             // Send PUT request
+            //             const response = await axios.post(
+            //                 `/api/set-credit-settings/${encodeURIComponent(
+            //                     subscriptionPlan
+            //                 )}`,
+            //                 {
+            //                     videoEditorCredits,
+            //                     videoRestyleCredits,
+            //                     videoVoicingCredits,
+            //                     lipSyncCredits,
+            //                     faceSwapCredits,
+            //                     myAvatarCredits,
+            //                     threeDVideoModelingCredits,
+            //                 }
+            //             );
+
+            //             // Handle success response
+            //             messageContainer.classList.remove('hidden');
+            //             messageText.textContent = response.data.message;
+            //             messageContainer.classList.add(
+            //                 'bg-green-100',
+            //                 'text-green-800'
+            //             );
+            //         } catch (error) {
+            //             // Handle error response
+            //             messageContainer.classList.remove('hidden');
+            //             messageText.textContent =
+            //                 error.response?.data?.error || 'An error occurred';
+            //             messageContainer.classList.add(
+            //                 'bg-red-100',
+            //                 'text-red-800'
+            //             );
+            //         }
+            //     });
+            // });
             document
                 .getElementById('setCreditSettingsForm')
                 .addEventListener('submit', async function (e) {
@@ -4340,54 +3446,7 @@
                             .getElementById('messageContainer')
                             .classList.remove('hidden');
                     }
-                    // Set a timer to clear the message after 5 seconds
-                    setTimeout(() => {
-                        messageContainer.classList.add('hidden');
-                        messageText.textContent = '';
-                    }, 5000); // 5000 milliseconds = 5 seconds
                 });
-
-            document.addEventListener('DOMContentLoaded', async function () {
-                const creditsTableBody =
-                    document.getElementById('creditsTableBody');
-
-                try {
-                    // Fetch the current credits settings from the server
-                    const response = await axios.get('/get-credits');
-                    const { creditsData } = response.data;
-
-                    // Clear any existing rows
-                    creditsTableBody.innerHTML = '';
-
-                    // Display the credits for each subscription plan in a table
-                    creditsData.forEach((plan) => {
-                        plan.credits.forEach((credit) => {
-                            const row = document.createElement('tr');
-
-                            const planCell = document.createElement('td');
-                            planCell.textContent = plan.plan;
-                            planCell.className = 'border px-4 py-2';
-                            row.appendChild(planCell);
-
-                            const featureCell = document.createElement('td');
-                            featureCell.textContent = credit.feature;
-                            featureCell.className = 'border px-4 py-2';
-                            row.appendChild(featureCell);
-
-                            const creditsCell = document.createElement('td');
-                            creditsCell.textContent = credit.credits;
-                            creditsCell.className = 'border px-4 py-2';
-                            row.appendChild(creditsCell);
-
-                            creditsTableBody.appendChild(row);
-                        });
-                    });
-                } catch (error) {
-                    console.error('Error fetching credits:', error);
-                    creditsTableBody.innerHTML =
-                        '<tr><td colspan="3" class="text-red-500 text-center py-2">Failed to load credits.</td></tr>';
-                }
-            });
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -5155,7 +4214,10 @@
                     // Wrap the jsonData in the format that matches your JSON file structure
                     const subscriptionData = [{ plan: jsonData }];
 
-                    // console.log('Subscription Data to be sent:', JSON.stringify(subscriptionData, null, 2));
+                    console.log(
+                        'Subscription Data to be sent:',
+                        JSON.stringify(subscriptionData, null, 2)
+                    );
                     try {
                         const response = await fetch(`/auth/update-com`, {
                             method: 'POST',
@@ -5175,6 +4237,9 @@
                         // console.log(subscriptionData);
                         // console.log(result.subscription);
                         handleNotificator('success', result.message);
+                        console.log('key', result.updatePlanKey);
+                        console.log('data', result.newData);
+                        console.log('plan key', result.subscription);
                     } catch (error) {
                         // console.log(error);
                         handleNotificator('error', 'Error:', error);
@@ -5206,405 +4271,6 @@
                 notificator.onclick = () =>
                     (notificator.style.display = 'none');
             };
-        </script>
-        <script>
-            const sidebarLinks = document.querySelectorAll('.cursor-pointer');
-            const sections = document.querySelectorAll(
-                '#manageAdminSection, #adminListSection, #manageUsersSection, #manageProjectsSection, #toggleVisabilitySection, #manageSubmitsAndPricingSection, #changeAdminPasswordSection'
-            );
-
-            // Function to hide all sections
-            const hideAllSections = () => {
-                sections.forEach((section) => section.classList.add('hidden'));
-            };
-
-            // Function to show the relevant section
-            const showSection = (sectionId) => {
-                hideAllSections();
-                document.getElementById(sectionId).classList.remove('hidden');
-            };
-
-            // Event listener for sidebar links
-            sidebarLinks.forEach((link) => {
-                link.addEventListener('click', (e) => {
-                    const targetId = e.target.id;
-
-                    if (targetId === 'manageAdminBtn') {
-                        showSection('manageAdminSection');
-                    } else if (targetId === 'manageUsersBtn') {
-                        showSection('manageUsersSection');
-                    } else if (targetId === 'manageProjectsBtn') {
-                        showSection('manageProjectsSection');
-                    } else if (targetId === 'toggleVisability') {
-                        showSection('toggleVisabilitySection');
-                    } else if (targetId === 'manageSubmitsAndPricing') {
-                        showSection('manageSubmitsAndPricingSection');
-                    } else if (targetId === 'changeAdminPasswordSectionBtn') {
-                        showSection('changeAdminPasswordSection');
-                    } else if (targetId === 'adminListBtn') {
-                        showSection('adminListSection');
-                    } else if (targetId === 'registerAdmin') {
-                        showSection('manageAdminSection');
-                    } else if (targetId === 'manageAvatarBtn') {
-                        showSection('manageAvatarSection');
-                    } else if (targetId === 'manageplanBtn') {
-                        showSection('manageplanSection');
-                    }
-
-                    // Toggle visibility of nested ul elements
-                    const nestedUl = e.target.nextElementSibling;
-                    if (nestedUl && nestedUl.tagName === 'UL') {
-                        nestedUl.classList.toggle('hidden');
-                    }
-                });
-            });
-        </script>
-        <script>
-            document
-                .getElementById('admin-password-form')
-                .addEventListener('submit', async function (event) {
-                    event.preventDefault();
-
-                    const email = document.getElementById('pemail').value;
-                    const password = document.getElementById('cpassword').value;
-
-                    try {
-                        const response = await axios.post(
-                            '/admin/adminChangePassword',
-                            { email, password }
-                        );
-
-                        if (response.status === 200) {
-                            document.getElementById(
-                                'changePasswordMessage'
-                            ).textContent = 'Password changed successfully!';
-                            document
-                                .getElementById('changePasswordMessage')
-                                .classList.add('text-green-500');
-                        }
-                    } catch (error) {
-                        document.getElementById(
-                            'changePasswordMessage'
-                        ).textContent =
-                            error.response.data.msg ||
-                            'Error changing password';
-                        document
-                            .getElementById('changePasswordMessage')
-                            .classList.add('text-red-500');
-                    }
-                });
-
-            document.addEventListener('DOMContentLoaded', function () {
-                const adminTableBody =
-                    document.querySelector('#adminTable tbody');
-
-                // Fetch the admin data from the API
-                fetch('/admin/admins')
-                    .then((response) => response.json())
-                    .then((admins) => {
-                        // Clear the table body
-                        adminTableBody.innerHTML = '';
-
-                        // Populate the table with the fetched admins
-                        admins.forEach((admin) => {
-                            const row = document.createElement('tr');
-                            row.classList.add('border-t'); // Add border to each row
-
-                            const idCell = document.createElement('td');
-                            idCell.textContent = admin._id;
-                            idCell.classList.add(
-                                'py-4',
-                                'px-6',
-                                'text-sm',
-                                'text-gray-700'
-                            ); // Add Tailwind classes to the cell
-                            row.appendChild(idCell);
-
-                            const emailCell = document.createElement('td');
-                            emailCell.textContent = admin.email;
-                            emailCell.classList.add(
-                                'py-4',
-                                'px-6',
-                                'text-sm',
-                                'text-gray-700'
-                            ); // Add Tailwind classes to the cell
-                            row.appendChild(emailCell);
-
-                            const isSuperUserCell =
-                                document.createElement('td');
-                            isSuperUserCell.textContent = admin.isSuperuser
-                                ? 'Yes'
-                                : 'No';
-                            isSuperUserCell.classList.add(
-                                'py-4',
-                                'px-6',
-                                'text-sm',
-                                'text-gray-700'
-                            ); // Add Tailwind classes to the cell
-                            row.appendChild(isSuperUserCell);
-
-                            const actionsCell = document.createElement('td');
-                            actionsCell.classList.add(
-                                'py-4',
-                                'px-6',
-                                'text-sm',
-                                'text-gray-700'
-                            ); // Add Tailwind classes to the cell
-                            const deleteButton =
-                                document.createElement('button');
-                            deleteButton.textContent = 'Delete';
-                            deleteButton.classList.add(
-                                'bg-red-500',
-                                'hover:bg-red-600',
-                                'text-white',
-                                'font-bold',
-                                'py-1',
-                                'px-3',
-                                'rounded'
-                            ); // Add Tailwind classes to the button
-                            deleteButton.addEventListener('click', () =>
-                                handleDelete(admin._id)
-                            );
-                            actionsCell.appendChild(deleteButton);
-                            row.appendChild(actionsCell);
-
-                            adminTableBody.appendChild(row);
-                        });
-                    })
-                    .catch((error) =>
-                        console.error('Error fetching admins:', error)
-                    );
-            });
-
-            // Handle delete action
-            function handleDelete(adminId) {
-                if (confirm('Are you sure you want to delete this admin?')) {
-                    fetch(`/admin/admins/${adminId}`, {
-                        method: 'DELETE',
-                    })
-                        .then((response) => response.json())
-                        .then((result) => {
-                            alert(result.message);
-                            location.reload(); // Reload the page to reflect changes
-                        })
-                        .catch((error) =>
-                            console.error('Error deleting admin:', error)
-                        );
-                }
-            }
-        </script>
-        <!-- In admin-dashboard.html -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Handle the Add Video form submission
-                const videoForm = document.getElementById('videoForm');
-                videoForm.addEventListener('submit', async function (event) {
-                    event.preventDefault(); // Prevent default form submission
-
-                    const formData = new FormData(videoForm);
-                    const data = {
-                        page: formData.get('page'),
-                        videoLink: formData.get('videoLink'),
-                    };
-
-                    try {
-                        const response = await fetch('/admin/videos/add', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-                        });
-
-                        if (response.ok) {
-                            alert('Video added successfully!');
-                        } else {
-                            alert('Failed to add video.');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                });
-            });
-
-            document.addEventListener('DOMContentLoaded', function () {
-                // Fetch and display video links
-                async function loadVideos() {
-                    try {
-                        const response = await fetch('/admin/videos');
-                        const videos = await response.json();
-
-                        const videoTableBody =
-                            document.getElementById('videoTableBody');
-                        videoTableBody.innerHTML = ''; // Clear the table body
-
-                        videos.forEach((video) => {
-                            video.videoLinks.forEach((link) => {
-                                const row = document.createElement('tr');
-
-                                row.innerHTML = `
-                                    <td class="py-2 px-4">${video.page}</td>
-                                    <td class="py-2 px-4">${link.link}</td>
-                                    <td class="py-2 px-4">${new Date(
-                                        link.addedAt
-                                    ).toLocaleString()}</td>
-                                    <td class="py-2 px-4">
-                                        <button class="remove-btn bg-red-500 text-white px-2 py-1 rounded" data-page="${
-                                            video.page
-                                        }" data-link="${
-                                    link.link
-                                }">Remove</button>
-                                    </td>
-                                `;
-
-                                videoTableBody.appendChild(row);
-                            });
-                        });
-
-                        // Add event listeners to remove buttons
-                        const removeButtons =
-                            document.querySelectorAll('.remove-btn');
-                        removeButtons.forEach((button) => {
-                            button.addEventListener('click', handleRemoveVideo);
-                        });
-                    } catch (error) {
-                        console.error('Failed to load videos:', error);
-                    }
-                }
-
-                async function handleRemoveVideo(event) {
-                    const page = event.target.getAttribute('data-page');
-                    const videoLink = event.target.getAttribute('data-link');
-
-                    const confirmation = confirm(
-                        'Are you sure you want to delete this video?'
-                    );
-                    if (!confirmation) return;
-
-                    try {
-                        const response = await fetch('/admin/videos/remove', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ page, videoLink }),
-                        });
-
-                        if (response.ok) {
-                            alert('Video removed successfully!');
-                            loadVideos(); // Reload the videos after successful removal
-                        } else {
-                            alert('Failed to remove video.');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                }
-
-                // Load videos on page load
-                loadVideos();
-            });
-            loadVideos();
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Function to fetch and display the newsletter subscribers
-                async function fetchSubscribers() {
-                    try {
-                        const response = await fetch(
-                            '/admin/newsletter-subscribers'
-                        );
-                        if (!response.ok)
-                            throw new Error('Network response was not ok');
-                        const subscribers = await response.json();
-
-                        const tableBody = document.querySelector(
-                            '#subscribersTable tbody'
-                        );
-                        tableBody.innerHTML = ''; // Clear existing rows
-
-                        subscribers.forEach((subscriber) => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td class="px-4 py-2 border">${
-                                    subscriber.email
-                                }</td>
-                                <td class="px-4 py-2 border">${new Date(
-                                    subscriber.subscribedAt
-                                ).toLocaleString()}</td>
-                            `;
-                            tableBody.appendChild(row);
-                        });
-                    } catch (error) {
-                        console.error('Error fetching subscribers:', error);
-                    }
-                }
-
-                // Call the function to fetch subscribers on page load
-                fetchSubscribers();
-            });
-        </script>
-
-        <script src="./js/create-avatar.js"></script>
-        <script src="./js/create-plan.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Get the URL parameters
-                const urlParams = new URLSearchParams(window.location.search);
-                const trigger = urlParams.get('trigger');
-
-                // Check which button should be triggered
-                if (trigger) {
-                    const buttonMap = {
-                        manageAdminBtn: 'manageAdminBtn',
-                        manageUsersBtn: 'manageUsersBtn',
-                        manageSubmitsAndPricingBtn:
-                            'manageSubmitsAndPricingBtn',
-                        manageProjectAiBtn: 'manageProjectAiBtn',
-                        manageplanBtn: 'manageplanBtn',
-                        addplanBtn: 'addplanBtn',
-                        ManageComparisonBtn: 'ManageComparisonBtn',
-                        AddComparisonBtn: 'AddComparisonBtn',
-                        manageVideoBtn: 'manageVideoBtn',
-                        manageNewsletterBtn: 'manageNewsletterBtn',
-                    };
-
-                    const buttonId = buttonMap[trigger];
-                    if (buttonId) {
-                        const button = document.getElementById(buttonId);
-                        if (button) {
-                            button.click();
-                        }
-                    }
-                }
-            });
-        </script>
-        <script>
-            document
-                .getElementById('logoutBtn')
-                .addEventListener('click', function (event) {
-                    event.preventDefault(); // Prevent the default link behavior
-
-                    // Send a GET request to the logout endpoint
-                    fetch('/admin/logout', {
-                        method: 'GET',
-                        credentials: 'include', // Include cookies in the request
-                    })
-                        .then((response) => {
-                            if (response.ok) {
-                                // Redirect to login page after successful logout
-                                window.location.href = '/admin-login.html';
-                            } else {
-                                console.error('Logout failed');
-                            }
-                        })
-                        .catch((error) => {
-                            console.error(
-                                'An error occurred during logout:',
-                                error
-                            );
-                        });
-                });
         </script>
         <style>
             .responser {

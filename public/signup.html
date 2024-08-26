@@ -164,6 +164,12 @@
                                                         ></a
                                                     >
                                                 </div>
+                                                <input
+                                                    type="text"
+                                                    name="referral"
+                                                    id="referral"
+                                                    hidden
+                                                />
                                                 <button
                                                     type="submit"
                                                     class="btn-default"
@@ -210,6 +216,26 @@
 
         <!-- JS
 ============================================ -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Function to get the value of a query parameter
+                function getQueryParam(param) {
+                    const urlParams = new URLSearchParams(
+                        window.location.search
+                    );
+                    return urlParams.get(param);
+                }
+
+                // Check for the referral ID in the URL
+                const referralId = getQueryParam('r');
+                if (referralId) {
+                    const referralInput = document.getElementById('referral');
+                    if (referralInput) {
+                        referralInput.value = referralId; // Update the input field
+                    }
+                }
+            });
+        </script>
         <script src="assets/js/vendor/modernizr.min.js"></script>
         <script src="assets/js/vendor/jquery.min.js"></script>
         <script src="assets/js/vendor/bootstrap.min.js"></script>

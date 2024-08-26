@@ -5,6 +5,9 @@ const fss = require('fs').promises;
 const path = require('path');
 const router = express.Router();
 const { User } = require('../models/User');
+const { RequestSystem } = require('../models/User');
+const { ReferralPayment } = require('../models/User');
+const { AffiliateSys } = require('../models/User');
 const crypto = require('crypto');
 const { check, validationResult } = require('express-validator');
 const verifyTokenMiddleware = require('../middleware/auth');
@@ -15,6 +18,101 @@ const { v4: uuidv4 } = require('uuid');
 router.use(express.json());
 router.use(express.static(path.join(__dirname, 'public')));
 router.use(express.urlencoded({ extended: true }));
+
+// Define the route to handle form submission
+router.post('/update-request-status/:requestId', async (req, res) => {
+    try {
+        const { requestId } = req.params;
+        const { status } = req.body;
+
+        const result = await RequestSystem.findByIdAndUpdate(
+            requestId,
+            { WithdrawalRequestStatus: status },
+            { new: true }
+        );
+
+        if (!result) {
+            return res
+                .status(404)
+                .json({ success: false, message: 'Request not found' });
+        }
+
+        res.json({
+            success: true,
+            message: 'Request status updated successfully',
+        });
+    } catch (error) {
+        console.error('Error updating request status:', error.message);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+router.get('/payment-details/:requestId', async (req, res) => {
+    try {
+        const { requestId } = req.params;
+
+        // Find the request by ID to get the email
+        const request = await RequestSystem.findById(requestId);
+
+        if (!request) {
+            return res
+                .status(404)
+                .json({ success: false, message: 'Request not found' });
+        }
+
+        const email = request.email;
+
+        // Find payment details using the email
+        const paymentDetails = await ReferralPayment.findOne({ email: email });
+
+        if (!paymentDetails) {
+            return res
+                .status(404)
+                .json({ success: false, message: 'Payment details not found' });
+        }
+
+        res.json({ success: true, paymentDetails: paymentDetails });
+    } catch (error) {
+        console.error('Error fetching payment details:', error.message);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+router.post('/update-affiliate', async (req, res) => {
+    try {
+        const { id, limit, price } = req.body;
+
+        // Find the document and update it, or insert it if it doesn't exist
+        const result = await AffiliateSys.findOneAndUpdate(
+            { id: id }, // Filter by ID
+            { limit: limit, price: price }, // Update fields
+            { new: true, upsert: true } // Options: return the updated document, create if not exists
+        );
+
+        // Result will always be the updated or inserted document
+        res.send('Affiliate System updated / inserted successfully!');
+    } catch (error) {
+        console.error(
+            'Error updating or inserting affiliate system:',
+            error.message
+        );
+        res.status(500).send('Server error');
+    }
+});
+
+//get user referrals
+router.get('/referrals', async (req, res) => {
+    try {
+        // Find users where `referral_id` matches the logged-in user's `referral_id`
+        const request = await RequestSystem.find();
+
+        // Send the referral data
+        res.status(200).json(request);
+    } catch (error) {
+        console.error('Error fetching request:', error.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
 
 // Express route to update the subscription data
 const subscriptionsPath = path.join(

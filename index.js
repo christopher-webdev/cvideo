@@ -9,6 +9,9 @@ const Project = require('./models/Project');
 const Avatar = require('./models/Avatar');
 const Video = require('./models/VideoModel');
 const Newsletter = require('./models/Newsletter');
+const { ReferralPayment } = require('./models/User'); // Adjust the path as needed
+const { AffiliateSys } = require('./models/User');
+const { RequestSystem } = require('./models/User');
 
 const signupRoute = require('./routes/signupRoute');
 const bodyParser = require('body-parser');
@@ -211,6 +214,10 @@ app.get('/', (req, res) => {
 });
 
 // Displays billing methods
+app.get('/signup', (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+});
 app.get('/payment-methods', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'payment-methods.html'));
@@ -591,6 +598,234 @@ async function generateThumbnail(videoFile) {
             });
     });
 }
+
+// Handle PayPal form submissionconst crypto = require('crypto'); // Make sure to require crypto
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////HANDLING USER SIDE AFFILIATE PROGRAM/////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Route for handling PayPal form submission
+
+// Route for handling PayPal form submission
+app.post('/api/paypal-pay', ensureAuthenticated, async (req, res) => {
+    // Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('Validation errors:', errors.array());
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { paypaladdress } = req.body;
+    console.log('Received PayPal address:', paypaladdress);
+
+    try {
+        // Use findOneAndUpdate to either update an existing document or create a new one if it doesn't exist
+        const referral = await ReferralPayment.findOneAndUpdate(
+            { email: req.user.email }, // Search for document by email
+            {
+                $set: {
+                    // Update the PayPal information
+                    Paypal: paypaladdress,
+                },
+                $setOnInsert: {
+                    // Set unique ID and email if inserting new document
+                    id: crypto.randomBytes(16).toString('hex'),
+                    email: req.user.email,
+                },
+            },
+            {
+                new: true, // Return the updated document
+                upsert: true, // Create the document if it doesn't exist
+            }
+        );
+
+        console.log('Referral after update:', referral);
+        res.status(200).json({
+            msg: 'PayPal information updated successfully!',
+            email: req.user.email,
+        });
+    } catch (err) {
+        console.error('Error updating PayPal information:', err.message);
+        res.status(500).json({ msg: 'Server error', email: req.user.email });
+    }
+});
+// Handle Credit Card form submission
+// Route for handling Credit Card form submission
+app.post('/api/credit-card', ensureAuthenticated, async (req, res) => {
+    // Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { cardNumber, cardName, cardExp } = req.body;
+
+    try {
+        // Use findOneAndUpdate to either update an existing document or create a new one if it doesn't exist
+        const referral = await ReferralPayment.findOneAndUpdate(
+            { email: req.user.email }, // Search for document by email
+            {
+                $set: {
+                    // Update the card information
+                    CardNumber: cardNumber,
+                    CardName: cardName,
+                    Expiringdate: cardExp,
+                },
+                $setOnInsert: {
+                    // Set unique ID and email if inserting new document
+                    id: crypto.randomBytes(16).toString('hex'),
+                    email: req.user.email,
+                },
+            },
+            {
+                new: true, // Return the updated document
+                upsert: true, // Create the document if it doesn't exist
+            }
+        );
+        res.status(200).json({
+            msg: 'Credit card information updated successfully!',
+        });
+    } catch (err) {
+        console.error('Error updating credit card information:', err.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+// Handles user affiliate payments
+app.get('/api/user-payment', ensureAuthenticated, async (req, res) => {
+    try {
+        const userEmail = req.user.email;
+
+        // Ensure you are finding by email and not by ID
+        const payment = await ReferralPayment.findOne({ email: userEmail });
+
+        if (!payment) {
+            return res
+                .status(404)
+                .json({ error: 'Payment information not found.' });
+        }
+
+        res.json(payment);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({
+            error: 'Error fetching payment information: ' + error.message,
+        });
+    }
+});
+//get user referrals
+app.get('/api/referrals', ensureAuthenticated, async (req, res) => {
+    try {
+        // Find users where `referral_id` matches the logged-in user's `referral_id`
+        const referrals = await User.find({ referral: req.user.referral_id });
+
+        // Send the referral data
+        res.status(200).json(referrals);
+    } catch (error) {
+        console.error('Error fetching referrals:', error.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+//get referral link for each user
+app.get('/api/referral-info', ensureAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.user.email });
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        res.json({
+            referral_id: user.referral_id,
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Error fetching referral information: ' + error.message,
+        });
+    }
+});
+///request for refferral earning withdrwal
+
+// Route to handle withdrawal request
+app.post('/api/request-withdrawal', ensureAuthenticated, async (req, res) => {
+    try {
+        // Fetch affiliate system data to get limit
+        const affiliateData = await AffiliateSys.findOne();
+
+        if (!affiliateData) {
+            return res
+                .status(400)
+                .json({ success: false, message: 'Affiliate data not found' });
+        }
+
+        const limit = parseInt(affiliateData.limit, 10);
+
+        // Fetch referrals for the logged-in user
+        const referrals = await User.find({ referral: req.user.referral_id });
+
+        const totalReferred = referrals.length;
+
+        // Check if user's total referred is greater than or equal to limit
+        if (totalReferred >= limit) {
+            // Check if there is an existing pending or successful request
+            const existingRequest = await RequestSystem.findOne({
+                email: req.user.email,
+                WithdrawalRequestStatus: { $in: ['Pending', 'Successful'] },
+            });
+
+            if (existingRequest) {
+                // User already has a pending or successful request
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        'You already have a pending or successful request.',
+                });
+            }
+
+            // Create new withdrawal request
+            const newRequest = new RequestSystem({
+                name: req.user.firstname + ' ' + req.user.lastname,
+                email: req.user.email,
+                total_referred: totalReferred.toString(),
+                requestdate: new Date().toISOString(),
+                WithdrawalRequestStatus: 'Pending',
+            });
+
+            await newRequest.save();
+
+            return res.status(200).json({
+                success: true,
+                message: 'Withdrawal request submitted successfully!',
+                request: {
+                    email: req.user.email,
+                    total_referred: totalReferred,
+                    requestdate: newRequest.requestdate,
+                    status: newRequest.WithdrawalRequestStatus,
+                },
+            });
+        } else {
+            // Not enough referrals to withdraw
+            return res.status(400).json({
+                success: false,
+                message: 'Not enough referrals to request withdrawal.',
+            });
+        }
+    } catch (error) {
+        console.error(
+            'Error processing withdrawal request for user:',
+            req.user.email,
+            'Error:',
+            error.message
+        );
+        return res
+            .status(500)
+            .json({ success: false, message: 'Server error' });
+    }
+});
 
 // API to update Output History for user on video edit status
 app.get('/api/video-status', ensureAuthenticated, async (req, res) => {

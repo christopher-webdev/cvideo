@@ -26,6 +26,7 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
             rel="stylesheet"
         />
+        <link rel="stylesheet" href="css/chatcss.css" />
         <script>
             /**
              * THIS SCRIPT REQUIRED FOR PREVENT FLICKERING IN SOME BROWSERS
@@ -34,63 +35,6 @@
                 document.documentElement.classList.add('dark');
         </script>
     </head>
-    <!-- Start of LiveChat (www.livechat.com) code -->
-    <script>
-        window.__lc = window.__lc || {};
-        window.__lc.license = 18422055;
-        window.__lc.integration_name = 'manual_channels';
-        window.__lc.product_name = 'livechat';
-        (function (n, t, c) {
-            function i(n) {
-                return e._h ? e._h.apply(null, n) : e._q.push(n);
-            }
-            var e = {
-                _q: [],
-                _h: null,
-                _v: '2.0',
-                on: function () {
-                    i(['on', c.call(arguments)]);
-                },
-                once: function () {
-                    i(['once', c.call(arguments)]);
-                },
-                off: function () {
-                    i(['off', c.call(arguments)]);
-                },
-                get: function () {
-                    if (!e._h)
-                        throw new Error(
-                            "[LiveChatWidget] You can't use getters before load."
-                        );
-                    return i(['get', c.call(arguments)]);
-                },
-                call: function () {
-                    i(['call', c.call(arguments)]);
-                },
-                init: function () {
-                    var n = t.createElement('script');
-                    (n.async = !0),
-                        (n.type = 'text/javascript'),
-                        (n.src = 'https://cdn.livechatinc.com/tracking.js'),
-                        t.head.appendChild(n);
-                },
-            };
-            !n.__lc.asyncInit && e.init(),
-                (n.LiveChatWidget = n.LiveChatWidget || e);
-        })(window, document, [].slice);
-    </script>
-    <noscript
-        ><a href="https://www.livechat.com/chat-with/18422055/" rel="nofollow"
-            >Chat with us</a
-        >, powered by
-        <a
-            href="https://www.livechat.com/?welcome"
-            rel="noopener nofollow"
-            target="_blank"
-            >LiveChat</a
-        ></noscript
-    >
-    <!-- End of LiveChat code -->
 
     <body
         x-data
@@ -831,7 +775,7 @@
                                 </div>
                                 <br />
                                 <div>
-                                    <p class="pt-3">Enter video description</p>
+                                    <p class="pt-3">Enter Specifications:</p>
                                     <label class="block">
                                         <textarea
                                             rows="4"
@@ -842,7 +786,7 @@
                                         ></textarea>
                                     </label>
                                     <br />
-                                    <label class="block">
+                                    <!-- <label class="block">
                                         <span>Choose location</span>
                                         <select
                                             class="form-select mt-1.5 w-full rounded-full border border-slate-300 bg-white px-4 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
@@ -881,7 +825,7 @@
                                             />
                                             <p>Landscape</p>
                                         </label>
-                                    </div>
+                                    </div> -->
                                     <br /><br />
                                 </div>
                                 <div class="code-wrapper hidden pt-4">
@@ -1252,6 +1196,59 @@
                     class="text-center mt-3 text-slate-600 dark:text-navy-100"
                 ></div>
                 <div id="remainingCredits"></div>
+                <br />
+                <!-- ///////////////////////////////////////////////////////////////chatbox -->
+
+                <!-- <div> -->
+                <button id="toggleChatBtn" class="toggle-chat-btn w-full">
+                    Click to chat with us
+                </button>
+
+                <div id="chatContainer" class="chat-container">
+                    <div
+                        id="tawkChatContainer"
+                        style="height: 350px; width: 100%"
+                    ></div>
+                </div>
+                <!-- </div> -->
+                <!-- Start of Tawk.to Script -->
+                <script type="text/javascript">
+                    var Tawk_API = Tawk_API || {};
+                    Tawk_LoadStart = new Date();
+                    (function () {
+                        var s1 = document.createElement('script'),
+                            s0 = document.getElementsByTagName('script')[0];
+                        s1.async = true;
+                        s1.src =
+                            'https://embed.tawk.to/66c15835146b7af4a43ba50d/1i5hk14f1';
+                        s1.charset = 'UTF-8';
+                        s1.setAttribute('crossorigin', '*');
+                        s1.onload = function () {
+                            Tawk_API.embedded = 'tawkChatContainer';
+                        };
+                        s0.parentNode.insertBefore(s1, s0);
+                    })();
+                </script>
+                <!-- JavaScript for Chat Toggle -->
+                <script>
+                    const toggleChatBtn =
+                        document.getElementById('toggleChatBtn');
+                    const chatContainer =
+                        document.getElementById('chatContainer');
+
+                    toggleChatBtn.addEventListener('click', function () {
+                        if (chatContainer.classList.contains('hidden')) {
+                            chatContainer.classList.remove('hidden');
+                            chatContainer.classList.add('expanded');
+                            toggleChatBtn.textContent = 'Close Chat';
+                        } else {
+                            chatContainer.classList.remove('expanded');
+                            chatContainer.classList.add('hidden');
+                            toggleChatBtn.textContent = 'Click to chat with us';
+                        }
+                    });
+                </script>
+                <!-- ///////////////////////////////////////////////////////////////////////end chat -->
                 <br />
                 <br />
                 <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>

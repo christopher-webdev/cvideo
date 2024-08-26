@@ -99,11 +99,91 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
     },
+    referral_id: {
+        type: String,
+    },
+    credits: [CreditSchema],
+    referral: {
+        type: String,
+    },
+    referral_count: {
+        type: String,
+    },
     address: {
         type: String,
     },
     credits: [CreditSchema],
 });
+
+// Affiliate system Schema
+const WithdrawalRequest = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: false,
+    },
+    total_referred: {
+        type: String,
+    },
+    requestdate: {
+        type: String,
+    },
+    WithdrawalRequestStatus: {
+        type: String,
+    },
+});
+
+// Affiliate system Schema/////////////////////////////////////////////////////////////
+const AffiliateSystem = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true,
+    },
+    limit: {
+        type: String,
+        required: false,
+    },
+    price: {
+        type: String,
+    },
+});
+// Affiliate system Schema
+const AffiliatereditInformation = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: false,
+    },
+    Paypal: {
+        type: String,
+    },
+    CardNumber: {
+        type: String,
+    },
+    CardName: {
+        type: String,
+    },
+    Expiringdate: {
+        type: String,
+    },
+});
+//create model referral_system
+const RequestSystem = mongoose.model('ReferralRequest', WithdrawalRequest); // Create model referral_system
+const ReferralPayment = mongoose.model(
+    'ReferralPayments',
+    AffiliatereditInformation
+);
+const AffiliateSys = mongoose.model('Affiliatesystems', AffiliateSystem);
 
 // Create models from schemas
 const User = mongoose.model('User', UserSchema);
@@ -117,4 +197,7 @@ module.exports = {
     User,
     SubscriptionPlan,
     CreditSchema,
+    RequestSystem,
+    ReferralPayment,
+    AffiliateSys,
 };

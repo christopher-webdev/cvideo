@@ -56,6 +56,20 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+// Function to generate a random ID
+function generateRandomId() {
+    const timestamp = Date.now().toString(); // Convert timestamp to string
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    let randomChars = '';
+    for (let i = 0; i < 3; i++) {
+        randomChars += alphabet.charAt(
+            Math.floor(Math.random() * alphabet.length)
+        );
+    }
+    const combinedId = timestamp + randomChars;
+    return combinedId.slice(0, 10); // Ensure the ID length is no more than 10 characters
+}
+
 router.post(
     '/',
     [
@@ -75,12 +89,19 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { firstName, lastName, email, password, subscriptionPlan } =
-            req.body;
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            subscriptionPlan,
+            referral,
+        } = req.body;
+        const referral_id = generateRandomId(); // Generate a random ID for referral
 
         try {
+            // Check if the user already exists
             let user = await User.findOne({ email });
-
             if (user) {
                 return res.status(400).json({ msg: 'User already exists' });
             }
@@ -97,10 +118,12 @@ router.post(
                 isVerified: false,
                 verificationToken,
                 subscriptionPlan: subscriptionPlan || 'Free', // Set default subscription plan
+                referral_id, // Include generated referral_id
+                referral, // Referral from the request body
             });
 
+            // Save the user to the database
             await user.save();
-            console.log(verificationToken);
 
             // Apply credits based on the subscription plan
             await updateUserCredits(user, subscriptionPlan || 'Free');
