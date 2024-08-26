@@ -6,7 +6,7 @@ const locationSchema = new mongoose.Schema({
 });
 
 const avatarSchema = new mongoose.Schema({
-    number: { type: Number, required: true, unique: true },
+    name: { type: String, required: true },
     image: { type: String, required: true },
     locations: { type: [locationSchema], required: true },
 });

@@ -220,7 +220,7 @@
                                                     </li>
                                                     <li>
                                                         <a
-                                                            href="account/plans-billing.html"
+                                                            href="/plans-billing.html"
                                                             ><i
                                                                 class="fa-sharp fa-regular fa-briefcase"
                                                             ></i>
@@ -332,7 +332,7 @@
                                             <div class="rbt-sm-separator"></div>
                                             <li>
                                                 <a
-                                                    href="account/plans-billing.html"
+                                                    href="/plans-billing.html"
                                                 >
                                                     <i
                                                         class="fa-sharp fa-regular fa-briefcase"
@@ -345,7 +345,7 @@
                                             <div class="rbt-sm-separator"></div>
                                             <li>
                                                 <a
-                                                    href="account/payment-methods.html"
+                                                    href="/payment-methods.html"
                                                 >
                                                     <i
                                                         class="fa-sharp fa-regular fa-briefcase"
@@ -727,12 +727,12 @@
                     const response = await fetch('/api/user-info');
                     const user = await response.json();
 
-                    document.querySelector(
+                    document.querySelectorAll(
                         '.hh-fullname'
-                    ).textContent = `${user.firstName} ${user.lastName}`;
-                    document.querySelector(
+                    ).forEach(el=>el.textContent = `${user.firstName} ${user.lastName}`);
+                    document.querySelectorAll(
                         '.hh-username'
-                    ).textContent = `${user.email}`;
+                    ).forEach(el=>el.textContent = `${user.email}`);
 
                     document.getElementById('firstname').value = user.firstName;
                     document.getElementById('lastname').value = user.lastName;
