@@ -551,7 +551,7 @@
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
                                 id="manageVideoBtn"
                             >
-                                Add video
+                                Add videos & Manage Affiliate
                             </li>
                             <li
                                 class="px-4 py-2 custom-li hover:bg-gray-600 cursor-pointer"
@@ -573,241 +573,6 @@
             <!-- Main Content -->
 
             <div class="flex-1 p-8">
-                <div id="AffiliatePaymentRequestSection">
-                    <div class="container">
-                        <h1>Update Affiliate System</h1>
-                        <form
-                            action="/update-affiliate"
-                            id="AffiliateSystem"
-                            name="AffiliateSystem"
-                            method="POST"
-                        >
-                            <input
-                                type="text"
-                                id="id"
-                                name="id"
-                                value="1"
-                                hidden
-                            />
-
-                            <label for="limit">Limit:</label>
-                            <input
-                                type="text"
-                                id="limit"
-                                name="limit"
-                            /><br /><br />
-
-                            <label for="price">Price:</label>
-                            <input
-                                type="text"
-                                id="price"
-                                name="price"
-                            /><br /><br />
-
-                            <button
-                                class="btn btn-sm btn-primary"
-                                type="submit"
-                            >
-                                Update System
-                            </button>
-                        </form>
-                        <table
-                            class="table table-responsive"
-                            id="referral-table"
-                        >
-                            <thead>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Total Reffered</th>
-                                <th>Action</th>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-                <script>
-                    document.addEventListener('click', async function (event) {
-                        if (
-                            event.target &&
-                            (event.target.id === 'cancelpayment' ||
-                                event.target.id === 'approvePayment')
-                        ) {
-                            const requestId = event.target.getAttribute('name');
-
-                            try {
-                                // Fetch payment details
-                                const response = await fetch(
-                                    `/auth/payment-details/${requestId}`
-                                );
-                                const data = await response.json();
-
-                                if (!data.success) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: data.message,
-                                    });
-                                    return;
-                                }
-
-                                const paymentDetails = data.paymentDetails;
-
-                                // Show SweetAlert modal
-                                const result = await Swal.fire({
-                                    title: 'Payment Details',
-                                    html: `
-                                                <p>Email: ${paymentDetails.email}</p>
-                                                <p>Paypal: ${paymentDetails.Paypal}</p>
-                                                <p>Card Number: ${paymentDetails.CardNumber}</p>
-                                                <p>Card Name: ${paymentDetails.CardName}</p>
-                                                <p>Expiring Date: ${paymentDetails.Expiringdate}</p>
-                                            `,
-                                    icon: 'info',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Complete Payment',
-                                    cancelButtonText: 'Cancel Payment',
-                                });
-
-                                if (result.isConfirmed) {
-                                    // Complete payment action
-                                    await fetch(
-                                        `/auth/update-request-status/${requestId}`,
-                                        {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type':
-                                                    'application/json',
-                                            },
-                                            body: JSON.stringify({
-                                                status: 'Successful',
-                                            }),
-                                        }
-                                    );
-
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Payment Completed',
-                                        text: 'The payment has been successfully completed!',
-                                    }).then(() => {
-                                        window.location.reload(); // Refresh the page
-                                    });
-                                }
-                            } catch (error) {
-                                console.error('Error:', error);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'An error occurred while processing your request.',
-                                });
-                            }
-                        }
-                    });
-
-                    document.addEventListener('DOMContentLoaded', async () => {
-                        try {
-                            const response = await fetch('/auth/referrals');
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-
-                            const request = await response.json();
-                            const tableBody = document.querySelector(
-                                '#referral-table tbody'
-                            );
-                            // const numReferralsElement = document.getElementById('text_num_referral');
-
-                            // Clear existing table rows
-                            tableBody.innerHTML = '';
-                            if (request.length > 0) {
-                                // Populate the table with referrals
-
-                                // Populate the table with referrals
-                                referrals.forEach((referral, index) => {
-                                    const row = document.createElement('tr');
-                                    let button = `<button class="btn btn-sm btn-success" id="cancelpayment" name="${referrals.id}">Cancel Payment</button>`;
-
-                                    if (
-                                        referral.WithdrawalRequestStatus ===
-                                        'pending'
-                                    ) {
-                                        button += `<button class="btn btn-sm btn-warning" id="approvePayment" name="${referrals.id}">Approve Payment</button>`;
-                                    } else if (
-                                        referral.WithdrawalRequestStatus ===
-                                        'Successful'
-                                    ) {
-                                        button += `<button class="btn btn-sm btn-success" id="" name="${referrals.id}">Successful</button>`;
-                                    }
-                                    row.innerHTML = `
-                                            <td>${index + 1}</td>
-                                            <td>${referral.name}</td>
-                                            <td>${referral.email}</td>
-                                            <td>${referral.total_referred}</td>
-                                            <td>${referral.requestdate}</td>
-                                            <td>${button}</td>
-                                        `;
-                                    tableBody.appendChild(row);
-                                });
-                            } else {
-                                const row = document.createElement('tr');
-                                row.innerHTML = `
-                                            <td colspan="3" class="text-center">You have no requests yet!</td>
-                                        `;
-                                tableBody.appendChild(row);
-                            }
-                        } catch (error) {
-                            handleNotificator(
-                                'error',
-                                'An error occurred while requests referral data.' +
-                                    error
-                            );
-
-                            // console.error('Error fetching requests data:', error);
-                        }
-                    });
-
-                    document
-                        .getElementById('AffiliateSystem')
-                        .addEventListener(
-                            'submit',
-                            async function submitForm(event) {
-                                event.preventDefault(); // Prevent the default form submission
-
-                                // const form = event.target;
-                                const formData = new FormData(AffiliateSystem);
-                                const data = {};
-
-                                formData.forEach((value, key) => {
-                                    data[key] = value;
-                                });
-
-                                try {
-                                    const response = await fetch(
-                                        '/auth/update-affiliate',
-                                        {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type':
-                                                    'application/json',
-                                            },
-                                            body: JSON.stringify(data),
-                                        }
-                                    );
-
-                                    const result = await response.text();
-
-                                    if (response.ok) {
-                                        handleNotificator('success', result); // Display success message
-                                    } else {
-                                        handleNotificator('error', `${result}`); // Display error message
-                                    }
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                    handleNotificator('error', 'Server error');
-                                }
-                            }
-                        );
-                </script>
                 <!--  -->
                 <!-- Manage Comparison Section -->
                 <div id="EditComparesectionsection" class="hidden">
@@ -2264,7 +2029,280 @@
                 </div>
                 <!-- ///////////////////////////////////////// End of Manage Projects////////////////////////////////// -->
                 <div id="manageVideoSection" class="hidden p-6 bg-gray-50">
+                    <div id="AffiliatePaymentRequestSection">
+                        <div class="container">
+                            <h1>Update Affiliate System</h1>
+                            <p>
+                                Here you can set the Number of referrals before
+                                users request for withdrawaals and set and
+                                aamount per 1 referral
+                            </p>
+                            <form
+                                action="/update-affiliate"
+                                id="AffiliateSystem"
+                                name="AffiliateSystem"
+                                method="POST"
+                            >
+                                <input
+                                    type="text"
+                                    id="id"
+                                    name="id"
+                                    value="1"
+                                    hidden
+                                />
+
+                                <label for="limit">Limit:</label>
+                                <input
+                                    type="text"
+                                    id="limit"
+                                    name="limit"
+                                /><br /><br />
+
+                                <label for="price">Price:</label>
+                                <input
+                                    type="text"
+                                    id="price"
+                                    name="price"
+                                /><br /><br />
+
+                                <button
+                                    class="btn btn-sm btn-primary"
+                                    type="submit"
+                                >
+                                    Update System
+                                </button>
+                            </form>
+                            <br /><br />
+                            <table
+                                class="table table-responsive"
+                                id="referral-table"
+                            >
+                                <thead>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Total Reffered</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <script>
+                        document.addEventListener(
+                            'click',
+                            async function (event) {
+                                if (
+                                    event.target &&
+                                    (event.target.id === 'cancelpayment' ||
+                                        event.target.id === 'approvePayment')
+                                ) {
+                                    const requestId =
+                                        event.target.getAttribute('name');
+
+                                    try {
+                                        // Fetch payment details
+                                        const response = await fetch(
+                                            `/auth/payment-details/${requestId}`
+                                        );
+                                        const data = await response.json();
+
+                                        if (!data.success) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: data.message,
+                                            });
+                                            return;
+                                        }
+
+                                        const paymentDetails =
+                                            data.paymentDetails;
+
+                                        // Show SweetAlert modal
+                                        const result = await Swal.fire({
+                                            title: 'Payment Details',
+                                            html: `
+                                                    <p>Email: ${paymentDetails.email}</p>
+                                                    <p>Paypal: ${paymentDetails.Paypal}</p>
+                                                    <p>Card Number: ${paymentDetails.CardNumber}</p>
+                                                    <p>Card Name: ${paymentDetails.CardName}</p>
+                                                    <p>Expiring Date: ${paymentDetails.Expiringdate}</p>
+                                                `,
+                                            icon: 'info',
+                                            showCancelButton: true,
+                                            confirmButtonText:
+                                                'Complete Payment',
+                                            cancelButtonText: 'Cancel Payment',
+                                        });
+
+                                        if (result.isConfirmed) {
+                                            // Complete payment action
+                                            await fetch(
+                                                `/auth/update-request-status/${requestId}`,
+                                                {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type':
+                                                            'application/json',
+                                                    },
+                                                    body: JSON.stringify({
+                                                        status: 'Successful',
+                                                    }),
+                                                }
+                                            );
+
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Payment Completed',
+                                                text: 'The payment has been successfully completed!',
+                                            }).then(() => {
+                                                window.location.reload(); // Refresh the page
+                                            });
+                                        }
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'An error occurred while processing your request.',
+                                        });
+                                    }
+                                }
+                            }
+                        );
+
+                        document.addEventListener(
+                            'DOMContentLoaded',
+                            async () => {
+                                try {
+                                    const response = await fetch(
+                                        '/auth/referrals'
+                                    );
+                                    if (!response.ok) {
+                                        throw new Error(
+                                            'Network response was not ok'
+                                        );
+                                    }
+
+                                    const request = await response.json();
+                                    const tableBody = document.querySelector(
+                                        '#referral-table tbody'
+                                    );
+                                    // const numReferralsElement = document.getElementById('text_num_referral');
+
+                                    // Clear existing table rows
+                                    tableBody.innerHTML = '';
+                                    if (request.length > 0) {
+                                        // Populate the table with referrals
+
+                                        // Populate the table with referrals
+                                        referrals.forEach((referral, index) => {
+                                            const row =
+                                                document.createElement('tr');
+                                            let button = `<button class="btn btn-sm btn-success" id="cancelpayment" name="${referrals.id}">Cancel Payment</button>`;
+
+                                            if (
+                                                referral.WithdrawalRequestStatus ===
+                                                'pending'
+                                            ) {
+                                                button += `<button class="btn btn-sm btn-warning" id="approvePayment" name="${referrals.id}">Approve Payment</button>`;
+                                            } else if (
+                                                referral.WithdrawalRequestStatus ===
+                                                'Successful'
+                                            ) {
+                                                button += `<button class="btn btn-sm btn-success" id="" name="${referrals.id}">Successful</button>`;
+                                            }
+                                            row.innerHTML = `
+                                                <td>${index + 1}</td>
+                                                <td>${referral.name}</td>
+                                                <td>${referral.email}</td>
+                                                <td>${
+                                                    referral.total_referred
+                                                }</td>
+                                                <td>${referral.requestdate}</td>
+                                                <td>${button}</td>
+                                            `;
+                                            tableBody.appendChild(row);
+                                        });
+                                    } else {
+                                        const row =
+                                            document.createElement('tr');
+                                        row.innerHTML = `
+                                                <td colspan="3" class="text-center">You have no requests yet!</td>
+                                            `;
+                                        tableBody.appendChild(row);
+                                    }
+                                } catch (error) {
+                                    handleNotificator(
+                                        'error',
+                                        'An error occurred while requests referral data.' +
+                                            error
+                                    );
+
+                                    // console.error('Error fetching requests data:', error);
+                                }
+                            }
+                        );
+
+                        document
+                            .getElementById('AffiliateSystem')
+                            .addEventListener(
+                                'submit',
+                                async function submitForm(event) {
+                                    event.preventDefault(); // Prevent the default form submission
+
+                                    // const form = event.target;
+                                    const formData = new FormData(
+                                        AffiliateSystem
+                                    );
+                                    const data = {};
+
+                                    formData.forEach((value, key) => {
+                                        data[key] = value;
+                                    });
+
+                                    try {
+                                        const response = await fetch(
+                                            '/auth/update-affiliate',
+                                            {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type':
+                                                        'application/json',
+                                                },
+                                                body: JSON.stringify(data),
+                                            }
+                                        );
+
+                                        const result = await response.text();
+
+                                        if (response.ok) {
+                                            handleNotificator(
+                                                'success',
+                                                result
+                                            ); // Display success message
+                                        } else {
+                                            handleNotificator(
+                                                'error',
+                                                `${result}`
+                                            ); // Display error message
+                                        }
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        handleNotificator(
+                                            'error',
+                                            'Server error'
+                                        );
+                                    }
+                                }
+                            );
+                    </script>
+                    <br /><br />
+                    <hr />
+                    <br /><br />
                     <!-- In admin-dashboard.html -->
+                    <p></p>
                     <form
                         id="videoForm"
                         method="POST"
@@ -2286,7 +2324,7 @@
 
                         <button type="submit">Add Video</button>
                     </form>
-                    <br /><br />
+                    <br /><br /><br /><br />
                     <!-- To remove a video -->
                     <!-- In admin-dashboard.html -->
                     <div>
