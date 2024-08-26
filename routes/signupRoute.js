@@ -8,6 +8,9 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { check, validationResult } = require('express-validator');
 const { PORT } = require('../config');
+const Package = require('../models/Package');
+const { Package: EPackage } = require('../enums/Package');
+const PaymentProvider = require('../models/PaymentProvider');
 
 // Define the function to update credits
 const updateUserCredits = async (user, subscriptionPlan) => {
@@ -101,32 +104,48 @@ router.post(
 
         try {
             // Check if the user already exists
-            let user = await User.findOne({ email });
-            if (user) {
+            if (await User.exists({ email })) {
                 return res.status(400).json({ msg: 'User already exists' });
             }
 
-            const verificationToken = crypto.randomBytes(32).toString('hex');
-            console.log(verificationToken);
-            const verificationLink = `https://gunnyfrisch.shop/auth/verify-email?token=${verificationToken}`;
+            const plan = await Package.findOne({ name: EPackage.Free.name });
+            if (!plan) {
+                res.status(200).json({
+                    msg: 'Cant create user. Please ensure packages have been uploaded.',
+                });
+                return;
+            }
 
-            user = new User({
+            const verificationToken = crypto.randomBytes(32).toString('hex');
+
+            const verificationLink = `https://gunnyfrisch.shop/auth/verify-email?token=${verificationToken}`;
+            
+
+            const credit = await SubscriptionPlan.create({ plan: plan.name });
+    
+
+            const user = await User.create({
                 firstName,
                 lastName,
                 email,
                 password,
                 isVerified: false,
                 verificationToken,
-                subscriptionPlan: subscriptionPlan || 'Free', // Set default subscription plan
+                
+                subscriptionPlan: plan.name || 'Free', // Set default subscription plan
+                activePackage: plan.id,
+                // subscriptionPlan: subscriptionPlan || 'Free', // Set default subscription plan
+               
                 referral_id, // Include generated referral_id
                 referral, // Referral from the request body
             });
 
             // Save the user to the database
             await user.save();
+            await plan.updateOne({creditStore: credit._id})
 
             // Apply credits based on the subscription plan
-            await updateUserCredits(user, subscriptionPlan || 'Free');
+            await updateUserCredits(user,  plan.name || 'Free');
 
             await transporter.sendMail({
                 to: user.email,

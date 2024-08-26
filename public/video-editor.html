@@ -570,10 +570,10 @@
                                                         name="selectedAvatar" type="radio" value="avatar1" />
                                                     <p>Select Avatar</p>
                                                 </label>
-                                                <div class="mt-2"  x-show="avatar.locations > 0">
+                                                <div class="mt-2" x-show="avatar.locations.length > 0">
                                                     <p>Choose Location</p>
                                                     <template x-for="location in avatar.locations" :key="location._id">
-                                                        <label class="inline-flex items-center space-x-2">
+                                                        <label class="inline-flex items-center space-x-1 mt-2">
                                                             <input
                                                                 class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent ml-4"
                                                                 name="location_avatar" type="radio" :value="location.name" />
@@ -1644,7 +1644,7 @@
                 });
             }
 
-            fetchAvatars();
+            // fetchAvatars();
         </script>
         <script>
             async function showLocationImages(avatarId) {
