@@ -124,9 +124,7 @@ function createAvatar(section, avatar = null) {
 
             alert("Success!");
         } catch (error) {
-            console.log("🚀 ~ error:", error)
             alert(error?.response?.errors);
-            console.log('🚀 ~ container.addEventListener ~ error:', error);
         } finally {
             for (let i = 0; i < formElements.length; i++) {
                 formElements[i].disabled = false;
@@ -217,6 +215,7 @@ function createSelectorSection(labelText, inputName, inputType, options) {
 
     let label = createEl('p');
     label.textContent = labelText;
+    let selector = createFileSelector(inputName, inputType, options);
 
     if (Array.isArray(labelText)) {
         label = createEl('select');
@@ -231,9 +230,13 @@ function createSelectorSection(labelText, inputName, inputType, options) {
 
             label.append(optionEl);
         }
+
+        label.addEventListener('change', (e) => {
+            label.name = `locationImages[${e.target.value}]`
+            selector.name = `locationImages[${e.target.value}]`
+        });
     }
 
-    const selector = createFileSelector(inputName, inputType, options);
 
     container.className =
         'flex items-center gap-4 bg-gray-300 p-2 m-2 rounded-sm';
