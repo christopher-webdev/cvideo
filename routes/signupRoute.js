@@ -118,11 +118,9 @@ router.post(
 
             const verificationToken = crypto.randomBytes(32).toString('hex');
 
-            const verificationLink = `https://gunnyfrisch.shop/auth/verify-email?token=${verificationToken}`;
-            
+            const verificationLink = `https://eldravideo.com/auth/verify-email?token=${verificationToken}`;
 
             const credit = await SubscriptionPlan.create({ plan: plan.name });
-    
 
             const user = await User.create({
                 firstName,
@@ -131,21 +129,21 @@ router.post(
                 password,
                 isVerified: false,
                 verificationToken,
-                
+
                 subscriptionPlan: plan.name || 'Free', // Set default subscription plan
                 activePackage: plan.id,
                 // subscriptionPlan: subscriptionPlan || 'Free', // Set default subscription plan
-               
+
                 referral_id, // Include generated referral_id
                 referral, // Referral from the request body
             });
 
             // Save the user to the database
             await user.save();
-            await plan.updateOne({creditStore: credit._id})
+            await plan.updateOne({ creditStore: credit._id });
 
             // Apply credits based on the subscription plan
-            await updateUserCredits(user,  plan.name || 'Free');
+            await updateUserCredits(user, plan.name || 'Free');
 
             await transporter.sendMail({
                 to: user.email,
