@@ -54,7 +54,10 @@ const ProjectSchema = new mongoose.Schema(
         },
         location: {
             type: String,
-            enum: ['Office', 'Street', 'Forest', 'Home'],
+        },
+        avatarId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Avatar', // Reference to the Avatar collection
         },
         orientation: {
             type: String,
@@ -64,17 +67,7 @@ const ProjectSchema = new mongoose.Schema(
             type: String, // Path to the edited file uploaded by admin
         },
         avatar: {
-            type: String,
-            enum: [
-                'avatar1',
-                'avatar2',
-                'avatar3',
-                'avatar4',
-                'avatar5',
-                'avatar6',
-                'avatar7',
-                'avatar8',
-            ],
+            type: String, // Removed the enum constraint
         },
         createdAt: {
             type: Date,

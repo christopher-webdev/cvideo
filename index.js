@@ -403,6 +403,7 @@ app.post('/auth/reset-password/:token', async (req, res) => {
         });
     }
 });
+
 app.post(
     '/submit-video',
     ensureAuthenticated,
@@ -417,9 +418,10 @@ app.post(
             const {
                 videoLinks, // Changed to handle multiple links
                 videoDescription,
-                selectedAvatar,
-                location_avatar, // Handle location for avatar
+                selectedAvatar, // Added to receive the selected avatar name
+                selectedLocation, // Added to receive the avatar location
             } = req.body;
+
             const title = req.headers['page-title'] || 'Untitled Project';
 
             // Determine the feature based on the project title
@@ -463,12 +465,12 @@ app.post(
                 userId,
                 title,
                 videoFiles,
-                videoLink: JSON.parse(req.body.videoLinks), // Parse JSON string to array
+                videoLink: JSON.parse(videoLinks), // Parse JSON string to array
                 pictureFiles,
                 audioFiles,
                 videoDescription,
-                avatar: selectedAvatar,
-                location: location_avatar, // Save location if avatar is selected
+                avatar: selectedAvatar, // Save the selected avatar name
+                location: selectedLocation, // Save the avatar location
                 status: 'Pending',
             });
 
@@ -485,92 +487,6 @@ app.post(
         }
     }
 );
-
-// //handles video ai submits
-// app.post(
-//     '/submit-video',
-//     ensureAuthenticated,
-//     upload.fields([
-//         { name: 'videoFiles', maxCount: 5 },
-//         { name: 'pictureFiles', maxCount: 5 },
-//         { name: 'audioFiles', maxCount: 5 },
-//     ]),
-//     async (req, res) => {
-//         try {
-//             const userId = req.user._id;
-//             const {
-//                 videoLink,
-//                 videoDescription,
-//                 location,
-//                 orientation,
-//                 selectedAvatar,
-//             } = req.body;
-//             const title = req.headers['page-title'] || 'Untitled Project';
-
-//             // Determine the feature based on the project title
-//             const featureMap = {
-//                 'Video Editor AI': 'videoEditor',
-//                 'Video Restyling AI': 'videoRestyle',
-//                 'Video Voicing': 'videoVoicing',
-//                 'Lip Sync AI': 'lipSync',
-//                 'Face Swap AI': 'faceSwap',
-//                 '3D Video Modeling AI': '3dVideoModeling',
-//                 'Add Avatar': 'myAvatar',
-//             };
-//             const feature = featureMap[title];
-
-//             // Check if the user has enough credits for the feature
-//             const user = await User.findById(userId);
-//             const userCredit = user.credits.find(
-//                 (credit) => credit.feature === feature
-//             );
-//             if (!userCredit || userCredit.credits <= 0) {
-//                 return res.status(403).json({
-//                     error: `You have exceeded the submit limit for ${title}. Please upgrade your subscription to submit more.`,
-//                 });
-//             }
-
-//             // Deduct a credit
-//             userCredit.credits -= 1;
-//             await user.save();
-
-//             const videoFiles = req.files['videoFiles']
-//                 ? req.files['videoFiles'].map((file) => file.path)
-//                 : [];
-//             const pictureFiles = req.files['pictureFiles']
-//                 ? req.files['pictureFiles'].map((file) => file.path)
-//                 : [];
-//             const audioFiles = req.files['audioFiles']
-//                 ? req.files['audioFiles'].map((file) => file.path)
-//                 : [];
-
-//             const newProject = new Project({
-//                 userId,
-//                 title,
-//                 videoFiles,
-//                 videoLink,
-//                 pictureFiles,
-//                 audioFiles,
-//                 videoDescription,
-//                 location,
-//                 orientation,
-//                 avatar: selectedAvatar,
-//                 status: 'Pending',
-//             });
-
-//             await newProject.save();
-//             res.status(201).json({
-//                 message: 'Project created successfully',
-//                 projectId: newProject._id,
-//                 remainingCredits: userCredit.credits, // Include remaining credits in the response
-//             });
-//         } catch (error) {
-//             res.status(500).json({
-//                 error: 'Error creating project: ' + error.message,
-//             });
-//         }
-//     }
-// );
 
 // Set FFmpeg and FFprobe paths for Thumbnail settings
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
@@ -916,15 +832,76 @@ app.post(
     }
 );
 
+// Helper function to delete a file
+const deleteFile = (filePath) => {
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error(`Failed to delete file: ${filePath}`, err);
+        } else {
+            console.log(`File deleted: ${filePath}`);
+        }
+    });
+};
 //deletes project by admin
-app.delete('/api/projects/:id', ensureAdminAuthenticated, async (req, res) => {
+app.delete('/api/projects/:id', async (req, res) => {
     try {
-        await Project.findByIdAndDelete(req.params.id);
-        res.json({ message: 'Project deleted successfully' });
+        const projectId = req.params.id;
+
+        // Find the project by ID
+        const project = await Project.findById(projectId);
+
+        if (!project) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+
+        // Delete associated files (videoFiles, audioFiles, pictureFiles) from uploads/
+        const filesToDeleteFromUploads = [
+            ...project.videoFiles,
+            ...project.audioFiles,
+            ...project.pictureFiles,
+            project.editedFile, // Add edited file if it exists
+        ];
+
+        filesToDeleteFromUploads.forEach((file) => {
+            if (file) {
+                const filePath = path.join(__dirname, '../uploads', file);
+                deleteFile(filePath);
+            }
+        });
+
+        // Delete associated files (thumbnails, download links) from downloads/
+        const filesToDeleteFromDownloads = [
+            ...project.thumbnail,
+            project.downloadLink, // Assuming downloadLink points to a file path in downloads/
+        ];
+
+        filesToDeleteFromDownloads.forEach((file) => {
+            if (file) {
+                const filePath = path.join(__dirname, '../downloads', file);
+                deleteFile(filePath);
+            }
+        });
+
+        // Delete the project from the database
+        await Project.findByIdAndDelete(projectId);
+
+        res.json({
+            message: 'Project and associated files deleted successfully',
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to delete project' });
+        console.error('Failed to delete project:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+// app.delete('/api/projects/:id', ensureAdminAuthenticated, async (req, res) => {
+//     try {
+//         await Project.findByIdAndDelete(req.params.id);
+//         res.json({ message: 'Project deleted successfully' });
+//     } catch (error) {
+//         res.status(500).json({ error: 'Failed to delete project' });
+//     }
+// });
 //updating project sttus
 app.post(
     '/api/admin/update-project-status/:projectId',
@@ -1370,7 +1347,43 @@ app.get(
         }
     }
 );
+app.delete('/api/avatars/:id', async (req, res) => {
+    try {
+        const avatar = await Avatar.findById(req.params.id);
 
+        if (!avatar) {
+            return res.status(404).json({ error: 'Avatar not found' });
+        }
+
+        // Define the path to the avatar image file
+        const avatarImagePath = path.join(__dirname, 'uploads', avatar.image);
+
+        // Check if the file exists and delete it
+        if (fs.existsSync(avatarImagePath)) {
+            fs.unlinkSync(avatarImagePath);
+        }
+
+        // Loop through and delete each location image
+        avatar.locations.forEach((location) => {
+            const locationImagePath = path.join(
+                __dirname,
+                'uploads',
+                location.image
+            );
+            if (fs.existsSync(locationImagePath)) {
+                fs.unlinkSync(locationImagePath);
+            }
+        });
+
+        // Remove the avatar from the database
+        await Avatar.findByIdAndDelete(req.params.id);
+
+        res.json({ message: 'Avatar successfully deleted' });
+    } catch (error) {
+        console.error('Error deleting avatar:', error);
+        res.status(500).json({ error: 'Failed to delete avatar' });
+    }
+});
 // Route to get the list of videos
 // Route to get the list of videos
 

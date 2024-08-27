@@ -2033,9 +2033,9 @@
                         <div class="container">
                             <h1>Update Affiliate System</h1>
                             <p>
-                                Here you can set the Number of referrals before
-                                users request for withdrawaals and set and
-                                aamount per 1 referral
+                                Here you can set the number of referrals before
+                                users request for withdrawals and set the
+                                aamount per 1 referral.
                             </p>
                             <form
                                 action="/update-affiliate"
@@ -2073,6 +2073,7 @@
                                 </button>
                             </form>
                             <br /><br />
+
                             <table
                                 class="table table-responsive"
                                 id="referral-table"
@@ -2302,12 +2303,16 @@
                     <hr />
                     <br /><br />
                     <!-- In admin-dashboard.html -->
-                    <p></p>
+
                     <form
                         id="videoForm"
                         method="POST"
                         action="/admin/videos/add"
                     >
+                        <p>
+                            Here you can add youtube videolinks for your how to
+                            use page(Utilize) and for affiliates(Affiliate)
+                        </p>
                         <label for="page">Select Page:</label>
                         <select id="page" name="page">
                             <option value="utilize">Utilize</option>
@@ -3830,42 +3835,6 @@
             });
         </script>
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const categoryButtons = document.querySelectorAll(
-                    '#manageProjectslinkBtn li'
-                );
-
-                categoryButtons.forEach((button) => {
-                    button.addEventListener('click', (e) => {
-                        const category = e.target.getAttribute('data-category');
-                        fetchProjects(category);
-                    });
-                });
-
-                // Initial fetch to show all projects sorted by createdAt
-                fetchProjects();
-            });
-            document.addEventListener('DOMContentLoaded', () => {
-                fetchProjects();
-
-                // Event listener for Update Status form submission
-                document
-                    .getElementById('updateStatusForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await updateProjectStatus();
-                    });
-
-                // Event listener for Reupload form submission
-                document
-                    .getElementById('reuploadForm')
-                    .addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        await reuploadEditedFile();
-                    });
-            });
-
-            // Add event listeners to all category buttons
             document
                 .querySelectorAll('#manageProjectslinkBtn li')
                 .forEach((btn) => {
@@ -3875,6 +3844,7 @@
                     });
                     fetchProjects();
                 });
+
             async function fetchProjects(category = null) {
                 try {
                     const response = await axios.get('/api/projects');
@@ -3918,7 +3888,7 @@
                         let statusContent = `Status: ${project.status}`;
 
                         if (project.estimatedCompletionTime) {
-                            statusContent += `<p class="text-xl">ETA:${new Date(
+                            statusContent += `<p class="text-xl">ETA: ${new Date(
                                 project.estimatedCompletionTime
                             ).toLocaleString()}</p>`;
                         }
@@ -3949,6 +3919,15 @@
                         const optionsCell = document.createElement('td');
                         optionsCell.className = 'py-2 text-xl px-4';
 
+                        // Display avatar name and location
+                        if (project.avatar) {
+                            optionsCell.innerHTML += `<p class="text-xl">Avatar: ${project.avatar}</p>`;
+                        }
+
+                        if (project.location) {
+                            optionsCell.innerHTML += `<p class="text-xl">Location: ${project.location}</p>`;
+                        }
+
                         // Display multiple video links
                         if (project.videoLink && project.videoLink.length > 0) {
                             project.videoLink.forEach((link) => {
@@ -3960,22 +3939,6 @@
                             });
                         }
 
-                        if (project.videoDescription) {
-                            optionsCell.innerHTML += `<p class="text-xl">Description: ${project.videoDescription}</p>`;
-                        }
-
-                        if (project.orientation) {
-                            optionsCell.innerHTML += `<p class="text-xl">Orientation: ${project.orientation}</p>`;
-                        }
-
-                        if (project.location) {
-                            optionsCell.innerHTML += `<p class="text-xl">Location: ${project.location}</p>`;
-                        }
-
-                        if (project.avatar) {
-                            optionsCell.innerHTML += `<p class="text-xl"><Avatar: ${project.avatar}</p>`;
-                        }
-
                         projectRow.appendChild(optionsCell);
 
                         const actionsCell = document.createElement('td');
@@ -3983,17 +3946,17 @@
                         actionsCell.innerHTML += `
                 <button
                     onclick="openUpdateStatusModal('${project._id}')"
-                    class="bg-blue-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 mr-2">
+                    class="bg-blue-500 text-white font-bold py-2 px-4 text-xl rounded shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 mr-2">
                     Update Status
                 </button><br>
                 <button
                     onclick="openReuploadModal('${project._id}')"
-                    class="bg-green-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-300 mr-2">
+                    class="bg-green-500 text-white font-bold py-2 px-4 text-xl rounded shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-300 mr-2">
                     Reupload
-                </button><br> 
+                </button><br>
                 <button
                     onclick="openMediaModal('${project._id}')"
-                    class="bg-indigo-500 text-white font-bold py-2 px-4 text-xl  rounded shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
+                    class="bg-indigo-500 text-white font-bold py-2 px-4 text-xl rounded shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300">
                     View Project Files
                 </button>
                 <button
@@ -4018,6 +3981,8 @@
                     console.error('Failed to fetch projects:', error);
                 }
             }
+
+            // Remaining functions for opening/closing modals and performing actions
 
             function openUpdateStatusModal(projectId) {
                 document.getElementById('updateStatusModal').dataset.projectId =

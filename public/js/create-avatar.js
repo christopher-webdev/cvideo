@@ -72,7 +72,33 @@ function createAvatar(section, avatar = null) {
     expandButton.className = `${buttonClassName} absolute top-10 right-40`;
     addLocationButton.className = `${buttonClassName} absolute top-10 right-60`;
 
-    dismissButton.addEventListener('click', () => {
+    // dismissButton.addEventListener('click', () => {
+    //     avatarCreatedCount--;
+    //     container.remove();
+    // });
+
+    dismissButton.addEventListener('click', async () => {
+        if (avatar && avatar._id) {
+            try {
+                const response = await fetch(`/api/avatars/${avatar._id}`, {
+                    method: 'DELETE',
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(data.errors || 'Failed to delete avatar');
+                    return;
+                }
+
+                alert('Avatar successfully deleted!');
+            } catch (error) {
+                alert(
+                    error.message ||
+                        'An error occurred while deleting the avatar'
+                );
+            }
+        }
+
         avatarCreatedCount--;
         container.remove();
     });
@@ -95,26 +121,17 @@ function createAvatar(section, avatar = null) {
 
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
-        const formElements = event.target.elements;
+        const formData = new FormData(this);
 
-        for (let i = 0; i < formElements.length; i++) {
-            formElements[i].disabled = false;
+        if (avatar) {
+            formData.append('avatarId', avatar._id);
         }
-        try {
-            // Create FormData from the form
-            const formData = new FormData(this);
-            
-            if(avatar){
-                formData.append("avatarId", avatar._id)
-            }
 
-            // Send form data via fetch
+        try {
             const response = await fetch('/api/avatars', {
-                method: !!avatar ? 'PUT' : 'POST',
+                method: avatar ? 'PUT' : 'POST',
                 body: formData,
             });
-
-            // Parse and log the response
             const data = await response.json();
 
             if (!response.ok) {
@@ -122,13 +139,9 @@ function createAvatar(section, avatar = null) {
                 return;
             }
 
-            alert("Success!");
+            alert('Avatar successfully uploaded!');
         } catch (error) {
-            alert(error?.response?.errors);
-        } finally {
-            for (let i = 0; i < formElements.length; i++) {
-                formElements[i].disabled = false;
-            }
+            alert(error.message || 'An error occurred');
         }
     });
 
@@ -183,6 +196,7 @@ function addNewLocationField(container, location = null) {
     container.append(locContainer);
     return container;
 }
+
 async function retrieveAvatars() {
     try {
     } catch (error) {
@@ -232,11 +246,10 @@ function createSelectorSection(labelText, inputName, inputType, options) {
         }
 
         label.addEventListener('change', (e) => {
-            label.name = `locationImages[${e.target.value}]`
-            selector.name = `locationImages[${e.target.value}]`
+            label.name = `locationImages[${e.target.value}]`;
+            selector.name = `locationImages[${e.target.value}]`;
         });
     }
-
 
     container.className =
         'flex items-center gap-4 bg-gray-300 p-2 m-2 rounded-sm';
