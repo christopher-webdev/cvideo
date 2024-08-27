@@ -731,7 +731,7 @@
                     </h3>
                 </div>
                 <div class="flex justify-center p-5">
-                    <img src="images/avatar/222.png" alt="image" width="200" />
+                    <img src="images/avatar/222.png" alt="image" width="350" />
                 </div>
                 <form id="videoForm">
                     <div
@@ -742,451 +742,287 @@
                                 <div
                                     class="my-3 flex h-8 items-center justify-between"
                                 ></div>
+
+                                <!-- Upload Video Clip Section -->
                                 <h4
                                     class="text-lg text-center font-semibold text-slate-70 dark:text-navy-100"
                                 >
-                                    Upload Video clip to Lip Sync
+                                    Upload Video Clip to Edit
                                 </h4>
                                 <small class="text-warning text-center"
-                                    >(Mp4, Wav, Mov)</small
+                                    >You can enter multiple videos</small
                                 >
                                 <div class="max-w-l">
                                     <div class="mt-5">
                                         <div class="filepond fp-bordered">
                                             <input
-                                                type="file"
                                                 id="videoFiles"
+                                                type="file"
                                                 name="videoFiles"
+                                                accept="video/*"
                                                 x-init="$el._x_filepond = FilePond.create($el)"
                                                 multiple
                                             />
                                         </div>
                                     </div>
-                                    <label class="block"
-                                        ><p class="text-warning">
-                                            Add video link
+                                </div>
+
+                                <!-- Add Video Links Section -->
+                                <div class="mt-5">
+                                    <label class="block">
+                                        <p class="text-warning">
+                                            Add Video Links
                                         </p>
-                                        <input
-                                            class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            placeholder="Add video link from internet"
-                                            id="videoLink"
-                                            name="videoLink"
-                                            type="text"
-                                        />
+                                        <div id="videoLinksContainer">
+                                            <input
+                                                id=""
+                                                class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                                placeholder="Add video link from internet"
+                                                name="videoLink[]"
+                                                type="text"
+                                            />
+                                            <!-- Additional video link fields will be added here -->
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onclick="addVideoLinkField()"
+                                            class="mt-2 text-primary hover:underline"
+                                        >
+                                            Add More Link
+                                        </button>
                                     </label>
                                 </div>
-                                <br />
-                                <div align="center">
-                                    <h4
-                                        class="text-lg font-semibold text-slate-700 dark:text-navy-100"
-                                    >
-                                        Add Audio File
-                                    </h4>
-                                    <div class="flex justify-center p-5">
-                                        <img
-                                            src="images/avatar/123.png"
-                                            alt="image"
-                                            width="50"
-                                        />
+
+                                <!-- Add Picture Section -->
+                                <h4
+                                    class="text-lg text-center font-semibold text-slate-70 dark:text-navy-100"
+                                >
+                                    Add Picture
+                                </h4>
+                                <div class="max-w-l">
+                                    <div class="mt-5">
+                                        <div class="filepond fp-bordered">
+                                            <input
+                                                type="file"
+                                                name="pictureFiles"
+                                                accept="image/*"
+                                                x-init="$el._x_filepond = FilePond.create($el)"
+                                                id="pictureFiles"
+                                                multiple
+                                            />
+                                        </div>
                                     </div>
-                                    <p class="pt-3">
-                                        Select audio file to add to video
-                                    </p>
-                                    <label
-                                        class="mt-5 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90"
+                                </div>
+
+                                <!-- Add Audio File Section -->
+                                <h4
+                                    class="text-lg text-center font-semibold text-slate-700 dark:text-navy-100"
+                                >
+                                    Add Audio File
+                                </h4>
+                                <div class="flex justify-center p-5">
+                                    <img
+                                        src="images/avatar/123.png"
+                                        alt="image"
+                                        width="50"
+                                    />
+                                </div>
+                                <p class="pt-3 text-center">
+                                    Select audio file to add to video
+                                </p>
+                                <label
+                                    class="mt-5 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90"
+                                >
+                                    <div class="flex items-center space-x-2">
+                                        <div class="filepond fp-bordered">
+                                            <input
+                                                id="audioFiles"
+                                                type="file"
+                                                name="audioFiles"
+                                                accept="audio/*"
+                                                x-init="$el._x_filepond = FilePond.create($el)"
+                                                multiple
+                                            />
+                                        </div>
+                                    </div>
+                                </label>
+                                <br />
+                                <!-- Select Video Avatar Section -->
+                                <h4
+                                    class="text-lg text-center font-semibold text-slate-700 dark:text-navy-100"
+                                >
+                                    Select Video Avatar
+                                </h4>
+                                <small class="pt-3 text-center text-warning"
+                                    >Select a video from the list of
+                                    Avatars</small
+                                >
+
+                                <div
+                                    x-data="{
+                                    avatars: [],
+                                    selectedAvatarLocations: [],
+                                    fetchData() {
+                                        fetch('/api/avatars')
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                this.avatars = data;
+                                            })
+                                            .catch(error => console.error('Error fetching data:', error));
+                                    },
+                                    openModal(locations) {
+                                        this.selectedAvatarLocations = locations;
+                                        this.showModal = true;
+                                    },
+                                    showModal: false,
+                                    closeModal() {
+                                        this.showModal = false;
+                                    }
+                                }"
+                                    x-init="fetchData"
+                                    class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6"
+                                >
+                                    <!-- Fetch and Display Avatars -->
+                                    <template
+                                        x-for="avatar in avatars"
+                                        :key="avatar._id"
                                     >
                                         <div
-                                            class="flex items-center space-x-2"
+                                            class="card border-2 border-slate-300 shadow-lg rounded-lg"
                                         >
-                                            <div class="filepond fp-bordered">
-                                                <input
-                                                    id="audioFiles"
-                                                    type="file"
-                                                    name="audioFiles"
-                                                    x-init="$el._x_filepond = FilePond.create($el)"
-                                                    multiple
+                                            <div class="p-2.5">
+                                                <img
+                                                    :src="avatar.image"
+                                                    class="w-full rounded-lg object-cover object-center"
+                                                    :alt="avatar.name"
                                                 />
                                             </div>
+                                            <div
+                                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
+                                            >
+                                                <div class="mt-1">
+                                                    <p
+                                                        href="#"
+                                                        x-text="avatar.name"
+                                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
+                                                    ></p>
+                                                    <br />
+                                                    <span
+                                                        x-show="avatar.locations.length > 0"
+                                                        @click="openModal(avatar.locations)"
+                                                        class="cursor-pointer text-sm font-medium text-slate-700 hover:text-primary focus:text-primary"
+                                                    >
+                                                        View Locations
+                                                    </span>
+                                                </div>
+                                                <!-- Location Selection -->
+                                                <div
+                                                    class="my-2 flex items-center space-x-3 text-xs"
+                                                >
+                                                    <div
+                                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
+                                                    ></div>
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        class="inline-flex items-center space-x-2"
+                                                    >
+                                                        <input
+                                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
+                                                            name="selectedAvatar"
+                                                            type="radio"
+                                                            :value="avatar.name"
+                                                        />
+                                                        <p>Select Avatar</p>
+                                                    </label>
+                                                    <div
+                                                        class="mt-2"
+                                                        x-show="avatar.locations.length > 0"
+                                                    >
+                                                        <p>Choose Location</p>
+                                                        <template
+                                                            x-for="location in avatar.locations"
+                                                            :key="location._id"
+                                                        >
+                                                            <label
+                                                                class="inline-flex items-center space-x-1 mt-2"
+                                                            >
+                                                                <input
+                                                                    class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent ml-4"
+                                                                    name="location_avatar"
+                                                                    type="radio"
+                                                                    :value="location.name"
+                                                                />
+                                                                <p
+                                                                    x-text="location.name"
+                                                                ></p>
+                                                            </label>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </label>
-                                </div>
-                                <br />
-                                <div>
-                                    <p class="pt-3">Enter video description</p>
-                                    <label class="block">
-                                        <textarea
-                                            rows="4"
-                                            placeholder=" Enter Text"
-                                            class="form-textarea w-full resize-none rounded-lg bg-slate-150 p-2.5 placeholder:text-slate-400 dark:bg-navy-900 dark:placeholder:text-navy-300"
-                                            name="videoDescription"
-                                            id="videoDescription"
-                                        ></textarea>
-                                    </label>
-                                    <br /><br />
-                                </div>
-                                <div class="code-wrapper hidden pt-4">
-                                    <pre
-                                        class="is-scrollbar-hidden max-h-96 overflow-auto rounded-lg"
-                                        x-init="hljs.highlightElement($el)"
-                                    >
-                <code class="language-html" x-ignore>
-  &lt;div class=&quot;filepond fp-bordered&quot;&gt;&#13;&#10;    &lt;input type=&quot;file&quot;  x-init="$el._x_filepond = FilePond.create($el)" multiple /&gt;&#13;&#10;  &lt;/div&gt;&#13;&#10;</code>
-              </pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    </template>
 
-                    <br />
-                    <div align="center">
-                        <h4
-                            class="text-lg font-semibold text-slate-700 dark:text-navy-100"
-                        >
-                            Select Video Avatar
-                        </h4>
-                        <small class="pt-3 text-warning">
-                            Select a video from list of Avatar</small
-                        >
-                    </div>
-                    <br />
-                    <div
-                        class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6"
-                    >
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/21.jpg"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 1</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
+                                    <!-- Modal -->
                                     <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
+                                        x-show="showModal"
+                                        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                        style="display: none"
                                     >
-                                        <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar1"
-                                        />
-                                        <p>select Avatar</p>
-                                    </label>
+                                        <div
+                                            class="bg-white rounded-lg p-5 w-3/4 md:w-1/2 lg:w-1/3"
+                                            @click.away="closeModal"
+                                        >
+                                            <h2
+                                                class="text-xl font-semibold mb-4"
+                                            >
+                                                Location Images
+                                            </h2>
+                                            <div class="grid grid-cols-1 gap-4">
+                                                <template
+                                                    x-for="location in selectedAvatarLocations"
+                                                    :key="location._id"
+                                                >
+                                                    <div>
+                                                        <img
+                                                            :src="location.image"
+                                                            :alt="location.name"
+                                                            class="w-full h-40 object-cover rounded"
+                                                        />
+                                                        <p
+                                                            x-text="location.name"
+                                                            class="mt-2 text-center"
+                                                        ></p>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <div class="mt-5 text-right">
+                                                <button
+                                                    @click="closeModal"
+                                                    class="bg-blue-500 text-white px-4 py-2 rounded"
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
+                                ></div>
+                                <br />
+                                <div align="center">
+                                    <button
+                                        type="submit"
+                                        class="btn border border-warning/30 bg-warning/10 font-medium text-warning hover:bg-warning/20 focus:bg-warning/20 active:bg-warning/25"
+                                    >
+                                        Submit Video
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/images (27).jpeg"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 2</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
-                                    <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
-                                    >
-                                        <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar2"
-                                        />
-                                        <p>Select Avatar</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/1.png"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 3</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
-                                    <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
-                                    >
-                                        <input
-                                            <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar3"
-                                        />
-                                        />
-                                        <p>Select Avatar</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/12.png"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 4</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
-                                    <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
-                                    >
-                                        <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar4"
-                                        />
-                                        <p>Select Avatar</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/images (25).jpeg"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 5</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
-                                    <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
-                                    >
-                                        <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar5"
-                                        />
-                                        <p>Select Avatar</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/ramoo-1.gif"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 6</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
-                                    <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
-                                    >
-                                        <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar6"
-                                        />
-                                        <p>Select Avatar</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/212.png"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 7</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
-                                    <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
-                                    >
-                                        <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar7"
-                                        />
-                                        <p>Select Avatar</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="p-2.5">
-                                <img
-                                    src="images/avatar/images (21).jpeg"
-                                    class="h-48 w-full rounded-lg object-cover object-center"
-                                    alt="image"
-                                />
-                            </div>
-                            <div
-                                class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
-                            >
-                                <div class="mt-1">
-                                    <a
-                                        href="#"
-                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                        >Avatar 8</a
-                                    >
-                                </div>
-                                <div
-                                    class="my-2 flex items-center space-x-3 text-xs"
-                                >
-                                    <div
-                                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="inline-flex items-center space-x-2"
-                                    >
-                                        <input
-                                            class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100 before:!bg-warning checked:!border-warning hover:!border-warning focus:!border-warning dark:border-navy-500 dark:bg-navy-900"
-                                            name="selectedAvatar"
-                                            type="radio"
-                                            value="avatar8"
-                                        />
-                                        <p>Select Avatar</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br /><br />
-                    <div
-                        class="h-px flex-1 bg-slate-200 dark:bg-navy-500"
-                    ></div>
-                    <br />
-                    <div align="center">
-                        <button
-                            type="submit"
-                            class="btn border border-warning/30 bg-warning/10 font-medium text-warning hover:bg-warning/20 focus:bg-warning/20 active:bg-warning/25"
-                        >
-                            Submit Video
-                        </button>
                     </div>
                 </form>
                 <div
@@ -1194,7 +1030,56 @@
                     class="text-center mt-3 text-slate-600 dark:text-navy-100"
                 ></div>
                 <div id="remainingCredits"></div>
-                <br />
+                <!-- <div> -->
+                <br /><br />
+                <button id="toggleChatBtn" class="toggle-chat-btn w-full">
+                    Click to chat with us
+                </button>
+
+                <div id="chatContainer" class="chat-container">
+                    <div
+                        id="tawkChatContainer"
+                        style="height: 350px; width: 100%"
+                    ></div>
+                </div>
+                <!-- </div> -->
+                <!-- Start of Tawk.to Script -->
+                <script type="text/javascript">
+                    var Tawk_API = Tawk_API || {};
+                    Tawk_LoadStart = new Date();
+                    (function () {
+                        var s1 = document.createElement('script'),
+                            s0 = document.getElementsByTagName('script')[0];
+                        s1.async = true;
+                        s1.src =
+                            'https://embed.tawk.to/66c15835146b7af4a43ba50d/1i5hk14f1';
+                        s1.charset = 'UTF-8';
+                        s1.setAttribute('crossorigin', '*');
+                        s1.onload = function () {
+                            Tawk_API.embedded = 'tawkChatContainer';
+                        };
+                        s0.parentNode.insertBefore(s1, s0);
+                    })();
+                </script>
+                <!-- JavaScript for Chat Toggle -->
+                <script>
+                    const toggleChatBtn =
+                        document.getElementById('toggleChatBtn');
+                    const chatContainer =
+                        document.getElementById('chatContainer');
+
+                    toggleChatBtn.addEventListener('click', function () {
+                        if (chatContainer.classList.contains('hidden')) {
+                            chatContainer.classList.remove('hidden');
+                            chatContainer.classList.add('expanded');
+                            toggleChatBtn.textContent = 'Close Chat';
+                        } else {
+                            chatContainer.classList.remove('expanded');
+                            chatContainer.classList.add('hidden');
+                            toggleChatBtn.textContent = 'Click to chat with us';
+                        }
+                    });
+                </script>
                 <br />
                 <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
                 <br />
@@ -1319,6 +1204,9 @@
                 const videoPond = FilePond.create(
                     document.querySelector('input[name="videoFiles"]')
                 );
+                const picturePond = FilePond.create(
+                    document.querySelector('input[name="pictureFiles"]')
+                );
                 const audioPond = FilePond.create(
                     document.querySelector('input[name="audioFiles"]')
                 );
@@ -1334,7 +1222,7 @@
 
                         // Access files from FilePond instances
                         const videoFiles = videoPond.getFiles();
-
+                        const pictureFiles = picturePond.getFiles();
                         const audioFiles = audioPond.getFiles();
 
                         // Create a new FormData object
@@ -1345,32 +1233,49 @@
                             formData.append('videoFiles', fileItem.file);
                         });
 
+                        // Append picture files
+                        pictureFiles.forEach((fileItem) => {
+                            formData.append('pictureFiles', fileItem.file);
+                        });
+
                         // Append audio files
                         audioFiles.forEach((fileItem) => {
                             formData.append('audioFiles', fileItem.file);
                         });
 
                         // Append other form fields
-                        formData.append(
-                            'videoLink',
-                            document.getElementById('videoLink').value
+                        const videoLinkInputs = document.querySelectorAll(
+                            'input[name="videoLink[]"]'
+                        );
+                        const videoLinks = Array.from(videoLinkInputs).map(
+                            (input) => (input ? input.value : '')
                         );
                         formData.append(
-                            'videoDescription',
-                            document.getElementById('videoDescription').value
-                        );
-                        // Append selected radio button values if they exist
-                        const selectedOrientation = document.querySelector(
-                            'input[name="orientation"]:checked'
+                            'videoLinks',
+                            JSON.stringify(
+                                videoLinks.filter((link) => link.trim() !== '')
+                            )
                         );
 
+                        // Get the selected avatar and location
                         const selectedAvatar = document.querySelector(
                             'input[name="selectedAvatar"]:checked'
                         );
+                        const selectedLocation = document.querySelector(
+                            'input[name="location_avatar"]:checked'
+                        );
+
                         if (selectedAvatar) {
                             formData.append(
                                 'selectedAvatar',
                                 selectedAvatar.value
+                            );
+                        }
+
+                        if (selectedLocation) {
+                            formData.append(
+                                'selectedLocation',
+                                selectedLocation.value
                             );
                         }
 
@@ -1388,6 +1293,7 @@
                                     },
                                 }
                             );
+
                             console.log(response.data);
                             messageDiv.textContent =
                                 'Video submitted successfully!';
@@ -1400,6 +1306,7 @@
 
                             // Clear the FilePond instances
                             videoPond.removeFiles();
+                            picturePond.removeFiles();
                             audioPond.removeFiles();
                         } catch (error) {
                             console.error(error);
@@ -1417,13 +1324,13 @@
                                 messageDiv.style.color = 'red';
                             }
                         }
-
-                        setTimeout(() => {
-                            messageDiv.textContent = '';
-                            remainingCreditsDiv.textContent = '';
-                        }, 5000);
                     });
+                setTimeout(() => {
+                    messageDiv.textContent = '';
+                    remainingCreditsDiv.textContent = '';
+                }, 5000);
             });
+
             function showExhaustedCreditsModal(message) {
                 // Create modal element
                 const modal = document.createElement('div');
@@ -1432,10 +1339,65 @@
                 modal.style.left = '50%';
                 modal.style.top = '50%';
                 modal.style.transform = 'translate(-50%, -50%)';
-                modal.style.backgroundColor = '#bcc5ca';
-                modal.style.padding = '30px';
-                modal.style.boxShadow = '0px 0px 20px rgba(0, 0, 0, 0.3)';
+                modal.style.backgroundColor = '#fff';
+                modal.style.padding = '20px';
+                modal.style.boxShadow = '0px 0px 30px rgba(0, 0, 0, 0.1)';
+                modal.style.borderRadius = '8px';
                 modal.style.zIndex = '1000';
+                modal.style.maxWidth = '400px';
+                modal.style.width = '90%';
+                modal.style.textAlign = 'center';
+                modal.style.fontFamily = 'Arial, sans-serif';
+
+                // Modal content
+                const modalContent = `
+                        <br><div style="font-size: 50px; color: #d9534f;">
+                            😢
+                        </div><br>
+                        <h2 style="color: #333;">Oops!</h2><br>
+                        <p style="color: #555;">${message}</p>
+                        <p style="color: #555;">Please click <a href="/plans-billing.html" style="color: #007bff; text-decoration: none; font-weight: bold;">here</a> to upgrade and submit more videos.</p>
+                       <br> <button onclick="closeExhaustedCreditsModal()" style="
+                            background-color: #d9534f;
+                            color: white;
+                            padding: 12px 12px;
+                            border: none;
+                            border-radius: 5px;
+                            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                            font-weight: bold;
+                            cursor: pointer;
+                            transition: background-color 0.3s ease;
+                            font-size: 16px;
+                        ">Close</button>
+                    `;
+
+                modal.innerHTML = modalContent;
+
+                // Append modal to body
+                document.body.appendChild(modal);
+
+                // Add overlay
+                const overlay = document.createElement('div');
+                overlay.id = 'modalOverlay';
+                overlay.style.position = 'fixed';
+                overlay.style.left = '0';
+                overlay.style.top = '0';
+                overlay.style.width = '100%';
+                overlay.style.height = '100%';
+                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+                overlay.style.zIndex = '999';
+                document.body.appendChild(overlay);
+            }
+
+            function closeExhaustedCreditsModal() {
+                const modal = document.getElementById('creditsModal');
+                const overlay = document.getElementById('modalOverlay');
+                if (modal) {
+                    document.body.removeChild(modal);
+                }
+                if (overlay) {
+                    document.body.removeChild(overlay);
+                }
             }
 
             function deleteProject(projectId) {
@@ -1624,6 +1586,110 @@
                     }
                 });
             });
+        </script>
+        <script>
+            function addVideoLinkField() {
+                const container = document.getElementById(
+                    'videoLinksContainer'
+                );
+                const inputCount = container.querySelectorAll('input').length;
+                if (inputCount < 5) {
+                    const newInput = document.createElement('input');
+                    newInput.className =
+                        'form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent mt-2';
+                    newInput.placeholder = 'Add video link from internet';
+                    newInput.name = 'videoLink[]';
+                    newInput.type = 'text';
+                    container.appendChild(newInput);
+                } else {
+                    alert('Maximum of 5 video links are allowed.');
+                }
+            }
+        </script>
+        <script>
+            async function fetchAvatars() {
+                const response = await fetch('/api/avatars');
+                const avatars = await response.json();
+                const container = document.getElementById('avatarContainer');
+
+                container.innerHTML = ''; // Clear existing avatars
+
+                avatars.forEach((avatar) => {
+                    const card = document.createElement('div');
+                    card.className =
+                        'card border-2 border-slate-300 shadow-lg rounded-lg';
+                    card.innerHTML = `
+                        <div class="p-2.5">
+                            <img src="${
+                                avatar.image
+                            }" class="w-full rounded-lg object-cover object-center" alt="Avatar ${
+                        avatar.number
+                    }" />
+                        </div>
+                        <div class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5">
+                            <div class="mt-1">
+                                <a href="#" class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">Avatar ${
+                                    avatar.number
+                                }</a>
+                            </div>
+                            <div class="my-2 flex items-center space-x-3 text-xs">
+                                <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center space-x-2">
+                                    <input class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100" name="selectedAvatar" type="radio" value="avatar${
+                                        avatar.number
+                                    }" />
+                                    <p>Select Avatar</p>
+                                </label>
+                                <div class="mt-2">
+                                    <p>Choose Location</p>
+                                    ${avatar.locations
+                                        .map(
+                                            (location) => `
+                                        <label class="inline-flex items-center space-x-2">
+                                            <input class="form-radio is-outline size-5 rounded-md border-slate-400/70" name="location_avatar" type="radio" value="${location}" />
+                                            <p>${
+                                                location
+                                                    .charAt(0)
+                                                    .toUpperCase() +
+                                                location.slice(1)
+                                            }</p>
+                                        </label>
+                                    `
+                                        )
+                                        .join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // fetchAvatars();
+        </script>
+        <script>
+            async function showLocationImages(avatarId) {
+                const response = await fetch(`/api/avatars/${avatarId}`);
+                const avatar = await response.json();
+
+                const container = document.getElementById(
+                    'locationImagesContainer'
+                );
+                container.innerHTML = ''; // Clear previous images
+
+                avatar.locations.forEach((location) => {
+                    const img = document.createElement('img');
+                    img.src = location.image;
+                    img.alt = `${location.name} location`;
+                    img.className = 'w-32 h-32 rounded-lg object-cover';
+
+                    container.appendChild(img);
+                });
+
+                <!-- container.classList.remove('hidden'); -->
+            }
         </script>
     </body>
 </html>

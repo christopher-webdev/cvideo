@@ -698,7 +698,7 @@
                     </h3>
                 </div>
                 <div class="flex justify-center p-5">
-                    <img src="images/v1.png" alt="image" width="300" />
+                    <img src="images/v1.png" alt="image" width="350" />
                 </div>
                 <form id="videoForm">
                     <div
@@ -831,11 +831,60 @@
                 ></div>
                 <div id="remainingCredits"></div>
                 <br /><br />
-                <div id="chat-button">Click here to chat with support</div>
 
+                <button id="toggleChatBtn" class="toggle-chat-btn w-full">
+                    Click to chat with us
+                </button>
+
+                <div id="chatContainer" class="chat-container">
+                    <div
+                        id="tawkChatContainer"
+                        style="height: 350px; width: 100%"
+                    ></div>
+                </div>
+                <!-- </div> -->
+                <!-- Start of Tawk.to Script -->
+                <script type="text/javascript">
+                    var Tawk_API = Tawk_API || {};
+                    Tawk_LoadStart = new Date();
+                    (function () {
+                        var s1 = document.createElement('script'),
+                            s0 = document.getElementsByTagName('script')[0];
+                        s1.async = true;
+                        s1.src =
+                            'https://embed.tawk.to/66c15835146b7af4a43ba50d/1i5hk14f1';
+                        s1.charset = 'UTF-8';
+                        s1.setAttribute('crossorigin', '*');
+                        s1.onload = function () {
+                            Tawk_API.embedded = 'tawkChatContainer';
+                        };
+                        s0.parentNode.insertBefore(s1, s0);
+                    })();
+                </script>
+                <!-- JavaScript for Chat Toggle -->
+                <script>
+                    const toggleChatBtn =
+                        document.getElementById('toggleChatBtn');
+                    const chatContainer =
+                        document.getElementById('chatContainer');
+
+                    toggleChatBtn.addEventListener('click', function () {
+                        if (chatContainer.classList.contains('hidden')) {
+                            chatContainer.classList.remove('hidden');
+                            chatContainer.classList.add('expanded');
+                            toggleChatBtn.textContent = 'Close Chat';
+                        } else {
+                            chatContainer.classList.remove('expanded');
+                            chatContainer.classList.add('hidden');
+                            toggleChatBtn.textContent = 'Click to chat with us';
+                        }
+                    });
+                </script>
+                <!-- ///////////////////////////////////////////////////////////////////////end chat -->
+                <br />
+                <br />
                 <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
-                <br /><br />
-
+                <br />
                 <!-- Table Section -->
                 <div class="flex flex-col">
                     <div
@@ -1008,21 +1057,16 @@
                             JSON.stringify(
                                 videoLinks.filter((link) => link.trim() !== '')
                             )
-                        ); // Convert array to JSON string and filter out empty links
-
-                        const videoDescriptionElement =
-                            document.getElementById('videoDescription');
-                        formData.append(
-                            'videoDescription',
-                            videoDescriptionElement
-                                ? videoDescriptionElement.value
-                                : ''
                         );
 
-                        // Append selected radio button values if they exist
+                        // Get the selected avatar and location
                         const selectedAvatar = document.querySelector(
                             'input[name="selectedAvatar"]:checked'
                         );
+                        const selectedLocation = document.querySelector(
+                            'input[name="location_avatar"]:checked'
+                        );
+
                         if (selectedAvatar) {
                             formData.append(
                                 'selectedAvatar',
@@ -1030,13 +1074,10 @@
                             );
                         }
 
-                        const location_avatar = document.querySelector(
-                            'input[name="location_avatar"]:checked'
-                        );
-                        if (location_avatar) {
+                        if (selectedLocation) {
                             formData.append(
-                                'location_avatar',
-                                location_avatar.value
+                                'selectedLocation',
+                                selectedLocation.value
                             );
                         }
 
@@ -1085,13 +1126,13 @@
                                 messageDiv.style.color = 'red';
                             }
                         }
-
-                        setTimeout(() => {
-                            messageDiv.textContent = '';
-                            remainingCreditsDiv.textContent = '';
-                        }, 5000);
                     });
+                setTimeout(() => {
+                    messageDiv.textContent = '';
+                    remainingCreditsDiv.textContent = '';
+                }, 5000);
             });
+
             function showExhaustedCreditsModal(message) {
                 // Create modal element
                 const modal = document.createElement('div');
@@ -1112,25 +1153,25 @@
 
                 // Modal content
                 const modalContent = `
-                    <br><div style="font-size: 50px; color: #d9534f;">
-                        😢
-                    </div><br>
-                    <h2 style="color: #333;">Oops!</h2><br>
-                    <p style="color: #555;">${message}</p>
-                    <p style="color: #555;">Please click <a href="/plans-billing.html" style="color: #007bff; text-decoration: none; font-weight: bold;">here</a> to upgrade and submit more videos.</p>
-                   <br> <button onclick="closeExhaustedCreditsModal()" style="
-                        background-color: #d9534f;
-                        color: white;
-                        padding: 12px 12px;
-                        border: none;
-                        border-radius: 5px;
-                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-                        font-weight: bold;
-                        cursor: pointer;
-                        transition: background-color 0.3s ease;
-                        font-size: 16px;
-                    ">Close</button>
-                `;
+                            <br><div style="font-size: 50px; color: #d9534f;">
+                                😢
+                            </div><br>
+                            <h2 style="color: #333;">Oops!</h2><br>
+                            <p style="color: #555;">${message}</p>
+                            <p style="color: #555;">Please click <a href="/plans-billing.html" style="color: #007bff; text-decoration: none; font-weight: bold;">here</a> to upgrade and submit more videos.</p>
+                           <br> <button onclick="closeExhaustedCreditsModal()" style="
+                                background-color: #d9534f;
+                                color: white;
+                                padding: 12px 12px;
+                                border: none;
+                                border-radius: 5px;
+                                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                                font-weight: bold;
+                                cursor: pointer;
+                                transition: background-color 0.3s ease;
+                                font-size: 16px;
+                            ">Close</button>
+                        `;
 
                 modal.innerHTML = modalContent;
 
@@ -1370,28 +1411,90 @@
                 }
             }
         </script>
-        <script type="text/javascript">
-            var Tawk_API = Tawk_API || {},
-                Tawk_LoadStart = new Date();
-            (function () {
-                var s1 = document.createElement('script'),
-                    s0 = document.getElementsByTagName('script')[0];
-                s1.async = true;
-                s1.src =
-                    'https://embed.tawk.to/66c15835146b7af4a43ba50d/1i5hk14f1';
-                s1.charset = 'UTF-8';
-                s1.setAttribute('crossorigin', '*');
-                s0.parentNode.insertBefore(s1, s0);
-            })();
+        <script>
+            async function fetchAvatars() {
+                const response = await fetch('/api/avatars');
+                const avatars = await response.json();
+                const container = document.getElementById('avatarContainer');
 
-            // Add click event listener to the chat button
-            document
-                .getElementById('chat-button')
-                .addEventListener('click', function () {
-                    if (Tawk_API) {
-                        Tawk_API.maximize(); // Open the Tawk.to chat widget
-                    }
+                container.innerHTML = ''; // Clear existing avatars
+
+                avatars.forEach((avatar) => {
+                    const card = document.createElement('div');
+                    card.className =
+                        'card border-2 border-slate-300 shadow-lg rounded-lg';
+                    card.innerHTML = `
+                        <div class="p-2.5">
+                            <img src="${
+                                avatar.image
+                            }" class="w-full rounded-lg object-cover object-center" alt="Avatar ${
+                        avatar.number
+                    }" />
+                        </div>
+                        <div class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5">
+                            <div class="mt-1">
+                                <a href="#" class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">Avatar ${
+                                    avatar.number
+                                }</a>
+                            </div>
+                            <div class="my-2 flex items-center space-x-3 text-xs">
+                                <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center space-x-2">
+                                    <input class="form-radio is-outline size-5 rounded-full border-slate-400/70 bg-slate-100" name="selectedAvatar" type="radio" value="avatar${
+                                        avatar.number
+                                    }" />
+                                    <p>Select Avatar</p>
+                                </label>
+                                <div class="mt-2">
+                                    <p>Choose Location</p>
+                                    ${avatar.locations
+                                        .map(
+                                            (location) => `
+                                        <label class="inline-flex items-center space-x-2">
+                                            <input class="form-radio is-outline size-5 rounded-md border-slate-400/70" name="location_avatar" type="radio" value="${location}" />
+                                            <p>${
+                                                location
+                                                    .charAt(0)
+                                                    .toUpperCase() +
+                                                location.slice(1)
+                                            }</p>
+                                        </label>
+                                    `
+                                        )
+                                        .join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
                 });
+            }
+
+            // fetchAvatars();
+        </script>
+        <script>
+            async function showLocationImages(avatarId) {
+                const response = await fetch(`/api/avatars/${avatarId}`);
+                const avatar = await response.json();
+
+                const container = document.getElementById(
+                    'locationImagesContainer'
+                );
+                container.innerHTML = ''; // Clear previous images
+
+                avatar.locations.forEach((location) => {
+                    const img = document.createElement('img');
+                    img.src = location.image;
+                    img.alt = `${location.name} location`;
+                    img.className = 'w-32 h-32 rounded-lg object-cover';
+
+                    container.appendChild(img);
+                });
+
+                <!-- container.classList.remove('hidden'); -->
+            }
         </script>
     </body>
 </html>
