@@ -41,7 +41,7 @@
     "plan_price": "$599.00",
     "plan_url": "#",
     "plan_status": "Ordinary",
-    "plan_subscription": "yearly",
+    "plan_subscription": "monthly",
     "features": [
       "15,700 15-30 day turnarouord",
       "6+ Naive development",
@@ -91,7 +91,7 @@
     "plan_id": "50123728-fa4a-4a25-afe1-f8d61572c362",
     "plan_title": "Enterprise",
     "plan_heading": "For large teams & corportaions",
-    "plan_subscription": "yearly",
+    "plan_subscription": "monthly",
     "plan_price": "$80.50",
     "plan_url": "#",
     "plan_status": "Ordinary",

@@ -345,6 +345,11 @@ app.get('/manageplanx.html', ensureAdminAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'manageplanx.html'));
 });
+//ensure Auth for manage-plan.html
+app.get('/manage-plan', ensureAdminAuthenticated, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.sendFile(path.join(__dirname, 'public', 'manage-plan.html'));
+});
 //email verification middleware
 // Middleware to check if the user is new (i.e., created within the last 10 minutes)
 
