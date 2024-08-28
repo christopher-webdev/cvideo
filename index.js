@@ -1389,6 +1389,28 @@ app.delete('/api/avatars/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to delete avatar' });
     }
 });
+// Route to delete a package
+app.delete('/packages/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await Package.findByIdAndDelete(id);
+        if (result) {
+            res.json({ success: true });
+        } else {
+            res.status(404).json({
+                success: false,
+                errors: 'Package not found.',
+            });
+        }
+    } catch (error) {
+        console.error('Error deleting package:', error);
+        res.status(500).json({
+            success: false,
+            errors: 'Error deleting package.',
+        });
+    }
+});
+
 // Route to get the list of videos
 // Route to get the list of videos
 

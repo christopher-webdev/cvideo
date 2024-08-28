@@ -592,32 +592,6 @@ router.post('/add-plan', (req, res) => {
     });
 });
 
-// Email verification route
-router.get('/verify-email', async (req, res) => {
-    const { token } = req.query;
-
-    try {
-        // Find the user with the given verification token
-        let user = await User.findOne({ verificationToken: token });
-
-        if (!user) {
-            console.log('Token not found or expired in DB:', token);
-            return res.status(400).json({ msg: 'Invalid or expired token' });
-        }
-
-        // Mark the user as verified
-        user.isVerified = true;
-        user.verificationToken = undefined;
-
-        await user.save();
-
-        res.redirect('/email-verified');
-    } catch (err) {
-        console.error('Server error:', err.message);
-        res.status(500).send('Server error');
-    }
-});
-
 // @desc Auth with Google
 // @route GET /auth/google
 router.get(
@@ -749,5 +723,28 @@ router.get('/status', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+router.get('/verify-email', async (req, res) => {
+    const { token } = req.query;
 
+    try {
+        // Find the user with the given verification token
+        let user = await User.findOne({ verificationToken: token });
+
+        if (!user) {
+            console.log('Token not found or expired in DB:', token);
+            return res.status(400).json({ msg: 'Invalid or expired token' });
+        }
+
+        // Mark the user as verified
+        user.isVerified = true;
+        user.verificationToken = undefined;
+
+        await user.save();
+
+        res.redirect('/email-verified.html');
+    } catch (err) {
+        console.error('Server error:', err.message);
+        res.status(500).send('Server error');
+    }
+});
 module.exports = router;

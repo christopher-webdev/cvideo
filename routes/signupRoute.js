@@ -118,7 +118,7 @@ router.post(
 
             const verificationToken = crypto.randomBytes(32).toString('hex');
 
-            const verificationLink = `https://eldravideo.com/auth/verify-email?token=${verificationToken}`;
+            const verificationLink = `https://eldravideo.com//auth/verify-email?token=${verificationToken}`;
 
             const credit = await SubscriptionPlan.create({ plan: plan.name });
 
@@ -159,4 +159,5 @@ router.post(
         }
     }
 );
+
 module.exports = router;

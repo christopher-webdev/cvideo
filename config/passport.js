@@ -8,6 +8,9 @@ const Admin = require('../models/Admin');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const getEnv = require('./env');
+const Package = require('../models/Package');
+const { Package: EPackage } = require('../enums/Package');
+const PaymentProvider = require('../models/PaymentProvider');
 
 // Function to manually parse the full name
 function parseFullName(fullName) {
@@ -17,7 +20,19 @@ function parseFullName(fullName) {
         last: nameParts.slice(1).join(' ') || '', // Join the rest as last name
     };
 }
-
+// Function to generate a random ID
+function generateRandomId() {
+    const timestamp = Date.now().toString(); // Convert timestamp to string
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    let randomChars = '';
+    for (let i = 0; i < 3; i++) {
+        randomChars += alphabet.charAt(
+            Math.floor(Math.random() * alphabet.length)
+        );
+    }
+    const combinedId = timestamp + randomChars;
+    return combinedId.slice(0, 10); // Ensure the ID length is no more than 10 characters
+}
 module.exports = function (passport) {
     passport.use(
         new GoogleStrategy(
@@ -25,35 +40,41 @@ module.exports = function (passport) {
                 clientID:
                     '250038052754-atan58f9rgc9q6oacvrq11mfdlneecph.apps.googleusercontent.com',
                 clientSecret: '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',
-                callbackURL: 'https://eldravideo.com/auth/google/callback',
+                callbackURL: `${getEnv('APP_URL')}/auth/google/callback`,
             },
             async (accessToken, refreshToken, profile, done) => {
-                // Extract full name from profile
                 const fullName = profile.displayName || '';
                 const parsedName = parseFullName(fullName);
-
+                const plan = await Package.findOne({
+                    name: EPackage.Free.name,
+                });
                 const newUser = {
                     firstName: parsedName.first || '',
                     lastName: parsedName.last || '',
                     email: profile.emails[0].value,
                     profilePicture: profile.photos[0].value,
+                    isSignedIn: true,
+                    subscriptionPlan: plan.name || 'Free', // Set default subscription plan
+                    activePackage: plan.id,
+                    referral_id: generateRandomId(), // Generate referral ID
+                    // other fields as needed
                 };
 
                 try {
                     let user = await User.findOne({ email: newUser.email });
 
                     if (user) {
-                        // User already exists, update isSignedIn to true
+                        // User exists, update their `isSignedIn` and other necessary fields
                         user.isSignedIn = true;
+                        // You can update other fields if needed
                         await user.save();
                         done(null, user);
                     } else {
-                        // Create a new user with isSignedIn set to true
-                        newUser.isSignedIn = true;
+                        // Create new user
                         user = await User.create(newUser);
 
-                        // Apply credits based on the user's subscription plan
-                        await applyDefaultCredits(user._id, 'Free'); // Default subscription plan, adjust as necessary
+                        // Apply default credits if needed
+                        await applyDefaultCredits(user._id, 'Free');
 
                         done(null, user);
                     }
@@ -141,52 +162,60 @@ module.exports = function (passport) {
         )
     );
 
-    passport.use(
-        new TwitterStrategy(
-            {
-                consumerKey: 'alDLgZJUVrZFbZGPjNXD0SoGr',
-                consumerSecret:
-                    't71NKUcE5fkcB6Hgu3y9DbKMClKTkJx0Y4biAEqjwqTR14oJHy',
-                callbackURL: `${getEnv('APP_URL')}/auth/twitter/callback`,
-                includeEmail: true,
-            },
-            async (accessToken, refreshToken, profile, done) => {
-                // Extract full name from profile
-                const fullName = profile.displayName || '';
-                const parsedName = parseFullName(fullName);
+    module.exports = function (passport) {
+        passport.use(
+            new TwitterStrategy(
+                {
+                    consumerKey: 'alDLgZJUVrZFbZGPjNXD0SoGr',
+                    consumerSecret:
+                        't71NKUcE5fkcB6Hgu3y9DbKMClKTkJx0Y4biAEqjwqTR14oJHy',
+                    callbackURL: `${getEnv('APP_URL')}/auth/twitter/callback`,
+                    includeEmail: true,
+                },
+                async (token, tokenSecret, profile, done) => {
+                    const fullName = profile.displayName || '';
+                    const parsedName = parseFullName(fullName);
+                    const plan = await Package.findOne({
+                        name: EPackage.Free.name,
+                    });
+                    const newUser = {
+                        firstName: parsedName.first || '',
+                        lastName: parsedName.last || '',
+                        email: profile.emails[0].value,
+                        profilePicture: profile.photos[0].value,
+                        isSignedIn: true, // Set user as signed in
+                        subscriptionPlan: plan.name || 'Free', // Set default subscription plan
+                        activePackage: plan.id,
+                        referral_id: generateRandomId(), // Generate referral ID
+                        // other fields as needed
+                    };
 
-                const newUser = {
-                    firstName: parsedName.first || '',
-                    lastName: parsedName.last || '',
-                    email: profile.emails[0].value,
-                    profilePicture: profile.photos[0].value,
-                };
+                    try {
+                        let user = await User.findOne({ email: newUser.email });
 
-                try {
-                    let user = await User.findOne({ email: newUser.email });
+                        if (user) {
+                            // User exists, update their `isSignedIn` and other necessary fields
+                            user.isSignedIn = true;
+                            // You can update other fields if needed
+                            await user.save();
+                            done(null, user);
+                        } else {
+                            // Create new user
+                            user = await User.create(newUser);
 
-                    if (user) {
-                        // User already exists, update isSignedIn to true
-                        user.isSignedIn = true;
-                        await user.save();
-                        done(null, user);
-                    } else {
-                        // Create a new user with isSignedIn set to true
-                        newUser.isSignedIn = true;
-                        user = await User.create(newUser);
+                            // Apply default credits if needed
+                            await applyDefaultCredits(user._id, 'Free');
 
-                        // Apply credits based on the user's subscription plan
-                        await applyDefaultCredits(user._id, 'Free'); // Default subscription plan, adjust as necessary
-
-                        done(null, user);
+                            done(null, user);
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        done(err, false);
                     }
-                } catch (err) {
-                    console.error(err);
-                    done(err, false);
                 }
-            }
-        )
-    );
+            )
+        );
+    };
 
     passport.serializeUser((entity, done) => {
         done(null, {
