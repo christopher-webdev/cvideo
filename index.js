@@ -222,13 +222,13 @@ app.get('/payment-methods', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'payment-methods.html'));
 });
-app.get('/affiliate-daashboard.html', ensureAuthenticated, (req, res) => {
+app.get('/affiliate-program.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'affiliate-daashboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'affiliate-program.html'));
 });
-app.get('/affiliate-daashboard', ensureAuthenticated, (req, res) => {
+app.get('/affiliate-program', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'affiliate-daashboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'affiliate-program.html'));
 });
 app.get('/payment-methods.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
