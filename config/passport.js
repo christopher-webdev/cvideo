@@ -162,60 +162,58 @@ module.exports = function (passport) {
         )
     );
 
-    module.exports = function (passport) {
-        passport.use(
-            new TwitterStrategy(
-                {
-                    consumerKey: 'alDLgZJUVrZFbZGPjNXD0SoGr',
-                    consumerSecret:
-                        't71NKUcE5fkcB6Hgu3y9DbKMClKTkJx0Y4biAEqjwqTR14oJHy',
-                    callbackURL: `${getEnv('APP_URL')}/auth/twitter/callback`,
-                    includeEmail: true,
-                },
-                async (token, tokenSecret, profile, done) => {
-                    const fullName = profile.displayName || '';
-                    const parsedName = parseFullName(fullName);
-                    const plan = await Package.findOne({
-                        name: EPackage.Free.name,
-                    });
-                    const newUser = {
-                        firstName: parsedName.first || '',
-                        lastName: parsedName.last || '',
-                        email: profile.emails[0].value,
-                        profilePicture: profile.photos[0].value,
-                        isSignedIn: true, // Set user as signed in
-                        subscriptionPlan: plan.name || 'Free', // Set default subscription plan
-                        activePackage: plan.id,
-                        referral_id: generateRandomId(), // Generate referral ID
-                        // other fields as needed
-                    };
+    passport.use(
+        new TwitterStrategy(
+            {
+                consumerKey: 'vIv7Oi88efthaCI9VSQtJK5HP',
+                consumerSecret:
+                    'mtN86XgtyE2nyuni2vNNGnErDiWg51XZIdofSHnRybws3Y0V1Q',
+                callbackURL: 'https://eldravideo.com/auth/twitter/callback',
+                includeEmail: true,
+            },
+            async (token, tokenSecret, profile, done) => {
+                const fullName = profile.displayName || '';
+                const parsedName = parseFullName(fullName);
+                const plan = await Package.findOne({
+                    name: EPackage.Free.name,
+                });
+                const newUser = {
+                    firstName: parsedName.first || '',
+                    lastName: parsedName.last || '',
+                    email: profile.emails[0].value,
+                    profilePicture: profile.photos[0].value,
+                    isSignedIn: true, // Set user as signed in
+                    subscriptionPlan: plan.name || 'Free', // Set default subscription plan
+                    activePackage: plan.id,
+                    referral_id: generateRandomId(), // Generate referral ID
+                    // other fields as needed
+                };
 
-                    try {
-                        let user = await User.findOne({ email: newUser.email });
+                try {
+                    let user = await User.findOne({ email: newUser.email });
 
-                        if (user) {
-                            // User exists, update their `isSignedIn` and other necessary fields
-                            user.isSignedIn = true;
-                            // You can update other fields if needed
-                            await user.save();
-                            done(null, user);
-                        } else {
-                            // Create new user
-                            user = await User.create(newUser);
+                    if (user) {
+                        // User exists, update their `isSignedIn` and other necessary fields
+                        user.isSignedIn = true;
+                        // You can update other fields if needed
+                        await user.save();
+                        done(null, user);
+                    } else {
+                        // Create new user
+                        user = await User.create(newUser);
 
-                            // Apply default credits if needed
-                            await applyDefaultCredits(user._id, 'Free');
+                        // Apply default credits if needed
+                        await applyDefaultCredits(user._id, 'Free');
 
-                            done(null, user);
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        done(err, false);
+                        done(null, user);
                     }
+                } catch (err) {
+                    console.error(err);
+                    done(err, false);
                 }
-            )
-        );
-    };
+            }
+        )
+    );
 
     passport.serializeUser((entity, done) => {
         done(null, {

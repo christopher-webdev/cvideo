@@ -337,9 +337,9 @@ app.get('/admin-dashboard', ensureAdminAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
 });
-app.get('/manageAvatar.html', ensureAdminAuthenticated, (req, res) => {
+app.get('/manageavatar.html', ensureAdminAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'manageAvatar.html'));
+    res.sendFile(path.join(__dirname, 'public', 'manageavatar.html'));
 });
 app.get('/manageplanx.html', ensureAdminAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
