@@ -47,16 +47,8 @@ function getPackages() {
     fetch('/api/packages')
         .then((e) => e.json())
         .then(async ({ data }) => {
-            // console.log(data);
-
             const resq = await fetch('/api/packages/list');
             AvailablePackages = (await resq.json()).data;
-            // console.log("🚀 ~ .then ~ AvailablePackages:", AvailablePackages)
-
-            // AvailablePackages = {
-            //     allowedPackages: data.allowedPackages,
-            //     allowedIntervals: data.allowedIntervals
-            // }
 
             let options = ``;
             for (const pkg of AvailablePackages.allowedPackages) {
