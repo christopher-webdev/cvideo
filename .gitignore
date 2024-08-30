@@ -1,6 +1,6 @@
 node_modules/
-# uploads/
-# downloads/
+uploads/
+downloads/
 .prettierrc
 .vscode
 txt.txt

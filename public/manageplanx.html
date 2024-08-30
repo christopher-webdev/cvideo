@@ -646,6 +646,153 @@
             </script>
 
             <script>
+                document.addEventListener('DOMContentLoaded', () => {
+              
+                    const fetchUsers = async () => {
+                        try {
+                            const response = await axios.get('/api/users');
+                            const users = response.data.users;
+                            const userTableBody =
+                                document.getElementById('userTableBody');
+                            userTableBody.innerHTML = '';
+
+                            users.forEach((user, index) => {
+                                const row = document.createElement('tr');
+                                row.classList.add(
+                                    'bg-gray-100',
+                                    'border-b',
+                                    'hover:bg-gray-200',
+                                    'text-sm',
+                                    'font-medium'
+                                );
+
+                                row.innerHTML = `
+                <td class="py-2 px-4">${index + 1}</td>
+                <td class="py-2 px-4">${user._id}</td>
+                <td class="py-2 px-4">${user.firstName} ${
+                                    user.lastName || ''
+                                }</td>
+                <td class="py-2 px-4">${user.email}</td>
+                <td class="py-2 px-4">${user.phoneNumber || 'N/A'}</td>
+                <td class="py-2 px-4">${user.address || 'N/A'}</td>
+                <td class="py-2 px-4">${user.subscriptionPlan}</td>
+                <td class="py-2 px-4">
+                    <button
+                        onclick="deleteUser('${user._id}')"
+                        class="text-red-600 hover:text-red-800 font-semibold mr-4">
+                        Delete user
+                    </button><br>
+                    <button
+                        onclick="window.openSubscriptionModal('${user._id}', '${
+                                    user.subscriptionPlan
+                                }')"
+                        class="text-blue-600 hover:text-blue-800 font-semibold">
+                        Update Plan
+                    </button>
+                </td>
+            `;
+                                userTableBody.appendChild(row);
+                            });
+                        } catch (error) {
+                            console.error('Error fetching users:', error);
+                        }
+                    };
+
+                    window.openSubscriptionModal = (userId, currentPlan) => {
+                        selectedUserId = userId;
+                        document.getElementById('subscriptionSelect').value =
+                            currentPlan;
+                        document
+                            .getElementById('subscriptionModal')
+                            .classList.remove('hidden');
+                    };
+
+                    document
+                        .getElementById('closeModalBtn')
+                        .addEventListener('click', () => {
+                            document
+                                .getElementById('subscriptionModal')
+                                .classList.add('hidden');
+                        });
+
+                    document
+                        .getElementById('updateSubscriptionBtn')
+                        .addEventListener('click', async () => {
+                            const newPlan =
+                                document.getElementById(
+                                    'subscriptionSelect'
+                                ).value;
+
+                            try {
+                                await axios.put(
+                                    `/update-subscription/${selectedUserId}`,
+                                    {
+                                        subscriptionPlan: newPlan,
+                                    }
+                                );
+                                fetchUsers(); // Refresh the users table
+                                document
+                                    .getElementById('subscriptionModal')
+                                    .classList.add('hidden');
+                            } catch (error) {
+                                console.error(
+                                    'Error updating subscription plan:',
+                                    error
+                                );
+                            }
+                        });
+
+                    document
+                        .getElementById('searchInput')
+                        .addEventListener('input', (e) => {
+                            const searchQuery = e.target.value.toLowerCase();
+                            const rows =
+                                document.querySelectorAll('#userTableBody tr');
+
+                            rows.forEach((row) => {
+                                const userId =
+                                    row.cells[1].textContent.toLowerCase(); // User ID column
+                                const name =
+                                    row.cells[2].textContent.toLowerCase(); // Name column
+                                const email =
+                                    row.cells[3].textContent.toLowerCase(); // Email column
+
+                                if (
+                                    userId.includes(searchQuery) ||
+                                    name.includes(searchQuery) ||
+                                    email.includes(searchQuery)
+                                ) {
+                                    row.classList.remove('hidden');
+                                } else {
+                                    row.classList.add('hidden');
+                                }
+                            });
+                        });
+
+                    // Fetch users initially
+                    fetchUsers();
+                    // delete users
+                    window.deleteUser = async (userId) => {
+                        const confirmation = confirm(
+                            'Are you sure you want to delete this user?'
+                        );
+                        if (!confirmation) {
+                            return; // Exit the function if the user cancels
+                        }
+
+                        try {
+                            await axios.delete(`/users/${userId}`);
+                            fetchUsers(); // Refresh the user list after deletion
+                        } catch (error) {
+                            console.error('Error deleting user:', error);
+                        }
+                    };
+
+                    fetchUsers();
+                });
+            </script>
+
+            <script>
                 const sidebarLinks =
                     document.querySelectorAll('.cursor-pointer');
                 const sections = document.querySelectorAll(
