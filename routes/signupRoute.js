@@ -108,12 +108,9 @@ router.post(
                 return res.status(400).json({ msg: 'User already exists' });
             }
 
-            const plan = await Package.findOne({ name: EPackage.Free.name });
+            let plan = await Package.findOne({ name: EPackage.Free.name });
             if (!plan) {
-                res.status(200).json({
-                    msg: 'Cant create user. Please ensure packages have been uploaded.',
-                });
-                return;
+                plan = await Package.create({name: EPackage.Free.name})
             }
 
             const verificationToken = crypto.randomBytes(32).toString('hex');
