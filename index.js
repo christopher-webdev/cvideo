@@ -222,13 +222,13 @@ app.get('/payment-methods', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'payment-methods.html'));
 });
-app.get('/affiliate-daashboard.html', ensureAuthenticated, (req, res) => {
+app.get('/affiliate-program.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'affiliate-daashboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'affiliate-program.html'));
 });
-app.get('/affiliate-daashboard', ensureAuthenticated, (req, res) => {
+app.get('/affiliate-program', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'affiliate-daashboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'affiliate-program.html'));
 });
 app.get('/payment-methods.html', ensureAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
@@ -337,9 +337,9 @@ app.get('/admin-dashboard', ensureAdminAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
 });
-app.get('/manageAvatar.html', ensureAdminAuthenticated, (req, res) => {
+app.get('/manageavatar.html', ensureAdminAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
-    res.sendFile(path.join(__dirname, 'public', 'manageAvatar.html'));
+    res.sendFile(path.join(__dirname, 'public', 'manageavatar.html'));
 });
 app.get('/manageplanx.html', ensureAdminAuthenticated, (req, res) => {
     res.set('Cache-Control', 'no-store');
@@ -1389,6 +1389,28 @@ app.delete('/api/avatars/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to delete avatar' });
     }
 });
+// Route to delete a package
+app.delete('/packages/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await Package.findByIdAndDelete(id);
+        if (result) {
+            res.json({ success: true });
+        } else {
+            res.status(404).json({
+                success: false,
+                errors: 'Package not found.',
+            });
+        }
+    } catch (error) {
+        console.error('Error deleting package:', error);
+        res.status(500).json({
+            success: false,
+            errors: 'Error deleting package.',
+        });
+    }
+});
+
 // Route to get the list of videos
 // Route to get the list of videos
 

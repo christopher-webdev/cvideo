@@ -173,116 +173,6 @@ router.post('/update-com', (req, res) => {
     });
 });
 
-// const subscriptionsPath = path.join(
-//     __dirname,
-//     '..',
-//     'public',
-//     'data',
-//     'subscription.json'
-// );
-// router.post('/update-com', (req, res) => {
-//     const updatesubscription = req.body; // Assuming this contains the new data
-//     // Read the subscription.json file
-//     fs.readFile(subscriptionsPath, 'utf8', (err, data) => {
-//         if (err) {
-//             return res.status(500).send('Error reading subscription file');
-//         }
-
-//         let subscription;
-//         try {
-//             subscription = JSON.parse(data); // Parse the JSON data
-//         } catch (parseErr) {
-//             return res.status(500).send('Error parsing subscription data');
-//         }
-
-//         // Extract the key and new data from updatesubscription
-//         const updatePlanKey = Object.keys(updatesubscription[0].plan)[0];
-//         const newData = updatesubscription[0].plan[updatePlanKey].data;
-
-//         // Iterate through the subscription array to find and update the specific plan's data
-//         subscription.forEach((planArray) => {
-//             planArray.forEach((planObj) => {
-//                 const planKey = Object.keys(planObj.plan)[0];
-//                 if (planKey === updatePlanKey) {
-//                     // Only replace the data field
-//                     planObj.plan[planKey].data = newData;
-//                 }
-//             });
-//         });
-
-//         // Write the updated subscription data back to subscription.json
-//         fs.writeFile(
-//             subscriptionsPath,
-//             JSON.stringify(subscription, null, 2),
-//             'utf8',
-//             (writeErr) => {
-//                 if (writeErr) {
-//                     return res
-//                         .status(500)
-//                         .send('Error writing updated subscription file');
-//                 }
-//                 // res.send(message:'Subscription updated successfully');
-//                 res.json({ message: 'Subscription updated successfully' });
-//             }
-//         );
-//     });
-// });
-//updating comparision
-// router.post('/update-com', (req, res) => {
-//     // Handle the update comparison plan logic here
-//     res.json({ message: 'Plan updated successfully' });
-// });
-// router.put('/update-com/:planName', (req, res) => {
-//     const planId = req.params.planName;
-//     const subscriptionsPath = path.join(__dirname, '..', 'public', 'data', 'subscription.json');
-//     const updatedPlanData = req.body; // The updated plan details from the client
-//     const planKey = Object.keys(subscriptionsPath[0].plan)[0]; // This gets the first key of the plan object
-//     const planName = subscriptionsPath[0].plan[planKey].name; // This retrieves the name of the plan
-//         res.json({ message: 'Comparison plan updated successfully', plansent:planName });
-// Accessing the plan name
-
-// Step 1: Read the subscriptions from the file
-// fs.readFile(subscriptionsPath, 'utf8', (err, data) => {
-//     if (err) return res.status(500).json({ message: 'Error reading subscriptions file' });
-
-// let subscriptions;
-// try {
-//     subscriptions = JSON.parse(data);
-// } catch (err) {
-//     return res.status(500).json({ message: 'Error parsing subscriptions file' });
-// }
-
-// Step 2: Find and update the plan with the matching name
-// let planFound = false;
-
-// res.json({ message: 'Plan updated successfully'+subscriptions });
-// subscriptions.forEach(subscriptionArray => {
-//     subscriptionArray.forEach(subscriptionObj => {
-//         const planKeys = Object.keys(subscriptionObj.plan || {});
-
-//         planKeys.forEach(key => {
-//             if (updatedPlanData[key] && subscriptionObj.plan[key].name === updatedPlanData[key].name) {
-//                 // Update the existing plan data
-//                 subscriptionObj.plan[key] = updatedPlanData[key];
-//                 planFound = true;
-//             }
-//         });
-//     });
-// });
-
-// if (!planFound) {
-//     return res.status(404).json({ message: 'Plan not found' });
-// }
-
-// Step 3: Write the updated data back to the file
-// fs.writeFile(subscriptionsPath, JSON.stringify(subscriptions, null, 2), 'utf8', (err) => {
-//     if (err) return res.status(500).json({ message: 'Error writing subscriptions file' });
-
-//     res.json({ message: 'Comparison plan updated successfully' });
-// });
-// });
-// });
-
 //delete comparison
 
 router.delete('/delete-comparison-plan/:planName', (req, res) => {
@@ -592,32 +482,6 @@ router.post('/add-plan', (req, res) => {
     });
 });
 
-// Email verification route
-router.get('/verify-email', async (req, res) => {
-    const { token } = req.query;
-
-    try {
-        // Find the user with the given verification token
-        let user = await User.findOne({ verificationToken: token });
-
-        if (!user) {
-            console.log('Token not found or expired in DB:', token);
-            return res.status(400).json({ msg: 'Invalid or expired token' });
-        }
-
-        // Mark the user as verified
-        user.isVerified = true;
-        user.verificationToken = undefined;
-
-        await user.save();
-
-        res.redirect('/email-verified');
-    } catch (err) {
-        console.error('Server error:', err.message);
-        res.status(500).send('Server error');
-    }
-});
-
 // @desc Auth with Google
 // @route GET /auth/google
 router.get(
@@ -749,5 +613,28 @@ router.get('/status', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+router.get('/verify-email', async (req, res) => {
+    const { token } = req.query;
 
+    try {
+        // Find the user with the given verification token
+        let user = await User.findOne({ verificationToken: token });
+
+        if (!user) {
+            console.log('Token not found or expired in DB:', token);
+            return res.status(400).json({ msg: 'Invalid or expired token' });
+        }
+
+        // Mark the user as verified
+        user.isVerified = true;
+        user.verificationToken = undefined;
+
+        await user.save();
+
+        res.redirect('/email-verified.html');
+    } catch (err) {
+        console.error('Server error:', err.message);
+        res.status(500).send('Server error');
+    }
+});
 module.exports = router;

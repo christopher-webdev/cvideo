@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Function  user
     let AvailablePackages = {};
 
     document
         .getElementById('AddPackageBtn')
         .addEventListener('click', () => addNewPackageField(undefined, false));
 
+    document
+        .getElementById('UpdatePackageBtn')
+        .addEventListener('click', () => getPackages(true));
+
     getPackages();
+    updatePackage(data);
 });
 
 async function updatePackage(data) {
@@ -19,8 +23,8 @@ async function updatePackage(data) {
             },
         });
 
-        const data = await response.json();
-        console.log(data);
+        const result = await response.json();
+        console.log(result);
     } catch (error) {
         console.log('🚀 ~ updatePackage ~ error:', error);
     }
@@ -29,60 +33,63 @@ async function updatePackage(data) {
 async function createPackage(data) {
     try {
         const response = await fetch('/api/packages', {
-            method: 'PUT',
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
-        const data = await response.json();
-        console.log(data);
+        const result = await response.json();
+        console.log(result);
     } catch (error) {
-        console.log('🚀 ~ updatePackage ~ error:', error);
+        console.log('🚀 ~ createPackage ~ error:', error);
     }
 }
 
-function getPackages() {
+function getPackages(isUpdate = false) {
     fetch('/api/packages')
-        .then((e) => e.json())
+        .then((response) => response.json())
         .then(async ({ data }) => {
             const resq = await fetch('/api/packages/list');
             AvailablePackages = (await resq.json()).data;
 
-            let options = ``;
+            let options = '';
             for (const pkg of AvailablePackages.allowedPackages) {
                 options += `<option value='${pkg.name}'>${pkg.name}</option>`;
             }
 
-            const package = document.getElementById('subscriptionPlan');
-            package.innerHTML = options;
-
-            for (const pkg of data.pkgs) {
-                addNewPackageField(pkg);
+            const packageSelect = document.getElementById('subscriptionPlan');
+            if (packageSelect) {
+                packageSelect.innerHTML = options;
+            } else {
+                console.error('Element with ID "subscriptionPlan" not found.');
             }
 
-            // package.addEventListener("change", (e)=>getPackagePoints(e.target.value), false)
+            if (isUpdate) {
+                // Populate existing packages for updating
+                for (const pkg of data.pkgs) {
+                    addNewPackageField(pkg, true);
+                }
+            } else {
+                // Create new package fields
+                addNewPackageField();
+            }
         });
 }
 
 function buildFormData(form) {
-    // Convert form data to a JSON object, handling multiple fields with the same name
     const formData = new FormData(form);
     const formObject = {};
     const benefits = [];
 
     for (const [key, value] of formData) {
         if (key === 'benefits') {
-            // If key is benefit_name, push a new object into benefits array
             benefits.push({ name: value, isAvailable: false });
         } else if (key === 'isAvailable' && benefits.length > 0) {
-            // Update the isAvailable field of the last benefit in the array
-            benefits[benefits.length - 1].isAvailable = value == 'on';
+            benefits[benefits.length - 1].isAvailable = value === 'on';
         } else {
-            // For other fields, add them directly to the formObject
             if (formObject[key]) {
-                // If the key already exists, convert it to an array and push the new value
                 if (Array.isArray(formObject[key])) {
                     formObject[key].push(value);
                 } else {
@@ -94,51 +101,51 @@ function buildFormData(form) {
         }
     }
 
-    // Add the benefits array to the formObject
     formObject.benefits = benefits;
     return formObject;
 }
 
-function addNewPackageField(pkg, isNew = true) {
+function addNewPackageField(pkg = {}, isUpdate = false) {
     const container = document.createElement('form');
     const benefitInfoField = document.createElement('p');
-    const benefitcontainer = document.createElement('div');
+    const benefitContainer = document.createElement('div');
     const packagePrice = document.createElement('input');
-
     const packageHiddenId = document.createElement('input');
-
     const addBenefitBtn = document.createElement('button');
     const removePackageBtn = document.createElement('button');
     const submitButton = document.createElement('button');
     const indicator = document.createElement('p');
 
-    // const packageInterval = document.createElement('select')
     benefitInfoField.innerText =
         'Please check the box if the corresponding benefit is available for this package';
+
     const packageName = document.createElement('select');
     packageName.name = 'name';
-    packageName.disabled = isNew;
+    packageName.disabled = !isUpdate;
 
     const packageInterval = document.createElement('select');
     packageInterval.name = 'interval';
-    packageInterval.disabled = isNew;
+    packageInterval.disabled = !isUpdate;
 
     AvailablePackages?.allowedIntervals?.forEach((el) => {
         const option = document.createElement('option');
         option.value = el;
-        option.innerText = pkg?.interval || el;
+        option.innerText = el;
+        if (pkg?.interval === el) {
+            option.selected = true;
+        }
         packageInterval.append(option);
     });
 
     AvailablePackages?.allowedPackages?.forEach((el) => {
         const option = document.createElement('option');
         option.value = el.name;
-        option.innerText = pkg?.name || el.name;
+        option.innerText = el.name;
+        if (pkg?.name === el.name) {
+            option.selected = true;
+        }
         packageName.append(option);
     });
-
-    // packageName.value = pkg?.name || ""
-    // packageName.disabled = isNew
 
     packageHiddenId.name = 'packageId';
     packageHiddenId.value = pkg?._id || '';
@@ -148,10 +155,6 @@ function addNewPackageField(pkg, isNew = true) {
     packagePrice.value = pkg?.amount || '';
     packagePrice.disabled = pkg?.name === 'Free';
 
-    // packageInterval.name = "interval"
-    // packageInterval.value = pkg?.interval || ""
-    // packageInterval.disabled = true
-
     packageName.placeholder = 'Write Package name';
     packagePrice.placeholder = 'Add Price';
     packageInterval.placeholder = 'month, year';
@@ -160,39 +163,36 @@ function addNewPackageField(pkg, isNew = true) {
         'p-4 border border-blue-500 my-4 bg-gray-300 rounded-md';
     benefitInfoField.className =
         'p-4 border my-4 bg-yellow-100 text-yellow-600';
-    benefitcontainer.className = 'p-2';
+    benefitContainer.className = 'p-2';
     packageName.className = 'p-2 mr-2';
     indicator.className = 'p-2 mr-2 !text-red-500 error-message';
-
     packagePrice.className = 'p-2 mr-2';
     packageInterval.className = 'p-2 mr-2';
-    packageInterval.disabled = isNew;
 
     addBenefitBtn.className =
         'p-2 border bg-gray-500 rounded-md text-white mr-2';
     removePackageBtn.className =
         'p-2 border bg-gray-500 rounded-md text-white mr-2';
     submitButton.className =
-        'p-2 border bg-gray-500 rounded-md text-white mr-2 text-white';
+        'p-2 border bg-gray-500 rounded-md text-white mr-2';
 
     removePackageBtn.type = 'button';
-    // removePackageBtn.hidden = isNew
-
     addBenefitBtn.type = 'button';
     submitButton.type = 'submit';
 
-    addBenefitBtn.innerText = 'Add benefit';
+    addBenefitBtn.innerText = 'Add Benefit';
     removePackageBtn.innerText = 'Dismiss Section';
-    submitButton.innerText = 'Create Package';
+    submitButton.innerText = isUpdate ? 'Update Package' : 'Create Package';
 
-    pkg?.benefits.map((b) => {
-        addBenefitField(benefitcontainer, b);
-    });
+    if (pkg?.benefits) {
+        pkg.benefits.map((b) => addBenefitField(benefitContainer, b));
+    }
 
     addBenefitBtn.addEventListener('click', () =>
-        addBenefitField(benefitcontainer, undefined)
+        addBenefitField(benefitContainer)
     );
-    addBenefitField(benefitcontainer, undefined);
+    addBenefitField(benefitContainer, undefined);
+
     removePackageBtn.addEventListener('click', () => {
         const canContinue =
             packageName.value.length < 2 ||
@@ -207,6 +207,10 @@ function addNewPackageField(pkg, isNew = true) {
         }
     });
 
+    container.addEventListener('submit', (event) =>
+        handleSubmitNewPackage(event, indicator, isUpdate)
+    );
+
     container.append(
         packageName,
         packagePrice,
@@ -215,17 +219,13 @@ function addNewPackageField(pkg, isNew = true) {
         removePackageBtn,
         packageHiddenId
     );
-    container.append(benefitInfoField, benefitcontainer);
+    container.append(benefitInfoField, benefitContainer);
     container.append(indicator, submitButton);
-
-    container.addEventListener('submit', (even) =>
-        handleSubmitNewPackage(even, indicator)
-    );
 
     document.getElementById('packagesContainer').append(container);
 }
 
-async function handleSubmitNewPackage(event, indicator) {
+async function handleSubmitNewPackage(event, indicator, isUpdate = false) {
     event.preventDefault();
 
     const formData = buildFormData(event.target);
@@ -234,13 +234,15 @@ async function handleSubmitNewPackage(event, indicator) {
         for (let i = 0; i < formElements.length; i++) {
             formElements[i].disabled = true;
         }
-        indicator.textContent = 'Please wait. Submitting Plan....';
+        indicator.textContent = isUpdate
+            ? 'Please wait. Updating Plan....'
+            : 'Please wait. Submitting Plan....';
         const response = await fetch(
             `/api/packages${
                 formData?.packageId ? `/${formData?.packageId}` : ''
             }`,
             {
-                method: `${formData?.packageId ? `PUT` : 'POST'}`,
+                method: formData?.packageId ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -254,12 +256,12 @@ async function handleSubmitNewPackage(event, indicator) {
             return;
         }
 
-        indicator.textContent = 'Plan Created successully';
-        // alert("Plan added successfully")
+        indicator.textContent = isUpdate
+            ? 'Plan Updated Successfully'
+            : 'Plan Created Successfully';
     } catch (error) {
         console.log('🚀 ~ handleSubmitNewPackage ~ error:', error);
-        indicator.textContent = error.response.data.errors;
-        // alert(error.response.data.errors)
+        indicator.textContent = error.response?.data?.errors || error.message;
     } finally {
         for (let i = 0; i < formElements.length; i++) {
             formElements[i].disabled = false;
@@ -275,44 +277,111 @@ function addBenefitField(container, benefit) {
     const benefitContainer = document.createElement('div');
     const input = document.createElement('input');
     const isAvailable = document.createElement('input');
-    const addMoreBtn = document.createElement('button');
     const removeBtn = document.createElement('button');
 
     input.name = 'benefits';
     input.value = benefit?.name || '';
 
     isAvailable.name = 'isAvailable';
-    isAvailable.checked = !!benefit?.isAvailable || false;
+    isAvailable.checked = !!benefit?.isAvailable;
     isAvailable.className = 'p-2 mx-3';
     isAvailable.type = 'checkbox';
 
     benefitContainer.className = 'p-2';
     input.placeholder = 'Add a benefit for this plan';
     input.className = 'p-2 mr-2';
-    addMoreBtn.className = 'p-2 border bg-gray-500 rounded-md text-white';
     removeBtn.className = 'p-2 border bg-gray-500 rounded-md text-white mr-2';
-
-    addMoreBtn.innerText = 'Add';
-    removeBtn.innerText = 'Remove';
-
-    addMoreBtn.type = 'button';
-    addMoreBtn.hidden = true;
+    removeBtn.innerText = 'Remove Benefit';
     removeBtn.type = 'button';
 
-    addMoreBtn.addEventListener('click', () =>
-        addBenefitField(benefitContainer)
-    );
-    removeBtn.addEventListener('click', () => {
-        if (input.value.length > 2) {
-            if (confirm('Your input will be cleared')) {
-                benefitContainer.remove();
-            }
-        } else {
-            benefitContainer.remove();
-        }
-    });
-
-    benefitContainer.append(isAvailable, input, addMoreBtn, removeBtn);
-
+    benefitContainer.append(input, isAvailable, removeBtn);
     container.append(benefitContainer);
+
+    removeBtn.addEventListener('click', () => {
+        benefitContainer.remove();
+    });
+}
+async function displayPackagesForUpdate() {
+    const container = document.getElementById('packagesContainer');
+    if (!container) {
+        console.error('Element with ID "packagesContainer" not found.');
+        return;
+    }
+
+    // Clear existing content
+    container.innerHTML = '';
+
+    for (const pkg of AvailablePackages.allowedPackages) {
+        // Create a form for each package
+        const form = document.createElement('form');
+        form.className = 'package-form';
+        form.innerHTML = `
+            <h3 class="text-lg font-bold">${pkg.name}</h3>
+            <input type="hidden" name="packageId" value="${pkg._id}">
+            <label>Name:</label>
+            <input type="text" name="name" value="${pkg.name}" class="border p-2 mb-2 w-full">
+            <label>Price:</label>
+            <input type="text" name="amount" value="${pkg.amount}" class="border p-2 mb-2 w-full">
+            <label>Interval:</label>
+            <input type="text" name="interval" value="${pkg.interval}" class="border p-2 mb-2 w-full">
+            <div id="benefitsContainer-${pkg._id}"></div>
+            <button type="submit" class="bg-blue-500 text-white p-2">Update Package</button>
+        `;
+
+        // Add benefits
+        const benefitsContainer = form.querySelector(
+            `#benefitsContainer-${pkg._id}`
+        );
+        pkg.benefits.forEach((benefit) =>
+            addBenefitField(benefitsContainer, benefit)
+        );
+
+        // Create delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'bg-red-500 text-white p-2 ml-2';
+        deleteBtn.textContent = 'Delete Package';
+        deleteBtn.setAttribute('data-package-id', pkg._id);
+
+        deleteBtn.addEventListener('click', handleDeletePackage);
+
+        // Create a container for form and delete button
+        const formContainer = document.createElement('div');
+        formContainer.className = 'flex items-center';
+
+        formContainer.appendChild(form);
+        formContainer.appendChild(deleteBtn);
+
+        // Append the form container to the main container
+        container.appendChild(formContainer);
+    }
+}
+
+async function handleDeletePackage(event) {
+    const packageId = event.target.getAttribute('data-package-id');
+    if (!packageId) {
+        console.error('Package ID not found.');
+        return;
+    }
+
+    if (confirm('Are you sure you want to delete this package?')) {
+        try {
+            const response = await fetch(`/packages/${packageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Package deleted successfully.');
+                // Refresh the package list
+                getPackages(true);
+            } else {
+                alert('Failed to delete package: ' + result.errors);
+            }
+        } catch (error) {
+            console.error('Error deleting package:', error);
+        }
+    }
 }

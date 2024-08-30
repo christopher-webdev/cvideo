@@ -37,13 +37,13 @@ router.post('/', async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const resetURL = `https://eldravideo.com/reset-password/${token}`;
+        const resetURL = `http://localhost:443/reset-password/${token}`;
 
         await transporter.sendMail({
             to: user.email,
             from: 'cvideoai@gmail.com', // Replace with your email
             subject: 'Password Reset',
-            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n<a href="${resetURL}">Reset Password</a>\n\nIf you did not request this, please ignore this email.\n`,
+            html: `You are receiving this because you (or someone else) have requested the reset of the password for your account.<br><br>Please click on the following link to complete the process:<br><br><a href="${resetURL}">Click here to change your password</a><br><br>If you did not request this, please ignore this email.`,
         });
 
         res.json({
@@ -120,17 +120,21 @@ router.post('/reset-password/:token', async (req, res) => {
             resetPasswordToken: token,
             resetPasswordExpires: { $gt: Date.now() },
         });
+
         if (!user) {
             return res.status(400).json({
                 msg: 'Password reset token is invalid or has expired.',
             });
         }
+
         // Update user's password
         user.password = password;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
         await user.save();
-        res.json({ msg: 'Password has been successfully reset.' });
+
+        // Redirect to login.html after successful password reset
+        res.redirect('/login.html');
     } catch (err) {
         console.error(err);
         res.status(500).json({
