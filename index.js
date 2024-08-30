@@ -209,6 +209,19 @@ app.use('/api/user-info', ensureAuthenticated, userInfoController);
 app.use('/api/billings', userBillingController);
 app.use('/api/packages', userPackageController);
 // Serve index.html for the root URL
+
+// Catch-all route for 404 errors
+app.use((req, res, next) => {
+    res.status(404);
+    res.sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
+// Generic error handler for other errors
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500);
+    res.sendFile(path.join(__dirname, 'public', '500.html'));
+});
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
