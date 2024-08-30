@@ -40,7 +40,7 @@ module.exports = function (passport) {
                 clientID:
                     '250038052754-atan58f9rgc9q6oacvrq11mfdlneecph.apps.googleusercontent.com',
                 clientSecret: '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',
-                callbackURL: `${getEnv('APP_URL')}/auth/google/callback`,
+                callbackURL: 'https://eldravideo.com/auth/google/callback',
             },
             async (accessToken, refreshToken, profile, done) => {
                 const fullName = profile.displayName || '';
