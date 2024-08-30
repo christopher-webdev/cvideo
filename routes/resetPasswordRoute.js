@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const resetURL = `http://localhost:443/reset-password/${token}`;
+        const resetURL = `https://eldravideo.com/reset-password/${token}`;
 
         await transporter.sendMail({
             to: user.email,
