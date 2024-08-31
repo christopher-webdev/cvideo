@@ -578,18 +578,29 @@ router.get('/me', (req, res) => {
         subscriptionPlan: user.subscriptionPlan,
     });
 });
-
 router.post('/logout', async (req, res, next) => {
     if (req.isAuthenticated()) {
         try {
             const user = req.user;
+            const isImpersonating = user.isImpersonated || false; // Check if the user is impersonating
+
+            // Set the user as signed out and reset impersonation if necessary
             user.isSignedIn = false;
+            if (isImpersonating) {
+                user.isImpersonated = false; // Reset the impersonation flag
+            }
             await user.save();
+
+            // Log the user out
             req.logout((err) => {
                 if (err) {
                     return next(err);
                 }
-                res.redirect('/login.html');
+                if (isImpersonating) {
+                    res.redirect('/admin-dashboard.html'); // Redirect to admin dashboard if impersonating
+                } else {
+                    res.redirect('/login.html'); // Redirect to login page if not impersonating
+                }
             });
         } catch (err) {
             console.error(err);
@@ -599,6 +610,27 @@ router.post('/logout', async (req, res, next) => {
         res.redirect('/index.html');
     }
 });
+
+// router.post('/logout', async (req, res, next) => {
+//     if (req.isAuthenticated()) {
+//         try {
+//             const user = req.user;
+//             user.isSignedIn = false;
+//             await user.save();
+//             req.logout((err) => {
+//                 if (err) {
+//                     return next(err);
+//                 }
+//                 res.redirect('/login.html');
+//             });
+//         } catch (err) {
+//             console.error(err);
+//             res.status(500).json({ message: 'Internal server error' });
+//         }
+//     } else {
+//         res.redirect('/index.html');
+//     }
+// });
 
 router.get('/status', async (req, res) => {
     try {

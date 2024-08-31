@@ -112,6 +112,10 @@ const UserSchema = new mongoose.Schema({
     address: {
         type: String,
     },
+    isImpersonated: {
+        type: Boolean,
+        default: false,
+    },
     credits: [CreditSchema],
 });
 

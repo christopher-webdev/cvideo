@@ -229,6 +229,10 @@ module.exports = function (passport) {
                 entity = await Admin.findById(obj.id);
             } else {
                 entity = await User.findById(obj.id);
+                if (entity.isImpersonated) {
+                    entity.isImpersonated = false; // Reset impersonation flag
+                    await entity.save();
+                }
             }
             done(null, entity);
         } catch (err) {
@@ -236,7 +240,6 @@ module.exports = function (passport) {
         }
     });
 };
-
 // Helper function to apply default credits
 async function applyDefaultCredits(userId, subscriptionPlan) {
     try {

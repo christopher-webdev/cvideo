@@ -1192,12 +1192,11 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="py-2 px-4">#</th>
-                                    <th class="py-2 px-4">User id</th>
+                                    <th class="py-2 px-4">User ID</th>
                                     <th class="py-2 px-4">Name</th>
                                     <th class="py-2 px-4">Email</th>
                                     <th class="py-2 px-4">Phone Number</th>
                                     <th class="py-2 px-4">Address</th>
-                                    <th class="py-2 px-4">Subscription Plan</th>
                                     <th class="py-2 px-4">Actions</th>
                                 </tr>
                             </thead>
@@ -1205,6 +1204,7 @@
                                 <!-- User rows will be dynamically inserted here -->
                             </tbody>
                         </table>
+
                         <!-- Modal Structure -->
                         <div
                             id="subscriptionModal"
@@ -2513,40 +2513,40 @@
                     const planGroup = document.createElement('div');
                     planGroup.classList.add('plan-group', 'mb-4');
                     planGroup.innerHTML = `
-            <div class="newPlanDetails"><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                <h4>Plan ${planCount}</h4>
-                <div class="form-group">
-                    <label for="planName${planCount}">Plan Name</label>
-                    <input type="text" class="form-control" id="planName${planCount}" placeholder="Enter plan name" required>
-                </div>
-                <div class="dataContainer">
-                    <div class="data-group mb-3">
-                        <h5>Data 1</h5>
-                        <div class="form-group">
-                            <label for="dataName${dataCount}">Data Name</label>
-                            <select class="form-control dataName" id="dataName${dataCount}" required>
-                                <option value="Price & Credits">Price & Credits</option>
-                                <option value="Avatars">Avatars</option>
-                                <option value="All Features">All Features</option>
-                                <option value="Team Collaboration">Team Collaboration</option>
-                                <option value="Video Creation">Video Creation</option>
-                                <option value="">Add More...</option>
-                            </select>
-                            <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: none;">
-                        </div>
-                        <div class="form-group">
-                            <label for="subOption${dataCount}">Sub-option</label>
-                            <input type="text" class="form-control subOption" id="subOption${dataCount}" placeholder="Enter sub-option" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subOptionValue${dataCount}">Sub-option Value</label>
-                            <input type="text" class="form-control subOptionValue" id="subOptionValue${dataCount}" placeholder="Enter sub-option value" required>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-secondary addDataBtn">Add More Data</button>
-                </div>
-            `;
+                        <div class="newPlanDetails"><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                            <h4>Plan ${planCount}</h4>
+                            <div class="form-group">
+                                <label for="planName${planCount}">Plan Name</label>
+                                <input type="text" class="form-control" id="planName${planCount}" placeholder="Enter plan name" required>
+                            </div>
+                            <div class="dataContainer">
+                                <div class="data-group mb-3">
+                                    <h5>Data 1</h5>
+                                    <div class="form-group">
+                                        <label for="dataName${dataCount}">Data Name</label>
+                                        <select class="form-control dataName" id="dataName${dataCount}" required>
+                                            <option value="Price & Credits">Price & Credits</option>
+                                            <option value="Avatars">Avatars</option>
+                                            <option value="All Features">All Features</option>
+                                            <option value="Team Collaboration">Team Collaboration</option>
+                                            <option value="Video Creation">Video Creation</option>
+                                            <option value="">Add More...</option>
+                                        </select>
+                                        <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: none;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="subOption${dataCount}">Sub-option</label>
+                                        <input type="text" class="form-control subOption" id="subOption${dataCount}" placeholder="Enter sub-option" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="subOptionValue${dataCount}">Sub-option Value</label>
+                                        <input type="text" class="form-control subOptionValue" id="subOptionValue${dataCount}" placeholder="Enter sub-option value" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary addDataBtn">Add More Data</button>
+                            </div>
+                        `;
                     document
                         .getElementById('plansContainer')
                         .appendChild(planGroup);
@@ -2560,29 +2560,29 @@
                     const newDataGroup = document.createElement('div');
                     newDataGroup.classList.add('data-group', 'mb-3');
                     newDataGroup.innerHTML = `
-                <div class=""><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                    <h5>Data ${dataCount}</h5>
-                    <div class="form-group">
-                        <label for="dataName${dataCount}">Data Name</label>
-                        <select class="form-control dataName" id="dataName${dataCount}" required>
-                            <option value="Price & Credits">Price & Credits</option>
-                            <option value="Avatars">Avatars</option>
-                            <option value="All Features">All Features</option>
-                            <option value="Team Collaboration">Team Collaboration</option>
-                            <option value="Video Creation">Video Creation</option>
-                            <option value="">Add More...</option>
-                        </select>
-                        <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: none;">
-                    </div>
-                    <div class="form-group">
-                        <label for="subOption${dataCount}">Sub-option</label>
-                        <input type="text" class="form-control subOption" id="subOption${dataCount}" placeholder="Enter sub-option" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subOptionValue${dataCount}">Sub-option Value</label>
-                        <input type="text" class="form-control subOptionValue" id="subOptionValue${dataCount}" placeholder="Enter sub-option value" required>
-                    </div></div>
-                `;
+                            <div class=""><button  onclick="this.parentNode.remove()" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                <h5>Data ${dataCount}</h5>
+                                <div class="form-group">
+                                    <label for="dataName${dataCount}">Data Name</label>
+                                    <select class="form-control dataName" id="dataName${dataCount}" required>
+                                        <option value="Price & Credits">Price & Credits</option>
+                                        <option value="Avatars">Avatars</option>
+                                        <option value="All Features">All Features</option>
+                                        <option value="Team Collaboration">Team Collaboration</option>
+                                        <option value="Video Creation">Video Creation</option>
+                                        <option value="">Add More...</option>
+                                    </select>
+                                    <input type="text" class="form-control newDataName mt-2" placeholder="Enter new data name" style="display: none;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="subOption${dataCount}">Sub-option</label>
+                                    <input type="text" class="form-control subOption" id="subOption${dataCount}" placeholder="Enter sub-option" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subOptionValue${dataCount}">Sub-option Value</label>
+                                    <input type="text" class="form-control subOptionValue" id="subOptionValue${dataCount}" placeholder="Enter sub-option value" required>
+                                </div></div>
+                            `;
                     dataContainer.appendChild(newDataGroup);
                 }
             });
@@ -2686,25 +2686,25 @@
                                     PlanStatus = `<span class="badge bg-success">${plan.plan_status}</span>`;
                                 }
                                 const row = `
-                <tr>
-                    <td>${x}</td>
-                    <td>${plan.plan_title}</td>
-                    <td>${plan.plan_heading}</td>
-                    <td>${plan.plan_price}</td>
-                    <td>${plan.plan_subscription}</td>
-                    <td>${PlanStatus}</td>
-                    <td><ul>${featuresList}</ul></td>
-                    <td>
-                        <div class="d-flex">
-                            <div class="col-6">
-                        <button class="btn btn-sm btn-primary" onclick="editPlan('${plan.plan_id}')">Edit</button>
-                        </div>
-                            <div class="col-6">
-                        <button class="btn btn-sm btn-danger" onclick="deletePlan('${plan.plan_id}')">Delete</button>
-                    </div>
-                        </td>
-                </tr>
-            `;
+                            <tr>
+                                <td>${x}</td>
+                                <td>${plan.plan_title}</td>
+                                <td>${plan.plan_heading}</td>
+                                <td>${plan.plan_price}</td>
+                                <td>${plan.plan_subscription}</td>
+                                <td>${PlanStatus}</td>
+                                <td><ul>${featuresList}</ul></td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="col-6">
+                                    <button class="btn btn-sm btn-primary" onclick="editPlan('${plan.plan_id}')">Edit</button>
+                                    </div>
+                                        <div class="col-6">
+                                    <button class="btn btn-sm btn-danger" onclick="deletePlan('${plan.plan_id}')">Delete</button>
+                                </div>
+                                    </td>
+                            </tr>
+                        `;
 
                                 tbody.innerHTML += row;
                                 $('#plansTable').DataTable();
@@ -2770,25 +2770,25 @@
                                             PlanStatus = `<span class="badge bg-success">${plan.plan_status}</span>`;
                                         }
                                         const row = `
-                <tr>
-                    <td>${x}</td>
-                    <td>${plan.plan_title}</td>
-                    <td>${plan.plan_heading}</td>
-                    <td>${plan.plan_price}</td>
-                    <td>${plan.plan_subscription}</td>
-                    <td>${PlanStatus}</td>
-                    <td><ul>${featuresList}</ul></td>
-                    <td>
-                        <div class="d-flex">
-                            <div class="col-6">
-                        <button class="btn btn-sm btn-primary" onclick="editPlan('${plan.plan_id}')">Edit</button>
-                        </div>
-                            <div class="col-6">
-                        <button class="btn btn-sm btn-danger" onclick="deletePlan('${plan.plan_id}')">Delete</button>
-                    </div>
-                        </td>
-                </tr>
-            `;
+                            <tr>
+                                <td>${x}</td>
+                                <td>${plan.plan_title}</td>
+                                <td>${plan.plan_heading}</td>
+                                <td>${plan.plan_price}</td>
+                                <td>${plan.plan_subscription}</td>
+                                <td>${PlanStatus}</td>
+                                <td><ul>${featuresList}</ul></td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="col-6">
+                                    <button class="btn btn-sm btn-primary" onclick="editPlan('${plan.plan_id}')">Edit</button>
+                                    </div>
+                                        <div class="col-6">
+                                    <button class="btn btn-sm btn-danger" onclick="deletePlan('${plan.plan_id}')">Delete</button>
+                                </div>
+                                    </td>
+                            </tr>
+                        `;
 
                                         tbody.innerHTML += row;
                                         $('#plansTable').DataTable();
@@ -3713,24 +3713,30 @@
                             );
 
                             row.innerHTML = `
-                <td class="py-2 px-4">${index + 1}</td>
-                <td class="py-2 px-4">${user._id}</td>
-                <td class="py-2 px-4">${user.firstName} ${
+                            <td class="py-2 px-4">${index + 1}</td>
+                            <td class="py-2 px-4">${user._id}</td>
+                            <td class="py-2 px-4">${user.firstName} ${
                                 user.lastName || ''
                             }</td>
-                <td class="py-2 px-4">${user.email}</td>
-                <td class="py-2 px-4">${user.phoneNumber || 'N/A'}</td>
-                <td class="py-2 px-4">${user.address || 'N/A'}</td>
-                <td class="py-2 px-4">${user.subscriptionPlan}</td>
-                <td class="py-2 px-4">
-                    <button
-                        onclick="deleteUser('${user._id}')"
-                        class="text-red-600 hover:text-red-800 font-semibold">
-                        Delete user
-                    </button><br><br>
-                                
-                </td>
-            `;
+                            <td class="py-2 px-4">${user.email}</td>
+                            <td class="py-2 px-4">${
+                                user.phoneNumber || 'N/A'
+                            }</td>
+                            <td class="py-2 px-4">${user.address || 'N/A'}</td>
+                            <td class="py-2 px-4">${user.subscriptionPlan}</td>
+                            <td class="py-2 px-4">
+                                <button
+                                    onclick="impersonateUser('${user._id}')"
+                                    class="text-blue-600 hover:text-blue-800 font-semibold">
+                                    View User DashBoard
+                                </button><br><br>
+                                <button
+                                    onclick="deleteUser('${user._id}')"
+                                    class="text-red-600 hover:text-red-800 font-semibold">
+                                    Delete User
+                                </button>
+                            </td>
+                        `;
                             userTableBody.appendChild(row);
                         });
                     } catch (error) {
@@ -5619,7 +5625,23 @@
                 }
             }
         </style>
-
+        <script>
+            function impersonateUser(userId) {
+                fetch(`/impersonate/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin', // Include cookies in the request
+                }).then((response) => {
+                    if (response.ok) {
+                        window.location.href = '/dashboard.html'; // Redirect to the user's dashboard
+                    } else {
+                        alert('Failed to impersonate user');
+                    }
+                });
+            }
+        </script>
         <!-- <button
 onclick="window.openSubscriptionModal('${user._id}', '${
         user.subscriptionPlan

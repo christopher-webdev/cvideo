@@ -81,7 +81,7 @@
                         >
                             <!-- Dashobards -->
                             <a
-                                href="index.html"
+                                href="dashboard.html"
                                 class="flex size-11 items-center justify-center rounded-lg outline-none transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25"
                                 x-tooltip.placement.right="'Home'"
                             >
@@ -982,6 +982,9 @@
                                 (u) =>
                                     (u.innerHTML = `${data.firstName} ${data.lastName}`)
                             );
+                        document.getElementById('profile-picture').src =
+                            data.profilePicture ||
+                            'images/avatar/default-profile.png';
                         document.querySelector('.job').innerHTML = data.email;
                         document.querySelector('.email').innerHTML = data.email;
                         document.querySelector(
@@ -989,6 +992,22 @@
                         ).innerHTML = `${data.firstName} ${data.lastName}`;
                         document.querySelector('#subscription-plan').innerHTML =
                             data.subscriptionPlan;
+                    });
+                document
+                    .getElementById('logout-button')
+                    .addEventListener('click', function () {
+                        axios
+                            .post('/auth/logout')
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    window.location.href = 'index.html'; // Redirect to login page
+                                } else {
+                                    console.error('Logout failed');
+                                }
+                            })
+                            .catch((error) =>
+                                console.error('Error during logout:', error)
+                            );
                     });
             });
         </script>
