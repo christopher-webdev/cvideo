@@ -1413,29 +1413,33 @@
             <div id="manageVideoSection" class="hidden bg-gray-50">
                 <div id="AffiliatePaymentRequestSection">
                     <div class="container grid grid-cols-3 gap-2">
-                        <div>
-                            <form action="/update-affiliate" id="AffiliateSystem" name="AffiliateSystem" method="POST">
-                                <h2>Update Affiliate System</h2>
+                        <div class="space-y-4">
+                            <form id="earningPerUserRefereredForm">
+                                <h2>Earning Per User Referred</h2>
                                 <small class="text-slate-400">
-                                    Here you can set the number of referrals before
-                                    users request for withdrawals and set the
-                                    aamount per 1 referral.
+                                    Set the amount a user earns for referering a friend. (Not for Upgraded user)
                                 </small>
 
-                                <input type="text" id="id" name="id" value="1" hidden />
-
                                 <div>
-                                    <label for="limit">Limit:</label>
-                                    <input type="text" id="limit" name="limit" /><br /><br />
-
-                                    <label for="price">Price per unit</label>
-                                    <input type="text" id="price" name="price" /><br /><br />
-
-                                    <button class="btn btn-sm btn-primary" type="submit">
-                                        Update System
+                                    <label for="price">Amount</label>
+                                    <input id="earningPerUserReferered" type="text" placeholder="(e.g: 30)" name="amount" />
+                                    <button type="submit">
+                                        Submit
                                     </button>
                                 </div>
                             </form>
+                                <form class="mb-4" id="earningParUpgradedRefererForm">
+                                    <h2 class="tex-lg text-black">Earning per upgraded referer</h2>
+                                    <small class="text-slate-400">How much a user gets when the person they referred
+                                        upgrades to any of these plans</small>
+                                    <div class="flex flex-grow gap-3 my-4">
+                                        <button data-name="month" class="planDurationSettingControl active" type="button">Monthly</button>
+                                        <button data-name="year" class="planDurationSettingControl" type="button">Yearly</button>
+                                    </div>
+    
+                                    <div id="planDurationSetting"></div>
+                                    <button type="submit">Submit</button>
+                                </form>
                         </div>
 
                         <div>
@@ -1474,7 +1478,7 @@
                                 </select>
 
                                 <label for="videoLink">YouTube Video Link:</label>
-                                <input type="text" id="videoLink" name="videoLink" required />
+                                <input type="text" placeholder="https://www.youtube.com" id="videoLink" name="videoLink" required />
 
                                 <button type="submit">Add Video</button>
                             </form>
@@ -1482,8 +1486,8 @@
                     </div>
 
                     <br>
-                    <div class="grid grid-cols-3 gap-2 space-x-2-4 p-4">
-                        <div class="space-y-4 rounded-lg bg-white shadow-lg p-4">
+                    <div class=" gap-2 space-x-2-4 p-4">
+                        <!-- <div class="space-y-4 rounded-lg bg-white shadow-lg p-4">
                             <form class="mb-4" id="earningParUpgradedRefererForm">
                                 <h2 class="tex-lg text-black">Earning per upgraded referer</h2>
                                 <small class="text-slate-400">How much a user gets when the person they referred
@@ -1496,7 +1500,7 @@
                                 <div id="planDurationSetting"></div>
                                 <button type="submit">Submit</button>
                             </form>
-                        </div>
+                        </div> -->
                         <table class="table table-responsive col-span-2" id="referral-table">
                             <thead>
                                 <th>#</th>
@@ -1668,45 +1672,45 @@
                         }
                     );
 
-                    document
-                        .getElementById('AffiliateSystem')
-                        .addEventListener(
-                            'submit',
-                            async function submitForm(event) {
-                                event.preventDefault(); // Prevent the default form submission
+                    // document
+                    //     .getElementById('AffiliateSystem')
+                    //     .addEventListener(
+                    //         'submit',
+                    //         async function submitForm(event) {
+                    //             event.preventDefault(); // Prevent the default form submission
 
-                                const formData = new FormData(this);
-                                try {
-                                    const response = await fetch(
-                                        '/auth/update-affiliate',
-                                        {
-                                            method: 'POST',
-                                            body: formData,
-                                        }
-                                    );
+                    //             const formData = new FormData(this);
+                    //             try {
+                    //                 const response = await fetch(
+                    //                     '/auth/update-affiliate',
+                    //                     {
+                    //                         method: 'POST',
+                    //                         body: formData,
+                    //                     }
+                    //                 );
 
-                                    const result = await response.text();
+                    //                 const result = await response.text();
 
-                                    if (response.ok) {
-                                        handleNotificator(
-                                            'success',
-                                            result
-                                        ); // Display success message
-                                    } else {
-                                        handleNotificator(
-                                            'error',
-                                            `${result}`
-                                        ); // Display error message
-                                    }
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                    handleNotificator(
-                                        'error',
-                                        'Server error'
-                                    );
-                                }
-                            }
-                        );
+                    //                 if (response.ok) {
+                    //                     handleNotificator(
+                    //                         'success',
+                    //                         result
+                    //                     ); // Display success message
+                    //                 } else {
+                    //                     handleNotificator(
+                    //                         'error',
+                    //                         `${result}`
+                    //                     ); // Display error message
+                    //                 }
+                    //             } catch (error) {
+                    //                 console.error('Error:', error);
+                    //                 handleNotificator(
+                    //                     'error',
+                    //                     'Server error'
+                    //                 );
+                    //             }
+                    //         }
+                    //     );
                 </script>
                 <br /><br />
                 <hr />

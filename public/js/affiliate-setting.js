@@ -1,12 +1,14 @@
 const requests = [
      fetch(`/api/config?c=affiliateErrorMessage&query=value`).then(res=>res.json()),
      fetch(`/api/config?c=withdrawableAmount&query=value`).then(res=>res.json()),
+     fetch(`/api/config?c=earningPerUserReferered&query=value`).then(res=>res.json()),
 ]
 
 document.addEventListener('DOMContentLoaded', function () {
     const planDurationSettingControls = document.querySelectorAll('.planDurationSettingControl');
     const earningParUpgradedRefererForm = document.querySelector('#earningParUpgradedRefererForm');
     const withdrawableAmountForm = document.querySelector('#withdrawableAmountForm');
+    const earningPerUserRefereredForm = document.querySelector('#earningPerUserRefereredForm');
 
 
     handlePlanDurationChange("month");
@@ -20,11 +22,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     earningParUpgradedRefererForm.addEventListener("submit", handleEarningParUpgradedReferer)
     withdrawableAmountForm.addEventListener("submit", handleWithdrawableAmount)
+    earningPerUserRefereredForm.addEventListener("submit", handleEarningPerUserReferered)
     getAffiliateSettings()
 });
 
 
 
+async function handleEarningPerUserReferered(ev){
+    ev.preventDefault()
+    try {
+        const response = await fetch(`/api/config?c=earningPerUserReferered`, {
+            body: JSON.stringify(buildFormData(ev.target)),
+            method: 'PUT',
+            headers:{
+                "Content-Type": "application/json"
+            }
+         })
+         const data = await response.json()
+         if(response.ok){
+             alert("Success")
+             return
+         }
+         alert("Failure")
+     } catch (error) {
+        alert("An Error occured. Please try again")
+     } 
+}
 async function handleWithdrawableAmount(ev){
     ev.preventDefault()
     try {
@@ -48,13 +71,14 @@ async function handleWithdrawableAmount(ev){
 
 async function getAffiliateSettings(){
     try {
-        const [affiliateErrorMessage, withdrawableAmount] = (await Promise.allSettled(requests)).map(req=>req?.value)
+        const [affiliateErrorMessage, withdrawableAmount, earningPerUserReferered] = (await Promise.allSettled(requests)).map(req=>req?.value)
 
 
 
         
         document.getElementById('affiliateErrorMessage').value = affiliateErrorMessage.value
         document.getElementById('withdrawableAmount').value = withdrawableAmount.value
+        document.getElementById('earningPerUserReferered').value = earningPerUserReferered.value
        
     } catch (error) {
         console.log('🚀 ~ handlePlanDurationChange ~ error:', error);
@@ -97,11 +121,12 @@ async function handleEarningParUpgradedReferer(ev){
 }
 async function handlePlanDurationChange(name) {
     const container = document.getElementById('planDurationSetting');
-    container.innerHTML = '';
+    container.innerHTML = '<b className="text-center text-md mx-auto my-4">Please wait. Loading...</b>';
     try {
         const response = await fetch(`/api/config?c=earningPerUpgradedReferer&query=value.${name}`);
         const data = await response.json();
         let i = 0
+        container.innerHTML = ''
         for (const plan of data.value[name]) {
             i++;
             container.append(createCol2Input(plan.name, plan.amount));

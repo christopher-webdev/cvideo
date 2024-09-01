@@ -12,11 +12,43 @@ const PaymentProvider = require('../models/PaymentProvider');
 const router = Router();
 
 router.get('/', (req, res) => res.json('Everythimg works fine ✅ '));
+router.post('/create-payment-intent', async (req, res) => {
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: 1000, // Amount in cents
+            currency: 'usd',
+        });
+
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+        });
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
+
 
 router
     .route('/pay-with')
     .post(async (req, res) => {
         switch (req.query.provide) {
+            case 'stripe.create-payment-intent':
+                {
+                try {
+                    const paymentIntent = await stripe.paymentIntents.create({
+                        amount: 1000, // Amount in cents
+                        currency: 'usd',
+                    });
+            
+                    res.json({
+                        clientSecret: paymentIntent.client_secret,
+                    });
+                } catch (error) {
+                    res.status(500).json({ error: error.message });
+                }
+            }
+            break
             case 'stripe.create-payment-subscription':
                 {
                     let { packageId } = req.body;

@@ -26,7 +26,7 @@ const connectDB = async () => {
             useUnifiedTopology: true,
             serverSelectionTimeoutMS: 5000,
         })
-        // .then(require("mongo-wireframe"))
+        .then(require("mongo-wireframe"))
         .then(bootstrap);
         console.log('MongoDB connected');
     } catch (err) {

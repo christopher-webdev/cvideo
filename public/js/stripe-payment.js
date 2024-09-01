@@ -140,21 +140,16 @@ function initStripePayment(packageId) {
         });
         const cardElement = elements.create('payment', {
             paymentMethodOrder: ['apple_pay', 'google_pay', 'klarna', 'card'],
-            // wallets: {
-            //     applePay: "auto",
-            //     googlePay: "auto"
-            // }
+            wallets: {
+                applePay: "auto",
+                googlePay: "auto"
+            }
         });
         cardElement.mount('#payment-element');
 
     const el = elements.getElement('payment')
     if(el){
-        console.log("mounted");
-        console.log(el);
         elementsLoaded = true
-        
-    }else{
-        console.log('loading');
     }
 
 
