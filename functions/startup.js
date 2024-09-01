@@ -3,6 +3,7 @@ const AppConfig = require('../models/AppConfig');
 
 const AppConfigTable = {
     earningPerUpgradedReferer: 'earningPerUpgradedReferer',
+    earningPerUserReferered: 'earningPerUserReferered',
     affiliateErrorMessage: 'affiliateErrorMessage',
     widthdrawableAmount: 'withdrawableAmount',
 };
@@ -54,6 +55,15 @@ module.exports.bootstrap = async function bootstrap() {
     ) {
         await AppConfig.create({
             name: AppConfigTable.widthdrawableAmount,
+            value: 0,
+        });
+    }
+
+    if (
+        !(await AppConfig.exists({ name: AppConfigTable.earningPerUserReferered }))
+    ) {
+        await AppConfig.create({
+            name: AppConfigTable.earningPerUserReferered,
             value: 0,
         });
     }

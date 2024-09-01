@@ -44,11 +44,26 @@ router.put('/', async (req, res) => {
         case AppConfigTable.widthdrawableAmount:
             try {
                 const { withdrawableAmount } = req.body;
-                console.log("🚀 ~ router.put ~ req.body:", req.body)
         
                 const appConfig = await AppConfig.findOneAndUpdate(
                     { name: AppConfigTable.widthdrawableAmount },
                     { $set: { value: withdrawableAmount } },
+                    { new: true, upsert: true }
+                );
+        
+                return res.status(200).json(appConfig);
+            } catch (error) {
+                res.status(500).json({ success: false, errors: error.message });
+            }
+            break;
+    
+        case AppConfigTable.earningPerUserReferered:
+            try {
+                const { amount } = req.body;
+        
+                const appConfig = await AppConfig.findOneAndUpdate(
+                    { name: AppConfigTable.earningPerUserReferered },
+                    { $set: { value: amount } },
                     { new: true, upsert: true }
                 );
         

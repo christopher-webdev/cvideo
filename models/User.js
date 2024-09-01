@@ -84,9 +84,6 @@ const UserSchema = new mongoose.Schema({
     activePackage: { type: mongoose.Types.ObjectId, ref: 'Package' },
     activePackageExpiresAt: {
         type: Date,
-        default: new Date(
-            Date.now() + 10 * 365 * 24 * 60 * 60 * 1000
-        ).toISOString(),
     },
     paymantProvider: { type: mongoose.Types.ObjectId, ref: 'PaymentProvider' },
 
@@ -105,6 +102,8 @@ const UserSchema = new mongoose.Schema({
     credits: [CreditSchema],
     referral: {
         type: String,
+
+
     },
     referredBy: {
         type: mongoose.Types.ObjectId,
@@ -116,10 +115,10 @@ const UserSchema = new mongoose.Schema({
     address: {
         type: String,
     },
-    total_earned: {
-        type: Number,
-        default: 0
-    },
+    // total_earned: {
+    //     type: Number,
+    //     default: 0
+    // },
     credits: [CreditSchema],
 });
 

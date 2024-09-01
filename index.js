@@ -35,6 +35,9 @@ const userPackageController = require('./controllers/package.controller');
 const appConfigController = require('./controllers/app-config.controller');
 const { createAvatar } = require('./routes/create-avatar');
 const getEnv = require('./config/env');
+const AppConfig = require('./models/AppConfig');
+const { AppConfigTable } = require('./functions/startup');
+const { formatMoney } = require('./functions/helpers');
 // Passport Config
 require('./config/passport')(passport);
 
@@ -212,11 +215,7 @@ app.use('/api/config', appConfigController);
 
 // Serve index.html for the root URL
 
-// Catch-all route for 404 errors
-app.use((req, res, next) => {
-    res.status(404);
-    res.sendFile(path.join(__dirname, 'public', '404.html'));
-});
+
 
 // Generic error handler for other errors
 app.use((err, req, res, next) => {
@@ -657,10 +656,16 @@ app.get('/api/user-payment', ensureAuthenticated, async (req, res) => {
 app.get('/api/referrals', ensureAuthenticated, async (req, res) => {
     try {
         // Find users where `referral_id` matches the logged-in user's `referral_id`
-        const referrals = await User.find({ referral: req.user.referral_id });
-
+        const user = await User.findById(req.user._id, "referral_id")
+        const referrals = await User.find({ referral: req.user.referral_id }, "firstName lastName");
+        const earnedPerUserRefererd = await AppConfig.findOne({name: AppConfigTable.earningPerUserReferered}, "value")
+        const response = {
+            referral_id: user.referral_id,
+            referrals: referrals.map(ref=>({amountEarned: `+${formatMoney(earnedPerUserRefererd.value)}`, firstName: ref.firstName, lastName: ref.lastName})),
+            totalEarned: formatMoney(referrals.length * earnedPerUserRefererd.value)
+        }
         // Send the referral data
-        res.status(200).json(referrals);
+        res.status(200).json(response);
     } catch (error) {
         console.error('Error fetching referrals:', error.message);
         res.status(500).json({ msg: 'Server error' });
@@ -1394,5 +1399,11 @@ app.delete('/packages/:id', async (req, res) => {
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
+// Catch-all route for 404 errors
+app.use((req, res, next) => {
+    res.status(404);
+    res.sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
