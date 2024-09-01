@@ -1221,6 +1221,10 @@
                         const remainingCreditsDiv =
                             document.getElementById('remainingCredits');
 
+                        // Display the "Submitting..." message
+                        messageDiv.textContent = 'Submitting...';
+                        messageDiv.style.color = 'blue';
+
                         // Access files from FilePond instances
                         const videoFiles = videoPond.getFiles();
                         const pictureFiles = picturePond.getFiles();
@@ -1324,12 +1328,14 @@
                                     'An error occurred while submitting the video.';
                                 messageDiv.style.color = 'red';
                             }
+                        } finally {
+                            // Clear the "Submitting..." message after 5 seconds
+                            setTimeout(() => {
+                                messageDiv.textContent = '';
+                                remainingCreditsDiv.textContent = '';
+                            }, 5000);
                         }
                     });
-                setTimeout(() => {
-                    messageDiv.textContent = '';
-                    remainingCreditsDiv.textContent = '';
-                }, 5000);
             });
 
             function showExhaustedCreditsModal(message) {
