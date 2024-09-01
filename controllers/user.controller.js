@@ -214,10 +214,6 @@ router
                             data: 'subscriptionId',
                         });
                     } catch (error) {
-                        console.log(
-                            '🚀 ~ subscription paypal.success ~ error:',
-                            error
-                        );
                         res.status(500).json({
                             success: false,
                             errrors: error.message,
@@ -323,10 +319,6 @@ router
                             data: subscriptionId,
                         });
                     } catch (error) {
-                        console.log(
-                            '🚀 ~ subscription paypal.success ~ error:',
-                            error
-                        );
                         res.status(500).json({
                             success: false,
                             errrors: error.message,

@@ -32,15 +32,13 @@ const userInfoController = require('./controllers/user.controller');
 const userBillingController = require('./controllers/user-billing.controller');
 const Package = require('./models/Package');
 const userPackageController = require('./controllers/package.controller');
+const appConfigController = require('./controllers/app-config.controller');
 const { createAvatar } = require('./routes/create-avatar');
 const getEnv = require('./config/env');
-
 // Passport Config
 require('./config/passport')(passport);
 
-// Connect to MongoDB
 connectDB();
-
 const app = express();
 
 // Express session
@@ -193,6 +191,8 @@ function ensureAdminAuthenticated(req, res, next) {
     res.redirect('/admin-login.html');
 }
 
+
+
 // API Routes
 app.use('/api/signup', signupRoute);
 app.use('/api/forgot-password', resetPasswordRoute);
@@ -207,7 +207,9 @@ app.use('/admin', require('./routes/admin'));
 //handles user info updates
 app.use('/api/user-info', ensureAuthenticated, userInfoController);
 app.use('/api/billings', userBillingController);
-app.use('/api/packages', userPackageController);
+app.use('/api/packages', ensureAuthenticated, userPackageController);
+app.use('/api/config', appConfigController);
+
 // Serve index.html for the root URL
 
 // Catch-all route for 404 errors
@@ -568,7 +570,7 @@ app.post('/api/paypal-pay', ensureAuthenticated, async (req, res) => {
                 },
                 $setOnInsert: {
                     // Set unique ID and email if inserting new document
-                    id: crypto.randomBytes(16).toString('hex'),
+                    id: crypto.randomUUID().toString('hex'),
                     email: req.user.email,
                 },
             },
@@ -578,7 +580,6 @@ app.post('/api/paypal-pay', ensureAuthenticated, async (req, res) => {
             }
         );
 
-        console.log('Referral after update:', referral);
         res.status(200).json({
             msg: 'PayPal information updated successfully!',
             email: req.user.email,
@@ -612,7 +613,7 @@ app.post('/api/credit-card', ensureAuthenticated, async (req, res) => {
                 },
                 $setOnInsert: {
                     // Set unique ID and email if inserting new document
-                    id: crypto.randomBytes(16).toString('hex'),
+                    id: crypto.randomUUID().toString('hex'),
                     email: req.user.email,
                 },
             },
@@ -1128,13 +1129,16 @@ app.post(
 
             const payload = {
                 name: avatarName,
-                image: avatarImage.path,
+                image: avatarImage?.path,
                 locations: [],
             };
             
             for (let i = 0; i < locations.length; i++) {
-                const path = locations[i].path;
-                const name = locationNames[i];
+                const path = locations?.[i]?.path;
+                const name = locationNames?.[i];
+                if(!(path && name)){
+                    throw new Error("Please check file and name are correctly uploaded")
+                }
                 payload.locations.push({ name, image: path });
             }
             const updatedAvatar = await Avatar.create(payload);

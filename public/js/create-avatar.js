@@ -11,7 +11,7 @@ async function getUploadedAvatars(){
         const data = await response.json();
         
         if (!response.ok) {
-            alert(data.errors || 'Failed to delete avatar');
+            alert('Failed to fetch avatar. Please try again');
             return;
         }
         
@@ -28,7 +28,6 @@ async function getUploadedAvatars(){
                 container.append(initAvatarContainer(img))
             })
             deleteBtn.addEventListener("click", async ()=>{
-                try {
                     const res = await fetch(`/api/avatars/${img._id}`,{method: 'DELETE'})
                     if(res.ok){
                         alert("Avatar Deleted Successfully")
@@ -36,9 +35,6 @@ async function getUploadedAvatars(){
                         return;
                     }
                     alert("Unable to delete avatar. Please try again") 
-                } catch (error) {
-                    alert("Unable to delete avatar. Please try again") 
-                }
             })
 
             const imgName = createEl("p", {textContent: img.name, className: "truncate-1"})
@@ -47,18 +43,13 @@ async function getUploadedAvatars(){
         }
 
     } catch (error) {
-        alert(
-            error.message ||
-                'An error occurred while fetching the avatar'
-        );
+        alert('An error occurred while fetching the avatar. Please try again');
     }
 }
 
 
 async function handleSubmitAvatar(formData){
-    try {
         let url = `/api/avatars`, method = "POST"
-
 
         if(formData.has("id")){
             url = url + `/${formData.get("id")}`
@@ -69,21 +60,14 @@ async function handleSubmitAvatar(formData){
             method,
             body: formData
         });
-        const data = await response.json();
-
+       
+        const data = await response.json()
         if (!response.ok) {
-            alert(data.errors || 'Failed to delete avatar');
+            alert(data.errors);
             return;
         }
         alert(formData.has("id") ? "Avatar Updated successfully":'Avatar successfully uploaded!');
         window.location.reload()
-    } catch (error) {
-        console.log("🚀 ~ handleSubmitAvatar ~ error:", error)
-        alert(
-            error.message ||
-                'An error occurred. Please try again'
-        );
-    }
 }
 
 
@@ -156,6 +140,7 @@ function createAvatarControles(imageData = null) {
     });
 
     const input = createEl('input', {
+        required: true,
         placeholder: 'Enter avatar name (e.g: Avatar 1)',
         className: 'p-2 px-4 w-full rounded-md border-0 outline-none',
         name: "avatarName",  
@@ -186,6 +171,7 @@ function createImageSelector(options, imageData = null) {
 
 
     const inputName = createEl("input",  {
+        required: true,
         placeholder: 'Enter location (e.g: Forest)',
         className: 'ignore p-2 px-4 rounded-md border-0 outline-none block',
         name: options?.inputName,
@@ -195,12 +181,19 @@ function createImageSelector(options, imageData = null) {
     })
 
     const dismissThis = createEl("button", {type: "button", textContent:"x", className: "ignore text-sm text-red-500 rounded-full p-1 absolute top-1 right-1"})
-    const selector = createEl('input', { type: 'file', name: options?.fileName,
+    const selector = createEl('input', { 
+        accept: "image/*",
+        type: 'file', 
+        name: options?.fileName, 
         ...(imageData ? {
         filename: imageData.name
     }: undefined), });
 
     selector.addEventListener('change', function () {
+        if(this.files.length < 1){
+            alert("Please select a file")
+            return;
+        }
         const fr = new FileReader();
         fr.onload = function () {
             image.src = this.result;

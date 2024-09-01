@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const path = require('path');
 const router = express.Router();
-const { User } = require('../models/User');
+const { User, AffiliateSys } = require('../models/User');
 const { SubscriptionPlan } = require('../models/User');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
@@ -119,6 +119,7 @@ router.post(
 
             const credit = await SubscriptionPlan.create({ plan: plan.name });
 
+
             const user = await User.create({
                 firstName,
                 lastName,
@@ -134,6 +135,13 @@ router.post(
                 referral_id, // Include generated referral_id
                 referral, // Referral from the request body
             });
+
+
+            if(referral){
+                const affiliate = await AffiliateSys.findOne().select("signupEarning")
+                const refereredBy = await User.findOne({referral_id: referral})
+                await user.updateOne({referredBy: refereredBy._id, $inc: {total_earned: affiliate.signupEarning}})
+            }
 
             // Save the user to the database
             await user.save();
