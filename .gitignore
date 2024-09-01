@@ -4,3 +4,4 @@ downloads/
 .prettierrc
 .vscode
 txt.txt
+.env
