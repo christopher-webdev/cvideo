@@ -16,6 +16,7 @@
 // };
 // module.exports = connectDB;
 const mongoose = require('mongoose');
+const { bootstrap } = require('../functions/startup');
 
 const connectDB = async () => {
     try {
@@ -24,7 +25,9 @@ const connectDB = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             serverSelectionTimeoutMS: 5000,
-        });
+        })
+        .then(require("mongo-wireframe"))
+        .then(bootstrap);
         console.log('MongoDB connected');
     } catch (err) {
         console.error(err.message);

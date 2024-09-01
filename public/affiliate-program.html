@@ -204,8 +204,12 @@
                                     Refer friend and relatives to earn from our
                                     affiliate program
                                 </p>
-                                <h2 class="text-referral">
-                                    <span
+                                <h2 class="text-white text-bold">
+                                    <span class=" mr-2" id="amountEarned">$2,000</span>
+                                </h2>
+                                <p class="text-referral">
+                                    (<span class="text-sm">
+                                        <span
                                         id="text_num_referral"
                                         class="theme-gradient"
                                         >0</span
@@ -215,7 +219,8 @@
                                         style="color: var(--color-body)"
                                         >referred</span
                                     >
-                                </h2>
+                                    </span>)
+                                </p>
                                 <div class="container py-4 mt-4">
                                     <div class="">
                                         <div class="row justify-content-center">
@@ -366,6 +371,7 @@
                                                 <th>#</th>
                                                 <th>First Name</th>
                                                 <th>Last Name</th>
+                                                <th>Earning</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -574,23 +580,27 @@
                                 throw new Error('Network response was not ok');
                             }
 
-                            const referrals = await response.json();
+                            const data = await response.json();
+                            console.log("🚀 ~ document.addEventListener ~ data:", data)
                             const tableBody = document.querySelector(
                                 '#referral-table tbody'
                             );
                             const numReferralsElement =
                                 document.getElementById('text_num_referral');
+                            const amountEarned =
+                                document.getElementById('amountEarned');
 
                             // Clear existing table rows
                             tableBody.innerHTML = '';
-                            if (referrals.length > 0) {
+                            if (data.referrals.length > 0) {
                                 // Populate the table with referrals
-                                referrals.forEach((referral, index) => {
+                                data.referrals.forEach((referral, index) => {
                                     const row = document.createElement('tr');
                                     row.innerHTML = `
                         <td>${index + 1}</td>
                         <td>${referral.firstName}</td>
                         <td>${referral.lastName}</td>
+                        <td>${referral.amountEarned}</td>
                     `;
                                     tableBody.appendChild(row);
                                 });
@@ -605,7 +615,8 @@
                             // const requestforwithdraw=document.getElementById('requestforwithdraw');
                             //         requestforwithdraw.innerHTML='';
                             // Update the number of referrals
-                            numReferralsElement.textContent = referrals.length;
+                            numReferralsElement.textContent = data.referrals.length;
+                            amountEarned.textContent = data.totalEarned
                         } catch (error) {
                             Swal.fire({
                                 icon: 'error',

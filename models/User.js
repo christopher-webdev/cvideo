@@ -84,9 +84,6 @@ const UserSchema = new mongoose.Schema({
     activePackage: { type: mongoose.Types.ObjectId, ref: 'Package' },
     activePackageExpiresAt: {
         type: Date,
-        default: new Date(
-            Date.now() + 10 * 365 * 24 * 60 * 60 * 1000
-        ).toISOString(),
     },
     paymantProvider: { type: mongoose.Types.ObjectId, ref: 'PaymentProvider' },
 
@@ -105,6 +102,12 @@ const UserSchema = new mongoose.Schema({
     credits: [CreditSchema],
     referral: {
         type: String,
+
+
+    },
+    referredBy: {
+        type: mongoose.Types.ObjectId,
+        ref: "User"
     },
     referral_count: {
         type: String,
@@ -112,10 +115,17 @@ const UserSchema = new mongoose.Schema({
     address: {
         type: String,
     },
+<<<<<<< HEAD
     isImpersonated: {
         type: Boolean,
         default: false,
     },
+=======
+    // total_earned: {
+    //     type: Number,
+    //     default: 0
+    // },
+>>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
     credits: [CreditSchema],
 });
 
@@ -157,6 +167,14 @@ const AffiliateSystem = new mongoose.Schema({
     price: {
         type: String,
     },
+    signupEarning: {
+        type: Number,
+        default: 0
+    },
+    affiliateEarning: {
+        type: Number,
+        default: 0
+    }
 });
 // Affiliate system Schema
 const AffiliatereditInformation = new mongoose.Schema({

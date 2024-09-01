@@ -858,17 +858,16 @@
                     <div class="col-span-12 lg:col-span-8">
                         <div
                             x-data="{
-            plan: {},
-            manageSubscriptions() {
-              fetch('/api/billings/pay-with?provide=stripe.manage-subscriptions')
-              .then(response => response.json())
-              .then(data => {
-                console.log('🚀 ~ manageSubscriptions ~ response:', data)
-                this.plan = data.data;
-              })
-              .catch(error => console.error('Error fetching data:', error));
-            }
-          }"
+                                    plan: {},
+                                    manageSubscriptions() {
+                                    fetch('/api/billings/pay-with?provide=stripe.manage-subscriptions')
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        this.plan = data.data;
+                                    })
+                                    .catch(error => console.error('Error fetching data:', error));
+                                    }
+                                }"
                             x-init="manageSubscriptions"
                         >
                             <div class="card">

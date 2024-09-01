@@ -32,20 +32,25 @@ const userInfoController = require('./controllers/user.controller');
 const userBillingController = require('./controllers/user-billing.controller');
 const Package = require('./models/Package');
 const userPackageController = require('./controllers/package.controller');
+const appConfigController = require('./controllers/app-config.controller');
 const { createAvatar } = require('./routes/create-avatar');
 const getEnv = require('./config/env');
+<<<<<<< HEAD
 const AWS = require('aws-sdk');
 require('dotenv').config();
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 
+=======
+const AppConfig = require('./models/AppConfig');
+const { AppConfigTable } = require('./functions/startup');
+const { formatMoney } = require('./functions/helpers');
+>>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
 // Passport Config
 require('./config/passport')(passport);
 
-// Connect to MongoDB
 connectDB();
-
 const app = express();
 
 // Express session
@@ -290,6 +295,8 @@ function ensureAdminAuthenticated(req, res, next) {
     res.redirect('/admin-login.html');
 }
 
+
+
 // API Routes
 app.use('/api/signup', signupRoute);
 app.use('/api/forgot-password', resetPasswordRoute);
@@ -304,9 +311,12 @@ app.use('/admin', require('./routes/admin'));
 //handles user info updates
 app.use('/api/user-info', ensureAuthenticated, userInfoController);
 app.use('/api/billings', userBillingController);
-app.use('/api/packages', userPackageController);
+app.use('/api/packages', ensureAuthenticated, userPackageController);
+app.use('/api/config', appConfigController);
+
 // Serve index.html for the root URL
 
+<<<<<<< HEAD
 // // Catch 404 errors
 // app.use((req, res, next) => {
 //     res.status(404);
@@ -319,6 +329,9 @@ app.use((err, req, res, next) => {
     res.status(500);
     res.sendFile(path.join(__dirname, 'public', '404.html'));
 });
+=======
+
+>>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
 
 // Handle 502, 503, 504 errors
 app.use((err, req, res, next) => {
@@ -695,7 +708,7 @@ app.post('/api/paypal-pay', ensureAuthenticated, async (req, res) => {
                 },
                 $setOnInsert: {
                     // Set unique ID and email if inserting new document
-                    id: crypto.randomBytes(16).toString('hex'),
+                    id: crypto.randomUUID().toString('hex'),
                     email: req.user.email,
                 },
             },
@@ -705,7 +718,6 @@ app.post('/api/paypal-pay', ensureAuthenticated, async (req, res) => {
             }
         );
 
-        console.log('Referral after update:', referral);
         res.status(200).json({
             msg: 'PayPal information updated successfully!',
             email: req.user.email,
@@ -739,7 +751,7 @@ app.post('/api/credit-card', ensureAuthenticated, async (req, res) => {
                 },
                 $setOnInsert: {
                     // Set unique ID and email if inserting new document
-                    id: crypto.randomBytes(16).toString('hex'),
+                    id: crypto.randomUUID().toString('hex'),
                     email: req.user.email,
                 },
             },
@@ -783,10 +795,16 @@ app.get('/api/user-payment', ensureAuthenticated, async (req, res) => {
 app.get('/api/referrals', ensureAuthenticated, async (req, res) => {
     try {
         // Find users where `referral_id` matches the logged-in user's `referral_id`
-        const referrals = await User.find({ referral: req.user.referral_id });
-
+        const user = await User.findById(req.user._id, "referral_id")
+        const referrals = await User.find({ referral: req.user.referral_id }, "firstName lastName");
+        const earnedPerUserRefererd = await AppConfig.findOne({name: AppConfigTable.earningPerUserReferered}, "value")
+        const response = {
+            referral_id: user.referral_id,
+            referrals: referrals.map(ref=>({amountEarned: `+${formatMoney(earnedPerUserRefererd.value)}`, firstName: ref.firstName, lastName: ref.lastName})),
+            totalEarned: formatMoney(referrals.length * earnedPerUserRefererd.value)
+        }
         // Send the referral data
-        res.status(200).json(referrals);
+        res.status(200).json(response);
     } catch (error) {
         console.error('Error fetching referrals:', error.message);
         res.status(500).json({ msg: 'Server error' });
@@ -1276,6 +1294,7 @@ app.post(
     ]),
     async (req, res) => {
         try {
+<<<<<<< HEAD
             const updatedData = {
                 name: req.body.name,
             };
@@ -1285,6 +1304,24 @@ app.post(
                     success: false,
                     errors: `Name '${updatedData.name} already exists. Please try another name`,
                 });
+=======
+            const [avatarImage, ...locations] = req.files;
+            const { avatarName, location: locationNames } = req.body;
+
+            const payload = {
+                name: avatarName,
+                image: avatarImage?.path,
+                locations: [],
+            };
+            
+            for (let i = 0; i < locations.length; i++) {
+                const path = locations?.[i]?.path;
+                const name = locationNames?.[i];
+                if(!(path && name)){
+                    throw new Error("Please check file and name are correctly uploaded")
+                }
+                payload.locations.push({ name, image: path });
+>>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
             }
 
             if (req.files['avatarImage']) {
@@ -1596,5 +1633,15 @@ app.post('/impersonate/:userId', async (req, res) => {
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+<<<<<<< HEAD
+=======
+app.use(express.static(path.join(__dirname, 'uploads')));
+// Catch-all route for 404 errors
+app.use((req, res, next) => {
+    res.status(404);
+    res.sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
+>>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

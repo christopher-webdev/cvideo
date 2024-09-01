@@ -84,17 +84,8 @@ router
     // ensureAdmin
     .get(async (req, res) => {
         try {
-            let userId = '66c2a72995a879ab671a357c';
-            const isAdmin = true;
-
-            // if(req.query?.select === "credits"){
-            //     const pkg = await Package.find({name: req.query.packageName}).populate("creditStore", "credits");
-
-            //     res.status(200).json({ success: true, data:  pkg.creditStore.credits });
-            //     return ;
-            // }
-            // const {_id: userId} = req.user
-            const user = await User.findById(userId);
+           
+            const user = await User.findById(req.user._id);
 
             const pkgs = await Package.find({});
 
@@ -102,7 +93,7 @@ router
                 success: true,
                 data: {
                     pkgs,
-                    activePlan: user?.activePackage?.name,
+                    activePlan: user.subscriptionPlan
                 },
             });
         } catch (error) {

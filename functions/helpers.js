@@ -261,6 +261,16 @@ async function createWebhooks(payload) {
     }
 }
 
+function formatMoney(amount) {
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+
+    const formattedAmount = formatter.format(amount);
+    return formattedAmount;
+}
+
 module.exports = {
     createPaymentIntent,
     // confirmStripePayment,
@@ -277,6 +287,7 @@ module.exports = {
     getSubscriptionDetails,
     activateSubscription,
     createWebhooks,
+    formatMoney
 };
 
 // async function downloadAndCachePaypalCertUrl(url, cacheKey) {
