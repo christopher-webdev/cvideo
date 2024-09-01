@@ -106,11 +106,19 @@ const UserSchema = new mongoose.Schema({
     referral: {
         type: String,
     },
+    referredBy: {
+        type: mongoose.Types.ObjectId,
+        ref: "User"
+    },
     referral_count: {
         type: String,
     },
     address: {
         type: String,
+    },
+    total_earned: {
+        type: Number,
+        default: 0
     },
     credits: [CreditSchema],
 });
@@ -153,6 +161,14 @@ const AffiliateSystem = new mongoose.Schema({
     price: {
         type: String,
     },
+    signupEarning: {
+        type: Number,
+        default: 0
+    },
+    affiliateEarning: {
+        type: Number,
+        default: 0
+    }
 });
 // Affiliate system Schema
 const AffiliatereditInformation = new mongoose.Schema({
