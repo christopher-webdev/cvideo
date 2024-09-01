@@ -15,7 +15,7 @@ const { RequestSystem } = require('./models/User');
 
 const signupRoute = require('./routes/signupRoute');
 const bodyParser = require('body-parser');
-const multer = require('multer');
+
 const resetPasswordRoute = require('./routes/resetPasswordRoute');
 
 const { check, validationResult } = require('express-validator');
@@ -34,6 +34,11 @@ const Package = require('./models/Package');
 const userPackageController = require('./controllers/package.controller');
 const { createAvatar } = require('./routes/create-avatar');
 const getEnv = require('./config/env');
+const AWS = require('aws-sdk');
+require('dotenv').config();
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 
 // Passport Config
 require('./config/passport')(passport);
@@ -63,27 +68,116 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Multer configuration starts//////////////////////////////////////////////////////////////////////
-const uploadDir = path.join(__dirname, 'uploads');
-const downloadDir = path.join(__dirname, 'downloads');
+// const uploadDir = path.join(__dirname, 'uploads');
+// const downloadDir = path.join(__dirname, 'downloads');
 
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
+// if (!fs.existsSync(uploadDir)) {
+//     fs.mkdirSync(uploadDir, { recursive: true });
+// }
 
-if (!fs.existsSync(downloadDir)) {
-    fs.mkdirSync(downloadDir, { recursive: true });
-}
+// if (!fs.existsSync(downloadDir)) {
+//     fs.mkdirSync(downloadDir, { recursive: true });
+// }
 
-// Multer storage configuration for 'uploads' directory
-const uploadStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+// // Multer storage configuration for 'uploads' directory
+// const uploadStorage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'uploads/');
+//     },
+//     filename: function (req, file, cb) {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//         cb(
+//             null,
+//             file.fieldname +
+//                 '-' +
+//                 uniqueSuffix +
+//                 path.extname(file.originalname)
+//         );
+//     },
+// });
+
+// // Multer storage configuration for 'download' directory
+// const downloadStorage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'downloads/');
+//     },
+//     filename: function (req, file, cb) {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//         cb(
+//             null,
+//             `${req.params.id}-${uniqueSuffix}${path.extname(file.originalname)}`
+//         );
+//     },
+// });
+
+// Configure AWS SDK
+// AWS.config.update({
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID, // Your AWS Access Key ID
+//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // Your AWS Secret Access Key
+//     //region: process.env.AWS_REGION, // Your AWS Region
+// });
+// const s3 = new AWS.S3();
+
+// // Multer storage configuration for 'uploads' directory on S3
+// const uploadStorage = multerS3({
+//     s3: s3,
+//     bucket: process.env.S3_BUCKET_NAME, // Your S3 Bucket Name
+//     acl: 'public-read',
+//     key: function (req, file, cb) {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//         cb(
+//             null,
+//             'uploads/' +
+//                 file.fieldname +
+//                 '-' +
+//                 uniqueSuffix +
+//                 path.extname(file.originalname)
+//         );
+//     },
+// });
+
+// // Multer storage configuration for 'downloads' directory on S3
+// const downloadStorage = multerS3({
+//     s3: s3,
+//     bucket: process.env.S3_BUCKET_NAME, // Your S3 Bucket Name
+//     acl: 'public-read',
+//     key: function (req, file, cb) {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//         cb(
+//             null,
+//             'downloads/' +
+//                 req.params.id +
+//                 '-' +
+//                 uniqueSuffix +
+//                 path.extname(file.originalname)
+//         );
+//     },
+// });
+
+// // Create Multer instances for each storage configuration
+// const upload = multer({ storage: uploadStorage });
+// const downloadUpload = multer({ storage: downloadStorage });
+
+// Configure AWS SDK
+// Initialize S3 Client
+const s3 = new S3Client({
+    region: process.env.AWS_REGION, // Ensure this is set
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     },
-    filename: function (req, file, cb) {
+});
+
+// Multer storage configuration for 'uploads' directory on S3
+const uploadStorage = multerS3({
+    s3: s3,
+    bucket: process.env.S3_BUCKET_NAME,
+    key: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(
             null,
-            file.fieldname +
+            'uploads/' +
+                file.fieldname +
                 '-' +
                 uniqueSuffix +
                 path.extname(file.originalname)
@@ -91,32 +185,35 @@ const uploadStorage = multer.diskStorage({
     },
 });
 
-// Multer storage configuration for 'download' directory
-const downloadStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'downloads/');
-    },
-    filename: function (req, file, cb) {
+// Multer storage configuration for 'downloads' directory on S3
+const downloadStorage = multerS3({
+    s3: s3,
+    bucket: process.env.S3_BUCKET_NAME,
+    key: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(
             null,
-            `${req.params.id}-${uniqueSuffix}${path.extname(file.originalname)}`
+            'downloads/' +
+                req.params.id +
+                '-' +
+                uniqueSuffix +
+                path.extname(file.originalname)
         );
     },
 });
 
-// Create Multer instances for each storage configuration
+// Create Multer instances
 const upload = multer({ storage: uploadStorage });
 const downloadUpload = multer({ storage: downloadStorage });
+
 /////////////////////end of multer settings///////////////////////////////////////////////////////
 // middleware
 function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated() && req.user.isSignedIn) {
+    if (req.isAuthenticated()) {
         return next();
     }
     res.redirect('/login.html'); // Redirect to login page if not authenticated or signed in
 }
-
 const verifyTokenMiddleware = async (req, res, next) => {
     const { token } = req.query;
     if (!token) {
@@ -235,6 +332,20 @@ app.use((err, req, res, next) => {
     } else {
         next(err);
     }
+});
+
+// Route for uploading files
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.send('File uploaded successfully!');
+});
+
+// Route for downloading files
+app.post('/download/:id', downloadUpload.single('file'), (req, res) => {
+    res.send('File uploaded successfully!');
+});
+// Route for downloading files
+app.get('/download/:id', downloadUpload.single('file'), (req, res) => {
+    res.send('File downloded successfully!');
 });
 
 app.get('/', (req, res) => {
@@ -484,14 +595,15 @@ app.post(
             userCredit.credits -= 1;
             await user.save();
 
+            // Get the file URLs from S3
             const videoFiles = req.files['videoFiles']
-                ? req.files['videoFiles'].map((file) => file.path)
+                ? req.files['videoFiles'].map((file) => file.location) // S3 URL
                 : [];
             const pictureFiles = req.files['pictureFiles']
-                ? req.files['pictureFiles'].map((file) => file.path)
+                ? req.files['pictureFiles'].map((file) => file.location) // S3 URL
                 : [];
             const audioFiles = req.files['audioFiles']
-                ? req.files['audioFiles'].map((file) => file.path)
+                ? req.files['audioFiles'].map((file) => file.location) // S3 URL
                 : [];
 
             const newProject = new Project({
@@ -816,10 +928,7 @@ app.get('/api/video-status', ensureAuthenticated, async (req, res) => {
                             : '', // Get the latest comment
                     estimatedCompletionTime: project.estimatedCompletionTime,
                     createdAt: project.createdAt,
-                    downloadLink:
-                        project.status === 'Completed'
-                            ? project.downloadLink
-                            : null,
+                    downloadLink: project.downloadLink,
                     thumbnail: thumbnailUrl,
                 };
             })
@@ -844,6 +953,26 @@ app.get('/api/projects', ensureAdminAuthenticated, async (req, res) => {
     }
 });
 //project reuploads after downloading and editing offline
+// app.post(
+//     '/api/projects/:id/reupload',
+//     downloadUpload.single('file'),
+//     async (req, res) => {
+//         try {
+//             const project = await Project.findById(req.params.id);
+//             if (!project) {
+//                 return res.status(404).json({ error: 'Project not found' });
+//             }
+//             // Save the file path relative to the 'download' directory in the editedFile field
+//             project.editedFile = req.file.filename;
+//             project.downloadLink = `/downloads/${req.file.filename}`;
+//             await project.save();
+//             res.json({ project });
+//         } catch (error) {
+//             console.error('Failed to reupload file:', error);
+//             res.status(500).json({ error: 'Failed to reupload file' });
+//         }
+//     }
+// );
 app.post(
     '/api/projects/:id/reupload',
     downloadUpload.single('file'),
@@ -853,9 +982,12 @@ app.post(
             if (!project) {
                 return res.status(404).json({ error: 'Project not found' });
             }
-            // Save the file path relative to the 'download' directory in the editedFile field
-            project.editedFile = req.file.filename;
-            project.downloadLink = `/downloads/${req.file.filename}`;
+
+            // Save the full S3 URL in the `downloadLink` field
+            const s3Url = req.file.location;
+            project.editedFile = req.file.key; // S3 key
+            project.downloadLink = s3Url; // Full S3 URL
+
             await project.save();
             res.json({ project });
         } catch (error) {
@@ -864,7 +996,6 @@ app.post(
         }
     }
 );
-
 // Helper function to delete a file
 const deleteFile = (filePath) => {
     fs.unlink(filePath, (err) => {
@@ -1462,43 +1593,6 @@ app.post('/impersonate/:userId', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
-
-// app.post('/api/admin/impersonate', async (req, res) => {
-//     try {
-//         const { userId } = req.body;
-//         const userToImpersonate = await User.findById(userId);
-
-//         if (!userToImpersonate) {
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-
-//         // Log out the current admin
-//         req.logout(async (err) => {
-//             if (err) return res.status(500).json({ error: 'Logout failed' });
-
-//             // Mark the user as impersonated
-//             userToImpersonate.isImpersonated = true;
-//             await userToImpersonate.save();
-
-//             // Log in as the impersonated user
-//             req.login(userToImpersonate, (err) => {
-//                 if (err)
-//                     return res
-//                         .status(500)
-//                         .json({ error: 'Impersonation failed' });
-//                 return res
-//                     .status(200)
-//                     .json({ message: 'Impersonation successful' });
-//             });
-//         });
-//     } catch (error) {
-//         console.error('Error during impersonation:', error);
-//         return res.status(500).json({ error: 'Internal server error' });
-//     }
-// });
-
-// Route to get the list of videos
-// Route to get the list of videos
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));

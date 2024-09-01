@@ -1415,18 +1415,20 @@
                                     statusBadge += `<br>ETA: ${eta}`;
                                 }
 
-                                let downloadButton = '';
+                                // Handling the download button based on the availability of the downloadLink
+                                let downloadButton = video.downloadLink
+                                    ? `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`
+                                    : `<a href="#" class="btn bg-primary font-medium text-white opacity-50 cursor-not-allowed">Download</a>`;
+
                                 let watchButton = '';
 
-                                // If the status is 'Completed', show the download button and the modal open button
+                                // If the status is 'Completed', show the modal open button for watching the video
                                 if (
-                                    video.status === 'Completed' ||
-                                    'Processing' ||
-                                    'Pending'
+                                    video.status === 'Completed' &&
+                                    video.downloadLink
                                 ) {
-                                    downloadButton = `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`;
                                     watchButton = `
-                                        <button 
+                                        <button
                                             id="openModal"
                                             data-video-src="${video.downloadLink}"
                                             data-video-title="${video.title}"

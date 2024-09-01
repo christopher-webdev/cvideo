@@ -1252,46 +1252,52 @@
                                 statusBadge += `<br>ETA: ${eta}`;
                             }
 
-                            let downloadButton = '';
+                            // Handling the download button based on the availability of the downloadLink
+                            let downloadButton = video.downloadLink
+                                ? `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`
+                                : `<a href="#" class="btn bg-primary font-medium text-white opacity-50 cursor-not-allowed">Download</a>`;
+
                             let watchButton = '';
 
-                            // If the status is 'Completed', show the download button and the modal open button
-                            if (video.status === 'Completed') {
-                                downloadButton = `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`;
+                            // If the status is 'Completed', show the modal open button for watching the video
+                            if (
+                                video.status === 'Completed' &&
+                                video.downloadLink
+                            ) {
                                 watchButton = `
-                                    <button 
-                                        id="openModal"
-                                        data-video-src="${video.downloadLink}"
-                                        data-video-title="${video.title}"
-                                        class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">
-                                        Watch Video
-                                    </button>`;
+                        <button
+                            id="openModal"
+                            data-video-src="${video.downloadLink}"
+                            data-video-title="${video.title}"
+                            class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">
+                            Watch Video
+                        </button>`;
                             }
 
                             row.innerHTML = `
-                                <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
-                                    index + 1
-                                }</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
-                                    video.id
-                                }</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
-                                    video.createdAt
-                                ).toLocaleDateString()}</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                                    <button onclick="deleteProject('${
-                                        video.id
-                                    }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
-                                    <br>
-                                    <br>
-                                    ${watchButton}
-                                </td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                                    ${downloadButton}
-                                </td>
-                            `;
+                    <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
+                        index + 1
+                    }</td>
+                    <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
+                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
+                        video.id
+                    }</td>
+                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
+                        video.createdAt
+                    ).toLocaleDateString()}</td>
+                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
+                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                        <button onclick="deleteProject('${
+                            video.id
+                        }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
+                        <br>
+                        <br>
+                        ${watchButton}
+                    </td>
+                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                        ${downloadButton}
+                    </td>
+                `;
 
                             outputHistory.appendChild(row);
                         });

@@ -1634,12 +1634,18 @@
                                 statusBadge += `<br>ETA: ${eta}`;
                             }
 
-                            let downloadButton = '';
+                            // Handling the download button based on the availability of the downloadLink
+                            let downloadButton = video.downloadLink
+                                ? `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`
+                                : `<a href="#" class="btn bg-primary font-medium text-white opacity-50 cursor-not-allowed">Download</a>`;
+
                             let watchButton = '';
 
-                            // If the status is 'Completed', show the download button and the modal open button
-                            if (video.status === 'Completed') {
-                                downloadButton = `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`;
+                            // If the status is 'Completed', show the modal open button for watching the video
+                            if (
+                                video.status === 'Completed' &&
+                                video.downloadLink
+                            ) {
                                 watchButton = `
                                     <button
                                         id="openModal"

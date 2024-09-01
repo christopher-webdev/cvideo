@@ -1188,15 +1188,16 @@
                     <br /><br />
 
                     <div class="overflow-x-auto shadow-md rounded-lg">
-                        <table class="table table-responsive" id="plansTable">
-                            <thead class="thead-dark">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-gray-800 text-white">
                                 <tr>
                                     <th class="py-2 px-4">#</th>
-                                    <th class="py-2 px-4">User ID</th>
+                                    <th class="py-2 px-4">User id</th>
                                     <th class="py-2 px-4">Name</th>
                                     <th class="py-2 px-4">Email</th>
                                     <th class="py-2 px-4">Phone Number</th>
                                     <th class="py-2 px-4">Address</th>
+                                    <th class="py-2 px-4">Subscription Plan</th>
                                     <th class="py-2 px-4">Actions</th>
                                 </tr>
                             </thead>
@@ -2002,6 +2003,10 @@
                                     id="editedFile"
                                     class="block w-full px-4 py-2 border rounded text-gray-700 focus:outline-none focus:border-blue-500"
                                 />
+                                <p
+                                    id="uploadingMessage"
+                                    class="hidden text-primary"
+                                ></p>
                                 <div class="mt-6 flex justify-end">
                                     <button
                                         onclick="reuploadEditedFile()"
@@ -4046,6 +4051,12 @@
                     document.getElementById('editedFile').files[0]
                 );
 
+                // Show the uploading message
+                const uploadingMessage =
+                    document.getElementById('uploadingMessage');
+                uploadingMessage.textContent = 'Uploading your file...';
+                uploadingMessage.classList.remove('hidden');
+
                 try {
                     await axios.post(
                         `/api/projects/${projectId}/reupload`,
@@ -4056,10 +4067,19 @@
                             },
                         }
                     );
+
+                    // Hide the uploading message and close the modal after upload is complete
+                    uploadingMessage.classList.add('hidden');
                     closeReuploadModal();
                     fetchProjects();
                 } catch (error) {
                     console.error('Failed to reupload file:', error);
+
+                    // Hide the uploading message if there's an error
+                    uploadingMessage.textContent = 'Failed to upload file.';
+                    setTimeout(() => {
+                        uploadingMessage.classList.add('hidden');
+                    }, 3000); // Hide error message after 3 seconds
                 }
             }
 
@@ -4445,78 +4465,130 @@
             });
         </script>
         <script>
-            function openMediaModal(projectId) {
-                // Fetch the project media files from the server
-                axios
-                    .get(`/api/admin/get-project-media/${projectId}`)
-                    .then((response) => {
-                        const { videoFiles, pictureFiles, audioFiles } =
-                            response.data;
+            async function openMediaModal(projectId) {
+                try {
+                    const response = await axios.get(
+                        `/api/admin/get-project-media/${projectId}`
+                    );
+                    const { videoFiles, pictureFiles, audioFiles } =
+                        response.data;
 
-                        // Populate the modal with media files
-                        const videoList = document.getElementById('videoList');
-                        const pictureList =
-                            document.getElementById('pictureList');
-                        const audioList = document.getElementById('audioList');
+                    // Populate media modal
+                    const videoList = document.getElementById('videoList');
+                    const pictureList = document.getElementById('pictureList');
+                    const audioList = document.getElementById('audioList');
 
-                        videoList.innerHTML = '';
-                        pictureList.innerHTML = '';
-                        audioList.innerHTML = '';
+                    // Clear existing content
+                    videoList.innerHTML = '';
+                    pictureList.innerHTML = '';
+                    audioList.innerHTML = '';
 
-                        videoFiles.forEach((video, index) => {
-                            const videoItem = document.createElement('li');
-                            videoItem.innerHTML = `
-                    <video controls class="w-full mb-2 rounded-lg">
-                        <source src="${video}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <a href="${video}" download class="text-blue-500 hover:underline">Download Video ${
-                                index + 1
-                            }</a>
-                `;
-                            videoList.appendChild(videoItem);
-                        });
-
-                        pictureFiles.forEach((picture, index) => {
-                            const pictureItem = document.createElement('li');
-                            pictureItem.innerHTML = `
-                    <img src="${picture}" class="w-full mb-2 rounded-lg">
-                    <a href="${picture}" download class="text-blue-500 hover:underline">Download Picture ${
-                                index + 1
-                            }</a>
-                `;
-                            pictureList.appendChild(pictureItem);
-                        });
-
-                        audioFiles.forEach((audio, index) => {
-                            const audioItem = document.createElement('li');
-                            audioItem.innerHTML = `
-                    <audio controls class="w-full mb-2">
-                        <source src="${audio}" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    <a href="${audio}" download class="text-blue-500 hover:underline">Download Audio ${
-                                index + 1
-                            }</a>
-                `;
-                            audioList.appendChild(audioItem);
-                        });
-
-                        // Show the modal
-                        const modal = document.getElementById('mediaModal');
-                        modal.classList.remove('hidden');
-                        modal.classList.add('flex');
-                    })
-                    .catch((error) => {
-                        console.error('Failed to fetch project media:', error);
+                    // Add video files
+                    videoFiles.forEach((url) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${url}" target="_blank">Video: <video src="${url}" width="320" controls></video></a>`;
+                        videoList.appendChild(li);
                     });
+
+                    // Add picture files
+                    pictureFiles.forEach((url) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${url}" target="_blank">Picture: <img src="${url}" width="320" /></a>`;
+                        pictureList.appendChild(li);
+                    });
+
+                    // Add audio files
+                    audioFiles.forEach((url) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${url}" target="_blank">Audio: <audio src="${url}" controls></audio></a>`;
+                        audioList.appendChild(li);
+                    });
+
+                    // Show the modal
+                    document
+                        .getElementById('mediaModal')
+                        .classList.remove('hidden');
+                } catch (error) {
+                    console.error('Failed to fetch project media:', error);
+                }
             }
 
             function closeMediaModal() {
-                const modal = document.getElementById('mediaModal');
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
+                document.getElementById('mediaModal').classList.add('hidden');
             }
+
+            // function openMediaModal(projectId) {
+            //     // Fetch the project media files from the server
+            //     axios
+            //         .get(`/api/admin/get-project-media/${projectId}`)
+            //         .then((response) => {
+            //             const { videoFiles, pictureFiles, audioFiles } =
+            //                 response.data;
+
+            //             // Populate the modal with media files
+            //             const videoList = document.getElementById('videoList');
+            //             const pictureList =
+            //                 document.getElementById('pictureList');
+            //             const audioList = document.getElementById('audioList');
+
+            //             videoList.innerHTML = '';
+            //             pictureList.innerHTML = '';
+            //             audioList.innerHTML = '';
+
+            //             videoFiles.forEach((video, index) => {
+            //                 const videoItem = document.createElement('li');
+            //                 videoItem.innerHTML = `
+            //         <video controls class="w-full mb-2 rounded-lg">
+            //             <source src="${video}" type="video/mp4">
+            //             Your browser does not support the video tag.
+            //         </video>
+            //         <a href="${video}" download class="text-blue-500 hover:underline">Download Video ${
+            //                     index + 1
+            //                 }</a>
+            //     `;
+            //                 videoList.appendChild(videoItem);
+            //             });
+
+            //             pictureFiles.forEach((picture, index) => {
+            //                 const pictureItem = document.createElement('li');
+            //                 pictureItem.innerHTML = `
+            //         <img src="${picture}" class="w-full mb-2 rounded-lg">
+            //         <a href="${picture}" download class="text-blue-500 hover:underline">Download Picture ${
+            //                     index + 1
+            //                 }</a>
+            //     `;
+            //                 pictureList.appendChild(pictureItem);
+            //             });
+
+            //             audioFiles.forEach((audio, index) => {
+            //                 const audioItem = document.createElement('li');
+            //                 audioItem.innerHTML = `
+            //         <audio controls class="w-full mb-2">
+            //             <source src="${audio}" type="audio/mpeg">
+            //             Your browser does not support the audio element.
+            //         </audio>
+            //         <a href="${audio}" download class="text-blue-500 hover:underline">Download Audio ${
+            //                     index + 1
+            //                 }</a>
+            //     `;
+            //                 audioList.appendChild(audioItem);
+            //             });
+
+            //             // Show the modal
+            //             const modal = document.getElementById('mediaModal');
+            //             modal.classList.remove('hidden');
+            //             modal.classList.add('flex');
+            //         })
+            //         .catch((error) => {
+            //             console.error('Failed to fetch project media:', error);
+            //         });
+            // }
+
+            // function closeMediaModal() {
+            //     const modal = document.getElementById('mediaModal');
+            //     modal.classList.add('hidden');
+            //     modal.classList.remove('flex');
+            // }
         </script>
         <script>
             // public/admin-register.js
