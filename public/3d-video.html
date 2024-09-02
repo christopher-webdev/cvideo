@@ -861,25 +861,25 @@
 
                                 <div
                                     x-data="{
-                                    avatars: [],
-                                    selectedAvatarLocations: [],
-                                    fetchData() {
-                                        fetch('/api/avatars')
-                                            .then(response => response.json())
-                                            .then(data => {
-                                                this.avatars = data;
-                                            })
-                                            .catch(error => console.error('Error fetching data:', error));
-                                    },
-                                    openModal(locations) {
-                                        this.selectedAvatarLocations = locations;
-                                        this.showModal = true;
-                                    },
-                                    showModal: false,
-                                    closeModal() {
-                                        this.showModal = false;
-                                    }
-                                }"
+                                avatars: [],
+                                selectedAvatarLocations: [],
+                                fetchData() {
+                                    fetch('/api/avatars')
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            this.avatars = data;
+                                        })
+                                        .catch(error => console.error('Error fetching data:', error));
+                                },
+                                openModal(locations) {
+                                    this.selectedAvatarLocations = locations;
+                                    this.showModal = true;
+                                },
+                                showModal: false,
+                                closeModal() {
+                                    this.showModal = false;
+                                }
+                            }"
                                     x-init="fetchData"
                                     class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6"
                                 >
@@ -891,31 +891,25 @@
                                         <div
                                             class="card border-2 border-slate-300 shadow-lg rounded-lg"
                                         >
-                                            <div class="p-2.5">
+                                            <div
+                                                class="p-2.5"
+                                                style="height: 250px"
+                                            >
                                                 <img
                                                     :src="avatar.image"
-                                                    class="w-full rounded-lg object-cover object-center"
+                                                    @click="openModal(avatar)"
+                                                    class="w-full h-full rounded-lg object-cover object-center cursor-pointer"
                                                     :alt="avatar.name"
                                                 />
                                             </div>
                                             <div
                                                 class="flex grow flex-col px-4 pb-5 pt-1 text-center sm:px-5"
                                             >
-                                                <div class="mt-1">
-                                                    <p
-                                                        href="#"
-                                                        x-text="avatar.name"
-                                                        class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
-                                                    ></p>
-                                                    <br />
-                                                    <span
-                                                        x-show="avatar.locations.length > 0"
-                                                        @click="openModal(avatar.locations)"
-                                                        class="cursor-pointer text-sm font-medium text-slate-700 hover:text-primary focus:text-primary"
-                                                    >
-                                                        View Locations
-                                                    </span>
-                                                </div>
+                                                <p
+                                                    href="#"
+                                                    x-text="avatar.name"
+                                                    class="text-lg font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light"
+                                                ></p>
                                                 <!-- Location Selection -->
                                                 <div
                                                     class="my-2 flex items-center space-x-3 text-xs"
@@ -936,30 +930,52 @@
                                                         />
                                                         <p>Select Avatar</p>
                                                     </label>
+                                                    <!-- <div class="mt-2"> -->
                                                     <div
-                                                        class="mt-2"
                                                         x-show="avatar.locations.length > 0"
+                                                        class="flex flex-wrap items-center justify-between place-contents-center gap-1 my-1"
                                                     >
-                                                        <p>Choose Location</p>
                                                         <template
                                                             x-for="location in avatar.locations"
                                                             :key="location._id"
                                                         >
-                                                            <label
-                                                                class="inline-flex items-center space-x-1 mt-2"
-                                                            >
-                                                                <input
-                                                                    class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent ml-4"
-                                                                    name="location_avatar"
-                                                                    type="radio"
-                                                                    :value="location.name"
-                                                                />
-                                                                <p
-                                                                    x-text="location.name"
-                                                                ></p>
-                                                            </label>
+                                                            <div>
+                                                                <div
+                                                                    class="w-10 h-10 rounded-md flex-1 cursor-pointer mx-auto block w-full"
+                                                                >
+                                                                    <img
+                                                                        :src="location.image"
+                                                                        @click="openModal(location)"
+                                                                        class="w-full h-full object-cover rounded-md"
+                                                                        :alt="location.name"
+                                                                    />
+                                                                </div>
+
+                                                                <div
+                                                                    class="flex items-center justify-center gap-2 w-full"
+                                                                >
+                                                                    <label
+                                                                        class="items-center space-x-1 mt-2"
+                                                                    >
+                                                                        <p
+                                                                            class="text-xs text-center"
+                                                                            x-text="location.name"
+                                                                        >
+                                                                            Flower
+                                                                        </p>
+
+                                                                        <input
+                                                                            class="form-radio is-outline size-5 rounded-md border-slate-400/70 before:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:before:bg-accent dark:hover:border-accent dark:focus:border-accent mr-2 inline-block"
+                                                                            name="location_avatar"
+                                                                            type="radio"
+                                                                            :value="location.name"
+                                                                        />
+                                                                    </label>
+                                                                </div>
+                                                            </div>
                                                         </template>
                                                     </div>
+                                                    <!-- </div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -972,31 +988,24 @@
                                         style="display: none"
                                     >
                                         <div
-                                            class="bg-white rounded-lg p-5 w-3/4 md:w-1/2 lg:w-1/3"
+                                            class="bg-white rounded-lg p-5 w-1/2"
                                             @click.away="closeModal"
                                         >
                                             <h2
-                                                class="text-xl font-semibold mb-4"
+                                                class="text-xl font-semibold mb-4 text-center"
+                                                x-text="selectedAvatarLocations.name"
                                             >
-                                                Location Images
+                                                Location Image
                                             </h2>
                                             <div class="grid grid-cols-1 gap-4">
-                                                <template
-                                                    x-for="location in selectedAvatarLocations"
-                                                    :key="location._id"
-                                                >
-                                                    <div>
-                                                        <img
-                                                            :src="location.image"
-                                                            :alt="location.name"
-                                                            class="w-full h-40 object-cover rounded"
-                                                        />
-                                                        <p
-                                                            x-text="location.name"
-                                                            class="mt-2 text-center"
-                                                        ></p>
-                                                    </div>
-                                                </template>
+                                                <img
+                                                    :src="selectedAvatarLocations.image"
+                                                    :alt="location.name"
+                                                    class="w-full object-cover rounded"
+                                                />
+                                                <p class="mt-2 text-center">
+                                                    Location Image
+                                                </p>
                                             </div>
                                             <div class="mt-5 text-right">
                                                 <button
@@ -1437,51 +1446,65 @@
                                 statusBadge += `<br>ETA: ${eta}`;
                             }
 
-                            // Handling the download button based on the availability of the downloadLink
-                            let downloadButton = video.downloadLink
-                                ? `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`
-                                : `<a href="#" class="btn bg-primary font-medium text-white opacity-50 cursor-not-allowed">Download</a>`;
+                            // Handling the download button
+                            const downloadButton = `
+                            <a href="${video.downloadLink || '#'}" 
+                               class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker"
+                               ${
+                                   video.downloadLink
+                                       ? ''
+                                       : 'style="opacity: 0.5; cursor: not-allowed;"'
+                               }
+                               ${
+                                   video.downloadLink
+                                       ? ''
+                                       : 'aria-disabled="true"'
+                               }
+                               download>
+                               Download
+                            </a>`;
 
-                            let watchButton = '';
-
-                            // If the status is 'Completed', show the modal open button for watching the video
-                            if (
-                                video.status === 'Completed' &&
-                                video.downloadLink
-                            ) {
-                                watchButton = `
-                                    <button
-                                        id="openModal"
-                                        data-video-src="${video.downloadLink}"
-                                        data-video-title="${video.title}"
-                                        class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">
-                                        Watch Video
-                                    </button>`;
-                            }
+                            // Handling the watch button
+                            const watchButton = `
+                            <button 
+                                id="openModal"
+                                data-video-src="${video.downloadLink || '#'}"
+                                data-video-title="${video.title || 'Untitled'}"
+                                class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker"
+                                ${
+                                    video.downloadLink
+                                        ? ''
+                                        : 'style="opacity: 0.5; cursor: not-allowed;"'
+                                }
+                                ${
+                                    video.downloadLink
+                                        ? ''
+                                        : 'aria-disabled="true"'
+                                }
+                            >
+                                Watch Video
+                            </button>`;
 
                             row.innerHTML = `
-                                <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
-                                    index + 1
-                                }</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
+                            <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
+                                index + 1
+                            }</td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
+                                video.id
+                            }</td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
+                                video.createdAt
+                            ).toLocaleDateString()}</td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                                <button onclick="deleteProject('${
                                     video.id
-                                }</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
-                                    video.createdAt
-                                ).toLocaleDateString()}</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                                    <button onclick="deleteProject('${
-                                        video.id
-                                    }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
-                                    <br>
-                                    <br>
-                                    ${watchButton}
-                                </td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                                    ${downloadButton}
-                                </td>
+                                }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
+                                <br><br>
+                                ${watchButton}
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">${downloadButton}</td>
                             `;
 
                             outputHistory.appendChild(row);
@@ -1491,7 +1514,6 @@
                         console.error('Error fetching video status:', error);
                     });
             }
-
             updateOutputHistory();
             // Optionally, set an interval to periodically update the output history
             setInterval(updateOutputHistory, 5000); // Update every 3 seconds
@@ -1671,24 +1693,48 @@
         </script>
         <script>
             async function showLocationImages(avatarId) {
-                const response = await fetch(`/api/avatars/${avatarId}`);
-                const avatar = await response.json();
+                try {
+                    // Fetch the avatar data
+                    const response = await fetch(`/api/avatars/${avatarId}`);
 
-                const container = document.getElementById(
-                    'locationImagesContainer'
-                );
-                container.innerHTML = ''; // Clear previous images
+                    // Check if the response is OK
+                    if (!response.ok) {
+                        console.error('Failed to fetch avatar data');
+                        return;
+                    }
 
-                avatar.locations.forEach((location) => {
-                    const img = document.createElement('img');
-                    img.src = location.image;
-                    img.alt = `${location.name} location`;
-                    img.className = 'w-32 h-32 rounded-lg object-cover';
+                    const avatar = await response.json();
 
-                    container.appendChild(img);
-                });
+                    // Get the container element
+                    const container = document.getElementById(
+                        'locationImagesContainer'
+                    );
 
-                <!-- container.classList.remove('hidden'); -->
+                    // Clear previous images
+                    container.innerHTML = '';
+
+                    // Check if the avatar has locations
+                    if (avatar.locations && Array.isArray(avatar.locations)) {
+                        avatar.locations.forEach((location) => {
+                            const img = document.createElement('img');
+                            img.src = location.image;
+                            img.alt = `${location.name} location`;
+                            img.className = 'w-32 h-32 rounded-lg object-cover';
+
+                            container.appendChild(img);
+                        });
+                    } else {
+                        console.log('No locations found for this avatar');
+                    }
+
+                    // Make sure the container is visible
+                    container.classList.remove('hidden');
+                } catch (error) {
+                    console.error(
+                        'Error fetching or displaying images:',
+                        error
+                    );
+                }
             }
         </script>
     </body>

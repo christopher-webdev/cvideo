@@ -35,18 +35,15 @@ const userPackageController = require('./controllers/package.controller');
 const appConfigController = require('./controllers/app-config.controller');
 const { createAvatar } = require('./routes/create-avatar');
 const getEnv = require('./config/env');
-<<<<<<< HEAD
 const AWS = require('aws-sdk');
 require('dotenv').config();
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 
-=======
 const AppConfig = require('./models/AppConfig');
 const { AppConfigTable } = require('./functions/startup');
 const { formatMoney } = require('./functions/helpers');
->>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
 // Passport Config
 require('./config/passport')(passport);
 
@@ -65,6 +62,18 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Set up multer storage
+const localStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'local-uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    },
+});
+
+const localUpload = multer({ storage: localStorage });
 
 // Body parser middleware
 // app.use(bodyParser.json());
@@ -295,8 +304,6 @@ function ensureAdminAuthenticated(req, res, next) {
     res.redirect('/admin-login.html');
 }
 
-
-
 // API Routes
 app.use('/api/signup', signupRoute);
 app.use('/api/forgot-password', resetPasswordRoute);
@@ -316,7 +323,6 @@ app.use('/api/config', appConfigController);
 
 // Serve index.html for the root URL
 
-<<<<<<< HEAD
 // // Catch 404 errors
 // app.use((req, res, next) => {
 //     res.status(404);
@@ -329,9 +335,6 @@ app.use((err, req, res, next) => {
     res.status(500);
     res.sendFile(path.join(__dirname, 'public', '404.html'));
 });
-=======
-
->>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
 
 // Handle 502, 503, 504 errors
 app.use((err, req, res, next) => {
@@ -795,14 +798,26 @@ app.get('/api/user-payment', ensureAuthenticated, async (req, res) => {
 app.get('/api/referrals', ensureAuthenticated, async (req, res) => {
     try {
         // Find users where `referral_id` matches the logged-in user's `referral_id`
-        const user = await User.findById(req.user._id, "referral_id")
-        const referrals = await User.find({ referral: req.user.referral_id }, "firstName lastName");
-        const earnedPerUserRefererd = await AppConfig.findOne({name: AppConfigTable.earningPerUserReferered}, "value")
+        const user = await User.findById(req.user._id, 'referral_id');
+        const referrals = await User.find(
+            { referral: req.user.referral_id },
+            'firstName lastName'
+        );
+        const earnedPerUserRefererd = await AppConfig.findOne(
+            { name: AppConfigTable.earningPerUserReferered },
+            'value'
+        );
         const response = {
             referral_id: user.referral_id,
-            referrals: referrals.map(ref=>({amountEarned: `+${formatMoney(earnedPerUserRefererd.value)}`, firstName: ref.firstName, lastName: ref.lastName})),
-            totalEarned: formatMoney(referrals.length * earnedPerUserRefererd.value)
-        }
+            referrals: referrals.map((ref) => ({
+                amountEarned: `+${formatMoney(earnedPerUserRefererd.value)}`,
+                firstName: ref.firstName,
+                lastName: ref.lastName,
+            })),
+            totalEarned: formatMoney(
+                referrals.length * earnedPerUserRefererd.value
+            ),
+        };
         // Send the referral data
         res.status(200).json(response);
     } catch (error) {
@@ -1230,18 +1245,20 @@ app.get('/api/get-dashboard-visibility', (req, res) => {
 app.post('/set-credits', ensureAdminAuthenticated, async (req, res) => {
     const { subscriptionPlan, credits } = req.body;
 
+    console.log('Received subscriptionPlan:', subscriptionPlan); // Debug log
+    console.log('Received credits:', credits); // Debug log
+
     try {
-        // Find the subscription plan
+        if (!subscriptionPlan || !Array.isArray(credits)) {
+            return res.status(400).json({ message: 'Invalid request data' });
+        }
+
         let plan = await SubscriptionPlan.findOne({ plan: subscriptionPlan });
         if (!plan) {
-            // Create a new plan if it doesn't exist
             plan = new SubscriptionPlan({ plan: subscriptionPlan });
         }
 
-        // Set the credits for the subscription plan
         plan.credits = credits;
-
-        // Save the updated subscription plan
         await plan.save();
 
         res.status(200).json({ message: 'Credits successfully set' });
@@ -1250,6 +1267,7 @@ app.post('/set-credits', ensureAdminAuthenticated, async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 app.get('/get-credits', ensureAdminAuthenticated, async (req, res) => {
     try {
         // Retrieve all subscription plans
@@ -1281,131 +1299,77 @@ app.put('/update-subscription/:userId', updateCreditsMiddleware, (req, res) => {
     });
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Setup Multer for local storage for avatar locally
 
-app.post(
-    '/api/avatars',
+// POST /api/avatars
+// POST /api/avatars
+app.post('/api/avatars', localUpload.any(), async (req, res) => {
+    try {
+        const [avatarImage, ...locations] = req.files;
+        const { avatarName, location: locationNames } = req.body;
 
-    upload.fields([
-        { name: 'avatarImage', maxCount: 1 },
-        { name: 'locationImages[office]', maxCount: 1 },
-        { name: 'locationImages[street]', maxCount: 1 },
-        { name: 'locationImages[forest]', maxCount: 1 },
-        { name: 'locationImages[home]', maxCount: 1 },
-    ]),
-    async (req, res) => {
-        try {
-<<<<<<< HEAD
-            const updatedData = {
-                name: req.body.name,
-            };
+        const payload = {
+            name: avatarName,
+            image: avatarImage?.path,
+            locations: [],
+        };
 
-            if (await Avatar.exists({ name: updatedData.name })) {
-                return res.status(400).json({
-                    success: false,
-                    errors: `Name '${updatedData.name} already exists. Please try another name`,
-                });
-=======
-            const [avatarImage, ...locations] = req.files;
-            const { avatarName, location: locationNames } = req.body;
-
-            const payload = {
-                name: avatarName,
-                image: avatarImage?.path,
-                locations: [],
-            };
-            
-            for (let i = 0; i < locations.length; i++) {
-                const path = locations?.[i]?.path;
-                const name = locationNames?.[i];
-                if(!(path && name)){
-                    throw new Error("Please check file and name are correctly uploaded")
-                }
-                payload.locations.push({ name, image: path });
->>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
+        for (let i = 0; i < locations.length; i++) {
+            const path = locations?.[i]?.path;
+            const name = locationNames?.[i];
+            if (!(path && name)) {
+                throw new Error(
+                    'Please check file and name are correctly uploaded'
+                );
             }
-
-            if (req.files['avatarImage']) {
-                updatedData.image = req.files['avatarImage'][0].path;
-            }
-
-            updatedData.locations = [];
-
-            ['office', 'street', 'forest', 'home'].forEach(async (location) => {
-                if (req.files[`locationImages[${location}]`]) {
-                    const exists = req.files[`locationImages[${location}]`];
-
-                    if (exists) {
-                        updatedData.locations.push({
-                            name: location,
-                            image: req.files[`locationImages[${location}]`][0]
-                                .path,
-                        });
-                    }
-                }
-            });
-
-            const updatedAvatar = await Avatar.create(updatedData);
-
-            res.status(201).json({ success: true, data: updatedAvatar });
-        } catch (error) {
-            res.status(500).json({ success: false, errors: error.message });
+            payload.locations.push({ name, image: path });
         }
+        const updatedAvatar = await Avatar.create(payload);
+
+        res.status(201).json({ success: true, data: updatedAvatar });
+    } catch (error) {
+        res.status(500).json({ success: false, errors: error.message });
     }
-);
-app.put(
-    '/api/avatars',
+});
 
-    upload.any(),
-    async (req, res) => {
-        try {
-            const updatedData = {
-                name: req.body.name,
-            };
+// PUT /api/avatars
+// PUT /api/avatars
+app.put('/api/avatars/:id', localUpload.any(), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [avatarImage, ...locations] = req.files;
+        const { avatarName, location: locationNames } = req.body;
 
-            if (!req.body.avatarId) {
-                return res
-                    .status(400)
-                    .json({ success: false, errors: `Avatar ID is required` });
-            }
+        const payload = {
+            name: avatarName,
+            image: avatarImage.path,
+            locations: [],
+        };
 
-            if (!(await Avatar.exists({ _id: req.body.avatarId }))) {
-                return res.status(404).json({
-                    success: false,
-                    errors: `Name '${updatedData.name} does not exists.`,
-                });
-            }
-
-            if (req.files['avatarImage']) {
-                updatedData.image = req.files['avatarImage'][0].path;
-            }
-
-            updatedData.locations = [];
-
-            ['office', 'street', 'forest', 'home'].forEach(async (location) => {
-                if (req.files[`locationImages[${location}]`]) {
-                    const exists = req.files[`locationImages[${location}]`];
-
-                    if (exists) {
-                        updatedData.locations.push({
-                            name: location,
-                            image: req.files[`locationImages[${location}]`][0]
-                                .path,
-                        });
-                    }
-                }
-            });
-
-            const updatedAvatar = await Avatar.findByIdAndUpdate(
-                req.body.avatarId,
-                updatedData
-            );
-
-            res.status(200).json({ success: true, data: updatedAvatar });
-        } catch (error) {
-            res.status(500).json({ success: false, errors: error.message });
+        for (let i = 0; i < locations.length; i++) {
+            const path = locations[i].path;
+            const name = locationNames[i];
+            payload.locations.push({ name, image: path });
         }
+        const avatar = await Avatar.findById(id);
+
+        avatar.name = payload.name?.trim() || avatar.name;
+        avatar.image = payload.image || avatar.image;
+        avatar.locations = [...avatar.locations, ...payload.locations];
+
+        await avatar.save();
+
+        // const updatedAvatar = await Avatar.findByIdAndUpdate(id, payload);
+
+        res.status(200).json({
+            success: true,
+            data: 'Avatar Updated Successfully',
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, errors: error.message });
     }
-);
+});
+// GET /avatars/:id
 app.get('/avatars/:id', async (req, res) => {
     try {
         const avatar = await Avatar.findById(req.params.id);
@@ -1417,7 +1381,8 @@ app.get('/avatars/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch avatar' });
     }
 });
-// Route to fetch all avatars
+
+// GET /api/avatars
 app.get('/api/avatars', async (req, res) => {
     try {
         const avatars = await Avatar.find();
@@ -1426,6 +1391,7 @@ app.get('/api/avatars', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch avatars' });
     }
 });
+
 app.post('/admin/videos/add', ensureAdminAuthenticated, async (req, res) => {
     const { page, videoLink } = req.body;
 
@@ -1633,15 +1599,18 @@ app.post('/impersonate/:userId', async (req, res) => {
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
-<<<<<<< HEAD
-=======
-app.use(express.static(path.join(__dirname, 'uploads')));
+
+app.use('/local-uploads', express.static('local-uploads'));
+
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
     res.status(404);
     res.sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
->>>>>>> 45c3d6340afe99122e7d9d5ae3b4eb76e27612d1
+app.use((req, res, next) => {
+    res.status(500);
+    res.sendFile(path.join(__dirname, 'public', '500.html'));
+});
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

@@ -1252,52 +1252,70 @@
                                 statusBadge += `<br>ETA: ${eta}`;
                             }
 
-                            // Handling the download button based on the availability of the downloadLink
-                            let downloadButton = video.downloadLink
-                                ? `<a href="${video.downloadLink}" class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">Download</a>`
-                                : `<a href="#" class="btn bg-primary font-medium text-white opacity-50 cursor-not-allowed">Download</a>`;
+                            // Handling the download button
+                            const downloadButton = `
+                                <a href="${video.downloadLink || '#'}" 
+                                   class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker"
+                                   ${
+                                       video.downloadLink
+                                           ? ''
+                                           : 'style="opacity: 0.5; cursor: not-allowed;"'
+                                   }
+                                   ${
+                                       video.downloadLink
+                                           ? ''
+                                           : 'aria-disabled="true"'
+                                   }
+                                   download>
+                                   Download
+                                </a>`;
 
-                            let watchButton = '';
-
-                            // If the status is 'Completed', show the modal open button for watching the video
-                            if (
-                                video.status === 'Completed' &&
-                                video.downloadLink
-                            ) {
-                                watchButton = `
-                        <button
-                            id="openModal"
-                            data-video-src="${video.downloadLink}"
-                            data-video-title="${video.title}"
-                            class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker">
-                            Watch Video
-                        </button>`;
-                            }
+                            // Handling the watch button
+                            const watchButton = `
+                                <button 
+                                    id="openModal"
+                                    data-video-src="${
+                                        video.downloadLink || '#'
+                                    }"
+                                    data-video-title="${
+                                        video.title || 'Untitled'
+                                    }"
+                                    class="btn bg-primary font-medium text-white hover:bg-primary-dark focus:bg-primary-dark active:bg-primary-darker"
+                                    ${
+                                        video.downloadLink
+                                            ? ''
+                                            : 'style="opacity: 0.5; cursor: not-allowed;"'
+                                    }
+                                    ${
+                                        video.downloadLink
+                                            ? ''
+                                            : 'aria-disabled="true"'
+                                    }
+                                >
+                                    Watch Video
+                                </button>`;
 
                             row.innerHTML = `
-                    <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
-                        index + 1
-                    }</td>
-                    <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
-                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
-                        video.id
-                    }</td>
-                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
-                        video.createdAt
-                    ).toLocaleDateString()}</td>
-                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
-                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                        <button onclick="deleteProject('${
-                            video.id
-                        }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
-                        <br>
-                        <br>
-                        ${watchButton}
-                    </td>
-                    <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                        ${downloadButton}
-                    </td>
-                `;
+                                <td class="whitespace-nowrap rounded-l-lg px-4 py-3 sm:px-5">${
+                                    index + 1
+                                }</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5"><div class="avatar size-24">${thumbnail}</div></td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${
+                                    video.id
+                                }</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${new Date(
+                                    video.createdAt
+                                ).toLocaleDateString()}</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${statusBadge}</td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                                    <button onclick="deleteProject('${
+                                        video.id
+                                    }')" class="btn bg-slate-150 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-success-450 dark:focus:bg-navy-450 dark:active:bg-success-450/90">Delete</button>
+                                    <br><br>
+                                    ${watchButton}
+                                </td>
+                                <td class="whitespace-nowrap px-4 py-3 sm:px-5">${downloadButton}</td>
+                                `;
 
                             outputHistory.appendChild(row);
                         });
@@ -1488,24 +1506,48 @@
         </script>
         <script>
             async function showLocationImages(avatarId) {
-                const response = await fetch(`/api/avatars/${avatarId}`);
-                const avatar = await response.json();
+                try {
+                    // Fetch the avatar data
+                    const response = await fetch(`/api/avatars/${avatarId}`);
 
-                const container = document.getElementById(
-                    'locationImagesContainer'
-                );
-                container.innerHTML = ''; // Clear previous images
+                    // Check if the response is OK
+                    if (!response.ok) {
+                        console.error('Failed to fetch avatar data');
+                        return;
+                    }
 
-                avatar.locations.forEach((location) => {
-                    const img = document.createElement('img');
-                    img.src = location.image;
-                    img.alt = `${location.name} location`;
-                    img.className = 'w-32 h-32 rounded-lg object-cover';
+                    const avatar = await response.json();
 
-                    container.appendChild(img);
-                });
+                    // Get the container element
+                    const container = document.getElementById(
+                        'locationImagesContainer'
+                    );
 
-                <!-- container.classList.remove('hidden'); -->
+                    // Clear previous images
+                    container.innerHTML = '';
+
+                    // Check if the avatar has locations
+                    if (avatar.locations && Array.isArray(avatar.locations)) {
+                        avatar.locations.forEach((location) => {
+                            const img = document.createElement('img');
+                            img.src = location.image;
+                            img.alt = `${location.name} location`;
+                            img.className = 'w-32 h-32 rounded-lg object-cover';
+
+                            container.appendChild(img);
+                        });
+                    } else {
+                        console.log('No locations found for this avatar');
+                    }
+
+                    // Make sure the container is visible
+                    container.classList.remove('hidden');
+                } catch (error) {
+                    console.error(
+                        'Error fetching or displaying images:',
+                        error
+                    );
+                }
             }
         </script>
     </body>
